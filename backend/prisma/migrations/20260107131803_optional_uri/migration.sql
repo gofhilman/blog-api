@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Category" ALTER COLUMN "uri" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Post" ALTER COLUMN "uri" DROP NOT NULL;

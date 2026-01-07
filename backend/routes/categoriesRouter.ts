@@ -1,16 +1,16 @@
 import { Router } from "express";
 import {
-  categoriedPostsGet,
   categoriesGet,
   categoryDelete,
   categoryPost,
   categoryPut,
+  specificCategoryGet,
 } from "../controllers/categoriesController";
 
 const categoriesRouter = Router();
 
 categoriesRouter.get("/", categoriesGet);
-categoriesRouter.get("/:categoryUri/posts", categoriedPostsGet);
+categoriesRouter.get("/:categoryUri", specificCategoryGet);
 
 categoriesRouter.post("/", categoryPost);
 

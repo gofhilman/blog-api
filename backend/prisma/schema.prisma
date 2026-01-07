@@ -20,7 +20,7 @@ model Post {
   title      String
   subtitle   String
   published  Boolean
-  uri        String
+  uri        String?    @unique
   author     User?      @relation(fields: [authorId], references: [id])
   authorId   String?
   categories Category[]
@@ -29,9 +29,9 @@ model Post {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  uri   String
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  uri   String? @unique
   posts Post[]
 }
 

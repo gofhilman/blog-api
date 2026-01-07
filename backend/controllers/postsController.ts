@@ -1,13 +1,12 @@
-import getPostId from "../lib/getPostId";
+import slugify from "@sindresorhus/slugify";
 import { prisma } from "../lib/prisma";
+import uriToId from "../lib/uriToId";
 
 const POSTS_PER_PAGE = 10;
 
 async function postsGet(req: any, res: any) {
   const page = +req.query.page || 1;
   const categoryUri = req.query.category;
-  const categoryId =
-    categoryUri && +categoryUri.split("-")[categoryUri.split("-").length - 1];
   const posts = await prisma.post.findMany({
     skip: (page - 1) * POSTS_PER_PAGE,
     take: POSTS_PER_PAGE,
@@ -19,7 +18,7 @@ async function postsGet(req: any, res: any) {
     ...(categoryUri && {
       where: {
         categories: {
-          some: { id: categoryId },
+          some: { uri: categoryUri },
         },
       },
     }),
@@ -28,10 +27,9 @@ async function postsGet(req: any, res: any) {
 }
 
 async function specificPostGet(req: any, res: any) {
-  const postId = getPostId(req.params.postUri);
   const post = await prisma.post.findUnique({
     where: {
-      id: postId,
+      uri: req.params.postUri,
     },
     include: {
       author: true,
@@ -43,7 +41,7 @@ async function specificPostGet(req: any, res: any) {
 }
 
 async function commentsGet(req: any, res: any) {
-  const postId = getPostId(req.params.postUri);
+  const postId = uriToId(req.params.postUri);
   const comments = await prisma.comment.findMany({
     orderBy: { createdAt: "asc" },
     where: { postId },
@@ -52,23 +50,26 @@ async function commentsGet(req: any, res: any) {
 }
 
 async function postPost(req: any, res: any) {
-  const { title, subtitle, published, uri, content, categories } = req.body;
-  const post = await prisma.post.create({
+  const { title, subtitle, published, content, categories } = req.body;
+  let post = await prisma.post.create({
     data: {
       title,
       subtitle,
       published,
-      uri,
       content,
       categories,
       authorId: req.user.id,
     },
   });
+  post = await prisma.post.update({
+    where: { id: post.id },
+    data: { uri: slugify(post.title) + "-" + post.id },
+  });
   res.json({ post });
 }
 
 async function commentPost(req: any, res: any) {
-  const postId = getPostId(req.params.postUri);
+  const postId = uriToId(req.params.postUri);
   const comment = await prisma.comment.create({
     data: {
       postId,
@@ -80,8 +81,8 @@ async function commentPost(req: any, res: any) {
 }
 
 async function postPut(req: any, res: any) {
-  const postId = getPostId(req.params.postUri);
-  const { title, subtitle, published, uri, content, categories } = req.body;
+  const { title, subtitle, published, content, categories } = req.body;
+  const postId = uriToId(req.params.postUri);
   const post = await prisma.post.update({
     where: {
       id: postId,
@@ -90,10 +91,10 @@ async function postPut(req: any, res: any) {
       title,
       subtitle,
       published,
-      uri,
       content,
       categories,
       authorId: req.user.id,
+      uri: slugify(title) + "-" + postId,
       updatedAt: new Date(),
     },
   });
@@ -101,18 +102,16 @@ async function postPut(req: any, res: any) {
 }
 
 async function commentPut(req: any, res: any) {
-  const commentId = req.params.commentId;
   const comment = await prisma.comment.update({
-    where: { id: commentId },
+    where: { id: req.params.commentId },
     data: { content: req.body.content },
   });
   res.json({ comment });
 }
 
 async function postDelete(req: any, res: any) {
-  const postId = getPostId(req.params.postUri);
   const post = await prisma.post.delete({
-    where: { id: postId },
+    where: { uri: req.params.postUri },
   });
   await prisma.category.deleteMany({
     where: { posts: { none: {} } },
@@ -121,9 +120,8 @@ async function postDelete(req: any, res: any) {
 }
 
 async function commentDelete(req: any, res: any) {
-  const commentId = req.params.commentId;
   const comment = await prisma.comment.delete({
-    where: { id: commentId },
+    where: { id: req.params.commentId },
   });
   res.json({ comment });
 }

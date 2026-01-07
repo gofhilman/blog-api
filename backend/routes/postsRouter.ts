@@ -1,18 +1,29 @@
 import { Router } from "express";
+import {
+  commentDelete,
+  commentPost,
+  commentPut,
+  commentsGet,
+  postDelete,
+  postPost,
+  postPut,
+  postsGet,
+  specificPostGet,
+} from "../controllers/postsController";
 
 const postsRouter = Router();
 
-postsRouter.get("/");
-postsRouter.get("/:postId");
-postsRouter.get("/:postId/comments");
+postsRouter.get("/", postsGet);
+postsRouter.get("/:postUri", specificPostGet);
+postsRouter.get("/:postUri/comments", commentsGet);
 
-postsRouter.post("/");
-postsRouter.post("/:postId/comments");
+postsRouter.post("/", postPost);
+postsRouter.post("/:postUri/comments", commentPost);
 
-postsRouter.put("/:postId");
-postsRouter.put("/:postId/comments/:commentId");
+postsRouter.put("/:postUri", postPut);
+postsRouter.put("/:postUri/comments/:commentId", commentPut);
 
-postsRouter.delete("/:postId");
-postsRouter.delete("/:postId/comments/:commentId");
+postsRouter.delete("/:postUri", postDelete);
+postsRouter.delete("/:postUri/comments/:commentId", commentDelete);
 
 export default postsRouter;

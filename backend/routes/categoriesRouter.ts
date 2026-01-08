@@ -6,16 +6,17 @@ import {
   categoryPut,
   specificCategoryGet,
 } from "../controllers/categoriesController";
+import auth from "../middleware/auth";
 
 const categoriesRouter = Router();
 
 categoriesRouter.get("/", categoriesGet);
 categoriesRouter.get("/:categoryUri", specificCategoryGet);
 
-categoriesRouter.post("/", categoryPost);
+categoriesRouter.post("/", auth, categoryPost);
 
-categoriesRouter.put("/:categoryUri", categoryPut);
+categoriesRouter.put("/:categoryUri", auth, categoryPut);
 
-categoriesRouter.delete("/:categoryUri", categoryDelete);
+categoriesRouter.delete("/:categoryUri", auth, categoryDelete);
 
 export default categoriesRouter;

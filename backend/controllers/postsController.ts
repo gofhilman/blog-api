@@ -46,18 +46,22 @@ async function commentsGet(req: any, res: any) {
     orderBy: { createdAt: "asc" },
     where: { postId },
   });
-  res.json({ comments, userId: req?.user.id });
+  res.json({ comments, userId: req.user.id });
 }
 
 async function postPost(req: any, res: any) {
   const { title, subtitle, published, content, categories } = req.body;
+  const connectOrCreate = categories.map((name: any) => ({
+    create: { name, uri: slugify(name) },
+    where: { name },
+  }));
   let post = await prisma.post.create({
     data: {
       title,
       subtitle,
       published,
       content,
-      categories,
+      categories: { connectOrCreate },
       authorId: req.user.id,
     },
   });

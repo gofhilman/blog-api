@@ -10,20 +10,21 @@ import {
   postsGet,
   specificPostGet,
 } from "../controllers/postsController";
+import auth from "../middleware/auth";
 
 const postsRouter = Router();
 
 postsRouter.get("/", postsGet);
 postsRouter.get("/:postUri", specificPostGet);
-postsRouter.get("/:postUri/comments", commentsGet);
+postsRouter.get("/:postUri/comments", auth, commentsGet);
 
-postsRouter.post("/", postPost);
-postsRouter.post("/:postUri/comments", commentPost);
+postsRouter.post("/", auth, postPost);
+postsRouter.post("/:postUri/comments", auth, commentPost);
 
-postsRouter.put("/:postUri", postPut);
-postsRouter.put("/:postUri/comments/:commentId", commentPut);
+postsRouter.put("/:postUri", auth, postPut);
+postsRouter.put("/:postUri/comments/:commentId", auth, commentPut);
 
-postsRouter.delete("/:postUri", postDelete);
-postsRouter.delete("/:postUri/comments/:commentId", commentDelete);
+postsRouter.delete("/:postUri", auth, postDelete);
+postsRouter.delete("/:postUri/comments/:commentId", auth, commentDelete);
 
 export default postsRouter;

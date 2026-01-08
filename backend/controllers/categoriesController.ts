@@ -1,6 +1,5 @@
 import slugify from "@sindresorhus/slugify";
 import { prisma } from "../lib/prisma";
-import uriToId from "../lib/uriToId";
 
 async function categoriesGet(req: any, res: any) {
   const categories = await prisma.category.findMany({
@@ -18,25 +17,18 @@ async function specificCategoryGet(req: any, res: any) {
 }
 
 async function categoryPost(req: any, res: any) {
-  let category = await prisma.category.create({
-    data: { name: req.body.name },
-  });
-  category = await prisma.category.update({
-    where: { id: category.id },
-    data: { uri: slugify(category.name) + "-" + category.id },
+  const { name } = req.body;
+  const category = await prisma.category.create({
+    data: { name, uri: slugify(name) },
   });
   res.json({ category });
 }
 
 async function categoryPut(req: any, res: any) {
-  const categoryId = uriToId(req.params.categoryUri);
   const { name } = req.body;
   const category = await prisma.category.update({
-    where: { id: categoryId },
-    data: {
-      name,
-      uri: slugify(name) + "-" + categoryId,
-    },
+    where: { uri: req.params.categoryUri },
+    data: { name, uri: slugify(name) },
   });
   res.json({ category });
 }

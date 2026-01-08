@@ -1,5 +1,6 @@
 import slugify from "@sindresorhus/slugify";
 import { prisma } from "../lib/prisma";
+import { POSTS_PER_PAGE } from "./constants";
 
 async function categoriesGet(req: any, res: any) {
   const categories = await prisma.category.findMany({
@@ -9,9 +10,22 @@ async function categoriesGet(req: any, res: any) {
 }
 
 async function specificCategoryGet(req: any, res: any) {
+  const page = +req.query.page || 1;
   const category = await prisma.category.findUnique({
     where: { uri: req.params.categoryUri },
-    include: { posts: true },
+    include: {
+      posts: {
+        skip: (page - 1) * POSTS_PER_PAGE,
+        take: POSTS_PER_PAGE,
+        orderBy: { createdAt: "desc" },
+        include: {
+          author: {
+            select: { username: true, role: true },
+          },
+          categories: true,
+        },
+      },
+    },
   });
   res.json({ category });
 }

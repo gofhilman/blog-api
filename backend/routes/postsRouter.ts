@@ -6,6 +6,7 @@ import {
   commentsGet,
   postDelete,
   postPost,
+  postPublishedPatch,
   postPut,
   postsGet,
   specificPostGet,
@@ -23,6 +24,8 @@ postsRouter.post("/:postUri/comments", auth, commentPost);
 
 postsRouter.put("/:postUri", auth, postPut);
 postsRouter.put("/:postUri/comments/:commentId", auth, commentPut);
+
+postsRouter.patch("/:postUri", auth, postPublishedPatch);
 
 postsRouter.delete("/:postUri", auth, postDelete);
 postsRouter.delete("/:postUri/comments/:commentId", auth, commentDelete);

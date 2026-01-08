@@ -1,8 +1,7 @@
 import slugify from "@sindresorhus/slugify";
 import { prisma } from "../lib/prisma";
 import uriToId from "../lib/uriToId";
-
-const POSTS_PER_PAGE = 10;
+import { POSTS_PER_PAGE } from "./constants";
 
 async function postsGet(req: any, res: any) {
   const page = +req.query.page || 1;
@@ -12,7 +11,9 @@ async function postsGet(req: any, res: any) {
     take: POSTS_PER_PAGE,
     orderBy: { createdAt: "desc" },
     include: {
-      author: true,
+      author: {
+        select: { username: true, role: true },
+      },
       categories: true,
     },
     ...(categoryUri && {
@@ -32,7 +33,9 @@ async function specificPostGet(req: any, res: any) {
       uri: req.params.postUri,
     },
     include: {
-      author: true,
+      author: {
+        select: { username: true, role: true },
+      },
       categories: true,
       // comments: true,
     },
@@ -45,6 +48,11 @@ async function commentsGet(req: any, res: any) {
   const comments = await prisma.comment.findMany({
     orderBy: { createdAt: "asc" },
     where: { postId },
+    include: {
+      user: {
+        select: { username: true, role: true },
+      },
+    },
   });
   res.json({ comments, userId: req.user.id });
 }
@@ -86,7 +94,15 @@ async function commentPost(req: any, res: any) {
 
 async function postPut(req: any, res: any) {
   const { title, subtitle, published, content, categories } = req.body;
+  const connectOrCreate = categories.map((name: any) => ({
+    create: { name, uri: slugify(name) },
+    where: { name },
+  }));
   const postId = uriToId(req.params.postUri);
+  await prisma.post.update({
+    where: { id: postId },
+    data: { categories: { set: [] } },
+  });
   const post = await prisma.post.update({
     where: {
       id: postId,
@@ -96,11 +112,14 @@ async function postPut(req: any, res: any) {
       subtitle,
       published,
       content,
-      categories,
+      categories: { connectOrCreate },
       authorId: req.user.id,
       uri: slugify(title) + "-" + postId,
       updatedAt: new Date(),
     },
+  });
+  await prisma.category.deleteMany({
+    where: { posts: { none: {} } },
   });
   res.json({ post });
 }
@@ -111,6 +130,14 @@ async function commentPut(req: any, res: any) {
     data: { content: req.body.content },
   });
   res.json({ comment });
+}
+
+async function postPublishedPatch(req: any, res: any) {
+  const post = await prisma.post.update({
+    where: { uri: req.params.postUri },
+    data: { published: req.body.published },
+  });
+  res.json({ post });
 }
 
 async function postDelete(req: any, res: any) {
@@ -138,6 +165,7 @@ export {
   commentPost,
   postPut,
   commentPut,
+  postPublishedPatch,
   postDelete,
   commentDelete,
 };

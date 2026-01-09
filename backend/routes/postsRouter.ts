@@ -12,6 +12,8 @@ import {
   specificPostGet,
 } from "../controllers/postsController";
 import auth from "../middleware/auth";
+import { validateComment, validatePost } from "../middleware/validators";
+import { handleValidation } from "../middleware/handleValidation";
 
 const postsRouter = Router();
 
@@ -19,11 +21,23 @@ postsRouter.get("/", postsGet);
 postsRouter.get("/:postUri", specificPostGet);
 postsRouter.get("/:postUri/comments", auth, commentsGet);
 
-postsRouter.post("/", auth, postPost);
-postsRouter.post("/:postUri/comments", auth, commentPost);
+postsRouter.post("/", auth, validatePost, handleValidation, postPost);
+postsRouter.post(
+  "/:postUri/comments",
+  auth,
+  validateComment,
+  handleValidation,
+  commentPost
+);
 
-postsRouter.put("/:postUri", auth, postPut);
-postsRouter.put("/:postUri/comments/:commentId", auth, commentPut);
+postsRouter.put("/:postUri", auth, validatePost, handleValidation, postPut);
+postsRouter.put(
+  "/:postUri/comments/:commentId",
+  auth,
+  validateComment,
+  handleValidation,
+  commentPut
+);
 
 postsRouter.patch("/:postUri", auth, postPublishedPatch);
 

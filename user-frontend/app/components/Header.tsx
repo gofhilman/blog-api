@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export default function Header() {
   return (
-    <div className="flex w-full items-center justify-between">
+    <header className="flex w-full items-center justify-between">
       <h1>
         <Link to="/">Stacked Stories</Link>
       </h1>
@@ -20,6 +20,6 @@ export default function Header() {
           />
         </a>
       </div>
-    </div>
+    </header>
   );
 }

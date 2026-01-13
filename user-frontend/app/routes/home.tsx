@@ -18,13 +18,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <title>Stacked Stories</title>
       <meta property="og:title" content="Stacked Stories" />
       {/* Test */}
-      <ul>
+      {/* <ul>
         {posts.map((post: any) => (
           <li key={post.id}>
             <Link to={post.uri}>{post.title}</Link>
           </li>
         ))}
-      </ul>
+      </ul> */}
+      <div>
+        
+      </div>
     </main>
   );
 }

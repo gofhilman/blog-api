@@ -1,4 +1,3 @@
-import { getPosts } from "~/api/postsApi";
 import type { Route } from "./+types/main-layout";
 import { getCategories } from "~/api/categoriesApi";
 import Header from "~/components/Header";

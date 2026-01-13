@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import { motion, type Variants } from "motion/react"
+import { motion, type Variants } from "motion/react";
 
-function LoadingThreeDotsPulse() {
-    const dotVariants: Variants = {
-        pulse: {
-            scale: [1, 1.5, 1],
-            transition: {
-                duration: 1.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-            },
-        },
-    }
+function LoadingThreeDotsPulse({ className }: any) {
+  const dotVariants: Variants = {
+    pulse: {
+      scale: [1, 1.5, 1],
+      transition: {
+        duration: 1.2,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
 
-    return (
-        <motion.div
-            animate="pulse"
-            transition={{ staggerChildren: -0.2, staggerDirection: -1 }}
-            className="container"
-        >
-            <motion.div className="dot" variants={dotVariants} />
-            <motion.div className="dot" variants={dotVariants} />
-            <motion.div className="dot" variants={dotVariants} />
-            <StyleSheet />
-        </motion.div>
-    )
+  return (
+    <motion.div
+      animate="pulse"
+      transition={{ staggerChildren: -0.2, staggerDirection: -1 }}
+      className={className + " container"}
+    >
+      <motion.div className="dot" variants={dotVariants} />
+      <motion.div className="dot" variants={dotVariants} />
+      <motion.div className="dot" variants={dotVariants} />
+      <StyleSheet />
+    </motion.div>
+  );
 }
 
 /**
  * ==============   Styles   ================
  */
 function StyleSheet() {
-    return (
-        <style>
-            {`
+  return (
+    <style>
+      {`
             .container {
                 display: flex;
                 justify-content: center;
@@ -50,8 +50,8 @@ function StyleSheet() {
                 will-change: transform;
             }
             `}
-        </style>
-    )
+    </style>
+  );
 }
 
-export default LoadingThreeDotsPulse
+export default LoadingThreeDotsPulse;

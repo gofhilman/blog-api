@@ -11,9 +11,7 @@ import LoadingThreeDotsPulse from "./components/ui/LoadingThreeDotsPulse";
 
 export async function HydrateFallback() {
   return (
-    <div className="flex h-full w-full items-center justify-center">
-      <LoadingThreeDotsPulse />
-    </div>
+    <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
   );
 }
 

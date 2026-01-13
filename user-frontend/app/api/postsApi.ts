@@ -1,18 +1,20 @@
 import throwError from "./throwError";
 
-async function getPosts(categoryUri?: any) {
+const postsUrl = import.meta.env.VITE_API_ROOT_URL + "/posts/";
+
+async function getPosts(categoryUri?: any, page?: any) {
   const response = await fetch(
-    import.meta.env.VITE_API_ROOT_URL +
-      (categoryUri ? "/?category=" + categoryUri : "/"),
+    postsUrl +
+      "?published=1" +
+      (categoryUri ? "&category=" + categoryUri : "") +
+      (page ? "&page=" + page : ""),
   );
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function getSpecificPost(postUri: any) {
-  const response = await fetch(
-    import.meta.env.VITE_API_ROOT_URL + "/" + postUri,
-  );
+  const response = await fetch(postsUrl + postUri + "?published=1");
   if (!response.ok) await throwError(response);
   return await response.json();
 }

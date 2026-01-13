@@ -6,6 +6,7 @@ import { POSTS_PER_PAGE } from "./constants";
 async function postsGet(req: any, res: any) {
   const page = +req.query.page || 1;
   const categoryUri = req.query.category;
+  const published = req.query.published;
   const posts = await prisma.post.findMany({
     skip: (page - 1) * POSTS_PER_PAGE,
     take: POSTS_PER_PAGE,
@@ -16,21 +17,25 @@ async function postsGet(req: any, res: any) {
       },
       categories: true,
     },
-    ...(categoryUri && {
-      where: {
+    where: {
+      ...(categoryUri && {
         categories: {
           some: { uri: categoryUri },
         },
-      },
-    }),
+      }),
+      ...(published && { published: +published }),
+    },
   });
-  res.json({ posts });
+  const postCount = await prisma.post.count();
+  res.json({ posts, postCount });
 }
 
 async function specificPostGet(req: any, res: any) {
+  const published = req.query.published;
   const post = await prisma.post.findUnique({
     where: {
       uri: req.params.postUri,
+      ...(published && { published: +published }),
     },
     include: {
       author: {

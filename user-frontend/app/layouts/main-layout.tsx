@@ -1,11 +1,23 @@
 import { getPosts } from "~/api/postsApi";
 import type { Route } from "./+types/main-layout";
+import { getCategories } from "~/api/categoriesApi";
+import Header from "~/components/Header";
+import Footer from "~/components/Footer";
+import { Outlet } from "react-router";
 
-export async function clientLoader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const categoryUri = url.searchParams.get("category");
-  const posts = await getPosts(categoryUri);
-  return { posts };
+export async function clientLoader() {
+  const { categories } = await getCategories();
+  return { categories };
 }
 
-export default function MainLayout({ loaderData }: Route.ComponentProps) {}
+export default function MainLayout({ loaderData }: Route.ComponentProps) {
+  const { categories } = loaderData;
+
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer categories={categories} />
+    </>
+  );
+}

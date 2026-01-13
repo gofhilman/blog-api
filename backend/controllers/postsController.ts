@@ -23,7 +23,7 @@ async function postsGet(req: any, res: any) {
           some: { uri: categoryUri },
         },
       }),
-      ...(published && { published: +published }),
+      ...(published && { published: +published === 1 }),
     },
   });
   const postCount = await prisma.post.count();
@@ -35,7 +35,7 @@ async function specificPostGet(req: any, res: any) {
   const post = await prisma.post.findUnique({
     where: {
       uri: req.params.postUri,
-      ...(published && { published: +published }),
+      ...(published && { published: +published === 1 }),
     },
     include: {
       author: {

@@ -3,6 +3,11 @@ import { prisma } from "../lib/prisma";
 import jwt from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
 
+function meGet(req: any, res: any) {
+  const { username, role } = req.user;
+  res.json({ user: { username, role } });
+}
+
 async function signupPost(req: any, res: any) {
   const { username, password, role } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,4 +49,4 @@ async function loginPost(req: any, res: any) {
   throw new AppError("Invalid username or password", 401);
 }
 
-export { signupPost, loginPost };
+export { meGet, signupPost, loginPost };

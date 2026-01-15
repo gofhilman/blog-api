@@ -19,4 +19,8 @@ async function getSpecificPost(postUri: any) {
   return await response.json();
 }
 
-export { getPosts, getSpecificPost };
+async function getComments(postUri: any) {
+  
+}
+
+export { getPosts, getSpecificPost, getComments };

@@ -19,7 +19,7 @@ const postsRouter = Router();
 
 postsRouter.get("/", postsGet);
 postsRouter.get("/:postUri", specificPostGet);
-postsRouter.get("/:postUri/comments", auth, commentsGet);
+postsRouter.get("/:postUri/comments", commentsGet);
 
 postsRouter.post("/", auth, validatePost, handleValidation, postPost);
 postsRouter.post(

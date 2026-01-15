@@ -1,6 +1,6 @@
 import { getPosts } from "~/api/postsApi";
 import type { Route } from "./+types/home";
-import { Link } from "react-router";
+import PostCard from "~/components/PostCard";
 
 export async function clientLoader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
@@ -17,16 +17,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     <main>
       <title>Stacked Stories</title>
       <meta property="og:title" content="Stacked Stories" />
-      {/* Test */}
-      {/* <ul>
-        {posts.map((post: any) => (
-          <li key={post.id}>
-            <Link to={post.uri}>{post.title}</Link>
-          </li>
-        ))}
-      </ul> */}
       <div>
-        
+        {posts.map((post: any) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </div>
     </main>
   );

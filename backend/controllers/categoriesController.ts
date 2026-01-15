@@ -10,13 +10,15 @@ async function categoriesGet(req: any, res: any) {
 }
 
 async function specificCategoryGet(req: any, res: any) {
-  const page = +req.query.page || 1;
+  const page = req.query.page;
+  const published = req.query.published;
+  const where = {
+    ...(published && { published: +published === 1 }),
+  };
   const category = await prisma.category.findUnique({
     where: { uri: req.params.categoryUri },
     include: {
       posts: {
-        skip: (page - 1) * POSTS_PER_PAGE,
-        take: POSTS_PER_PAGE,
         orderBy: { createdAt: "desc" },
         include: {
           author: {
@@ -24,7 +26,13 @@ async function specificCategoryGet(req: any, res: any) {
           },
           categories: true,
         },
+        ...(page && {
+          skip: (+page - 1) * POSTS_PER_PAGE,
+          take: POSTS_PER_PAGE,
+        }),
+        where,
       },
+      _count: { select: { posts: where } },
     },
   });
   res.json({ category });

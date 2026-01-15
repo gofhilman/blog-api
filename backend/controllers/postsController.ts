@@ -4,12 +4,18 @@ import uriToId from "../lib/uriToId";
 import { POSTS_PER_PAGE } from "./constants";
 
 async function postsGet(req: any, res: any) {
-  const page = +req.query.page || 1;
+  const page = req.query.page;
   const categoryUri = req.query.category;
   const published = req.query.published;
+  const where = {
+    ...(categoryUri && {
+      categories: {
+        some: { uri: categoryUri },
+      },
+    }),
+    ...(published && { published: +published === 1 }),
+  };
   const posts = await prisma.post.findMany({
-    skip: (page - 1) * POSTS_PER_PAGE,
-    take: POSTS_PER_PAGE,
     orderBy: { createdAt: "desc" },
     include: {
       author: {
@@ -17,16 +23,13 @@ async function postsGet(req: any, res: any) {
       },
       categories: true,
     },
-    where: {
-      ...(categoryUri && {
-        categories: {
-          some: { uri: categoryUri },
-        },
-      }),
-      ...(published && { published: +published === 1 }),
-    },
+    ...(page && {
+      skip: (+page - 1) * POSTS_PER_PAGE,
+      take: POSTS_PER_PAGE,
+    }),
+    where,
   });
-  const postCount = await prisma.post.count();
+  const postCount = await prisma.post.count({ where });
   res.json({ posts, postCount });
 }
 

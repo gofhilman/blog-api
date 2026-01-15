@@ -7,7 +7,7 @@ async function getPosts(categoryUri?: any, page?: any) {
     postsUrl +
       "?published=1" +
       (categoryUri ? "&category=" + categoryUri : "") +
-      (page ? "&page=" + page : ""),
+      (page ? "&page=" + page : "&page=1"),
   );
   if (!response.ok) await throwError(response);
   return await response.json();

@@ -1,32 +1,31 @@
 import { Link } from "react-router";
 import { Separator } from "./ui/separator";
 import { format } from "date-fns";
+import { Fragment } from "react/jsx-runtime";
 
 export default function PostCard({ post }: any) {
   return (
-    <Link to={post.uri}>
-      <article>
+    <article>
+      <Link to={post.uri}>
         <h2>{post.title}</h2>
-        <div className="flex h-5 items-center space-x-4 text-sm">
+      </Link>
+      <div className="flex h-5 items-center space-x-4 text-sm">
+        <Link to={post.uri}>
           <p>{format(post.createdAt, "MMMM d, y")}</p>
-          <Separator orientation="vertical" />
-          <p>
-            {post.categories.reduce(
-              (acc: any, category: any, index: any, array: any) => {
-                acc.push(
-                  <Link id={category.id} to={"?category=" + category.uri}>
-                    {category.name}
-                  </Link>,
-                );
-                if (index < array.length - 1) acc.push(", ");
-                return acc;
-              },
-              [],
-            )}
-          </p>
-        </div>
+        </Link>
+        <Separator orientation="vertical" />
+        <p>
+          {post.categories.map((category: any, index: any, array: any) => (
+            <Fragment key={category.id}>
+              <Link to={"?category=" + category.uri}>{category.name}</Link>
+              {index < array.length - 1 && ", "}
+            </Fragment>
+          ))}
+        </p>
+      </div>
+      <Link to={post.uri}>
         <p>{post.subtitle}</p>
-      </article>
-    </Link>
+      </Link>
+    </article>
   );
 }

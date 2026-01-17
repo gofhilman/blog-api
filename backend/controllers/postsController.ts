@@ -62,7 +62,7 @@ async function commentsGet(req: any, res: any) {
       },
     },
   });
-  res.json({ comments, userId: req.user.id });
+  res.json({ comments });
 }
 
 async function postPost(req: any, res: any) {

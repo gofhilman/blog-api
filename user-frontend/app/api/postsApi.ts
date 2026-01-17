@@ -20,7 +20,9 @@ async function getSpecificPost(postUri: any) {
 }
 
 async function getComments(postUri: any) {
-  
+  const response = await fetch(postsUrl + postUri + "/comments");
+  if (!response.ok) await throwError(response);
+  return await response.json();
 }
 
 export { getPosts, getSpecificPost, getComments };

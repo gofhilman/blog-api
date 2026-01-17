@@ -3,7 +3,8 @@ import throwError from "./throwError";
 const authUrl = import.meta.env.VITE_API_ROOT_URL + "/auth/";
 
 async function getMe() {
-  
+  const response = await fetch(authUrl + "me");
+  return response.ok ? await response.json() : { user: null };
 }
 
 async function postAuth(type: any, user: any) {

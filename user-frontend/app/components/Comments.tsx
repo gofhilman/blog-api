@@ -17,13 +17,18 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
 export default function Comments({ commentsAndUser }: any) {
-  const [comments, user]: any = use(commentsAndUser);
+  const [{ comments }, { user }]: any = use(commentsAndUser);
+
   return (
     <div>
       <div>
-        {comments.map((comment: any) => (
-          <CommentCard key={comment.id} comment={comment} user={user} />
-        ))}
+        {comments.length ? (
+          comments.map((comment: any) => (
+            <CommentCard key={comment.id} comment={comment} user={user} />
+          ))
+        ) : (
+          <p>No comments yet</p>
+        )}
       </div>
       <div>
         {user ? (

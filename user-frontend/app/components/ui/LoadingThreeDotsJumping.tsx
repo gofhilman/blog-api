@@ -1,12 +1,13 @@
 import { motion, type Variants } from "motion/react";
 
-function LoadingThreeDotsPulse({ className }: any) {
+function LoadingThreeDotsJumping({ className }: any) {
   const dotVariants: Variants = {
-    pulse: {
-      scale: [1, 1.5, 1],
+    jump: {
+      transform: "translateY(-30px)",
       transition: {
-        duration: 1.2,
+        duration: 0.8,
         repeat: Infinity,
+        repeatType: "mirror",
         ease: "easeInOut",
       },
     },
@@ -14,7 +15,7 @@ function LoadingThreeDotsPulse({ className }: any) {
 
   return (
     <motion.div
-      animate="pulse"
+      animate="jump"
       transition={{ staggerChildren: -0.2, staggerDirection: -1 }}
       className={className + " container"}
     >
@@ -37,7 +38,7 @@ function StyleSheet() {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                gap: 20px;
+                gap: 10px;
             }
 
             .dot {
@@ -52,4 +53,4 @@ function StyleSheet() {
   );
 }
 
-export default LoadingThreeDotsPulse;
+export default LoadingThreeDotsJumping;

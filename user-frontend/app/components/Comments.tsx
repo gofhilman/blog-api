@@ -14,6 +14,7 @@ import {
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 export default function Comments({ commentsAndUser }: any) {
   const [comments, user]: any = use(commentsAndUser);
@@ -26,7 +27,18 @@ export default function Comments({ commentsAndUser }: any) {
       </div>
       <div>
         {user ? (
-          <Form></Form>
+          <Form action="comments" method="post">
+            <div className="grid gap-3">
+              <Label htmlFor="comment-content">Leave a comment</Label>
+              <Textarea
+                placeholder="Type your comment here."
+                id="comment-content"
+                name="content"
+                required
+              />
+            </div>
+            <Button>Post comment</Button>
+          </Form>
         ) : (
           <div>
             <Dialog>
@@ -44,7 +56,7 @@ export default function Comments({ commentsAndUser }: any) {
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="login-username">Username</Label>
-                      <Input id="login-username" name="username" />
+                      <Input id="login-username" name="username" required />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="login-password">Password</Label>
@@ -52,6 +64,7 @@ export default function Comments({ commentsAndUser }: any) {
                         type="password"
                         id="login-password"
                         name="password"
+                        required
                       />
                     </div>
                   </div>
@@ -66,7 +79,29 @@ export default function Comments({ commentsAndUser }: any) {
             </Dialog>
             or
             <Dialog>
-              <Form action="/signup" method="post">
+              <Form
+                action="/signup"
+                method="post"
+                onSubmit={(event) => {
+                  const form = event.currentTarget;
+                  const password =
+                    form.querySelector<HTMLInputElement>("#signup-password");
+                  const confirmPassword = form.querySelector<HTMLInputElement>(
+                    "#signup-confirm-password",
+                  );
+                  if (confirmPassword) {
+                    confirmPassword.setCustomValidity("");
+                    if (confirmPassword.value !== password?.value) {
+                      confirmPassword.setCustomValidity(
+                        "Passwords must match, darling.",
+                      );
+                    }
+                  }
+                  if (!form.reportValidity()) {
+                    event.preventDefault();
+                  }
+                }}
+              >
                 <DialogTrigger asChild>
                   <Button variant="outline">Sign up</Button>
                 </DialogTrigger>
@@ -80,7 +115,7 @@ export default function Comments({ commentsAndUser }: any) {
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="signup-username">Username</Label>
-                      <Input id="signup-username" name="username" />
+                      <Input id="signup-username" name="username" required />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="signup-password">Password</Label>
@@ -88,9 +123,21 @@ export default function Comments({ commentsAndUser }: any) {
                         type="password"
                         id="signup-password"
                         name="password"
+                        required
                       />
                     </div>
-                    {/* To be continued */}
+                    <div className="grid gap-3">
+                      <Label htmlFor="signup-confirm-password">
+                        Confirm password
+                      </Label>
+                      <Input
+                        type="password"
+                        id="signup-confirm-password"
+                        name="confirm-password"
+                        required
+                      />
+                    </div>
+                    <Input type="hidden" name="role" value="USER" />
                   </div>
                   <DialogFooter>
                     <DialogClose asChild>

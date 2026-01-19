@@ -57,6 +57,7 @@ export default function CommentCard({ comment, user }: any) {
                     placeholder="Type your comment here."
                     name="content"
                     defaultValue={comment.content}
+                    required
                   />
                   <DialogFooter>
                     <DialogClose asChild>

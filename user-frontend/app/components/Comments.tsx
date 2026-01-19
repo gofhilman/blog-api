@@ -47,17 +47,17 @@ export default function Comments({ commentsAndUser }: any) {
         ) : (
           <div>
             <Dialog>
-              <Form action="/login" method="post">
-                <DialogTrigger asChild>
-                  <Button variant="outline">Log in</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Log in</DialogTitle>
-                    <DialogDescription>
-                      Enter your credentials to access your account.
-                    </DialogDescription>
-                  </DialogHeader>
+              <DialogTrigger asChild>
+                <Button variant="outline">Log in</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Log in</DialogTitle>
+                  <DialogDescription>
+                    Enter your credentials to access your account.
+                  </DialogDescription>
+                </DialogHeader>
+                <Form id="login" action="login" method="post">
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="login-username">Username</Label>
@@ -73,14 +73,16 @@ export default function Comments({ commentsAndUser }: any) {
                       />
                     </div>
                   </div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button type="submit">Log in</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Form>
+                </Form>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button type="submit" form="login">
+                    Log in
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
             </Dialog>
             or
             <Dialog>

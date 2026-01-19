@@ -13,10 +13,10 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
   const { categories } = loaderData;
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col px-5 py-12">
       <Header />
       <Outlet />
       <Footer categories={categories} />
-    </>
+    </div>
   );
 }

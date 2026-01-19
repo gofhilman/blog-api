@@ -12,5 +12,7 @@ export default [
     route(":postUri/comments", "routes/comment-add.tsx"),
     route(":postUri/comments/:commentId/edit", "routes/comment-edit.tsx"),
     route(":postUri/comments/:commentId/delete", "routes/comment-delete.tsx"),
+    route("login", "routes/login.tsx"),
+    route("signup", "routes/signup.tsx"),
   ]),
 ] satisfies RouteConfig;

@@ -8,14 +8,14 @@ const validateLogin = [
     .notEmpty()
     .withMessage(
       "Trying to log in without a username? Sweetie, we need to know " +
-        "who's knocking before we open the velvet rope."
+        "who's knocking before we open the velvet rope.",
     ),
   body("password")
     .trim()
     .notEmpty()
     .withMessage(
       "No password? This isn't a casual stroll, it's a secured entrance. " +
-        "Flash the credentials or sashay away!"
+        "Flash the credentials or sashay away!",
     ),
 ];
 
@@ -25,7 +25,7 @@ const validateSignup = [
     .notEmpty()
     .withMessage(
       "You're registering, darling. That means choosing a name that slaps, " +
-        "sparkles, and screams main character energy. Don't ghost us!"
+        "sparkles, and screams main character energy. Don't ghost us!",
     )
     .custom(async (username) => {
       const user = await prisma.user.findUnique({
@@ -34,7 +34,7 @@ const validateSignup = [
       if (user) {
         throw new AppError(
           "That username's already booked and busy, darling. Try something with more sparkle!",
-          409
+          409,
         );
       }
       return true;
@@ -44,8 +44,44 @@ const validateSignup = [
     .notEmpty()
     .withMessage(
       "A new account without a password? That's like wearing heels with no attitude. " +
-        "Lock it down, secure your sparkle, and strut into the system!"
+        "Lock it down, secure your sparkle, and strut into the system!",
     ),
+  body("confirm-password")
+    .trim()
+    .notEmpty()
+    .withMessage(
+      "Confirming your password is like checking your reflection before the runway, darling. " +
+        "We need to know you're serving consistency!",
+    )
+    .custom((confirmPassword, { req }) => {
+      if (confirmPassword !== req.body.password) {
+        throw new AppError(
+          "Mismatch alert! Your passwords aren't twinning, darling. " +
+            "Serve us a perfect match before you strut in!",
+          400,
+        );
+      }
+      return true;
+    }),
+  body("admin-passcode").custom((adminPasscode, { req }) => {
+    if (req.body.role === "ADMIN") {
+      if (adminPasscode.trim() === "") {
+        throw new AppError(
+          "Darling, you can't waltz into the VIP lounge without the secret sparkle code. " +
+            "Serve us that admin passcode or the velvet rope stays shut!",
+          401,
+        );
+      }
+      if (adminPasscode !== process.env.ADMIN_PASSCODE) {
+        throw new AppError(
+          "That passcode isn't serving admin realness, darling. " +
+            "Bring the correct glam key to unlock your crown!",
+          401,
+        );
+      }
+    }
+    return true;
+  }),
 ];
 
 const validatePost = [
@@ -54,32 +90,32 @@ const validatePost = [
     .notEmpty()
     .withMessage(
       "Darling, a post without a title? That's like serving tea without the drama. " +
-        "Give us a headline that slays, sparkles, and makes the feed stop scrolling!"
+        "Give us a headline that slays, sparkles, and makes the feed stop scrolling!",
     )
     .matches(/[\p{L}\p{N}]/u)
     .withMessage(
       "Honey, your title needs at least one letter or number. " +
-        "No ghost posts, no empty vibes, serve us something that actually walks the runway!"
+        "No ghost posts, no empty vibes, serve us something that actually walks the runway!",
     ),
   body("subtitle")
     .trim()
     .notEmpty()
     .withMessage(
       "Darling, a post without a subtitle? That's like a diva without a catchphrase. " +
-        "Give us that extra sparkle, the tagline that makes the crowd scream encore!"
+        "Give us that extra sparkle, the tagline that makes the crowd scream encore!",
     ),
   body("content")
     .trim()
     .notEmpty()
     .withMessage(
       "Darling, a post without content? That's like a runway with no models. " +
-        "Serve the drama, spill the tea, and give us words that sparkle!"
+        "Serve the drama, spill the tea, and give us words that sparkle!",
     ),
   body("categories")
     .isArray()
     .withMessage(
       "Sweetheart, your categories need to be an array. " +
-        "Think of them as your entourage-organized, fabulous, and ready to support the main act!"
+        "Think of them as your entourage-organized, fabulous, and ready to support the main act!",
     )
     .custom((array) => {
       if (array.length === 0) return true;
@@ -87,7 +123,7 @@ const validatePost = [
         throw new AppError(
           "Darling, empty categories are like backup dancers forgetting their steps. " +
             "Every category needs to bring the sparkle, not dead air!",
-          400
+          400,
         );
       }
       return true;
@@ -100,7 +136,7 @@ const validateComment = [
     .notEmpty()
     .withMessage(
       "Darling, a comment without content? That's like clapping with no hands. " +
-        "Spill the tea, drop the shade, or share the love, but don't leave us hanging!"
+        "Spill the tea, drop the shade, or share the love, but don't leave us hanging!",
     ),
 ];
 
@@ -110,12 +146,12 @@ const validateCategory = [
     .notEmpty()
     .withMessage(
       "Darling, a category without a name? That's like a fashion line without a label. " +
-        "Give it a name that slays and tells the world what it stands for!"
+        "Give it a name that slays and tells the world what it stands for!",
     )
     .matches(/[\p{L}\p{N}]/u)
     .withMessage(
       "Honey, your category name needs at least one letter or number. " +
-        "No ghost names, no empty vibes, serve us something that actually belongs on the marquee!"
+        "No ghost names, no empty vibes, serve us something that actually belongs on the marquee!",
     ),
 ];
 

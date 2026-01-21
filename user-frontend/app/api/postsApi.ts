@@ -28,6 +28,7 @@ async function getComments(postUri: any) {
 async function postComment(postUri: any, content: any) {
   const headers = new Headers();
   headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  headers.append("Content-Type", "application/json");
   const response = await fetch(postsUrl + postUri + "/comments", {
     method: "POST",
     headers,
@@ -40,6 +41,7 @@ async function postComment(postUri: any, content: any) {
 async function putComment(postUri: any, commentId: any, content: any) {
   const headers = new Headers();
   headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  headers.append("Content-Type", "application/json");
   const response = await fetch(postsUrl + postUri + "/comments/" + commentId, {
     method: "PUT",
     headers,

@@ -11,8 +11,9 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Form } from "react-router";
+import { useFetcher } from "react-router";
 import { Textarea } from "./ui/textarea";
+import FetcherErrors from "./FetcherErrors";
 
 function CommentData({ comment }: any) {
   return (
@@ -35,6 +36,10 @@ function CommentData({ comment }: any) {
 }
 
 export default function CommentCard({ comment, user }: any) {
+  const commentEditFetcher = useFetcher();
+  const commentDeleteFetcher = useFetcher();
+  const commentEditErrors = commentEditFetcher.data?.errors;
+  const commentDeleteErrors = commentDeleteFetcher.data?.errors;
   return (
     <article>
       <CommentData comment={comment} />
@@ -52,18 +57,19 @@ export default function CommentCard({ comment, user }: any) {
                     Edit your comment here. Click save when you're done.
                   </DialogDescription>
                 </DialogHeader>
-                <Form
+                <commentEditFetcher.Form
                   id="comment-edit"
                   action={"comments/" + comment.id + "/edit"}
                   method="post"
                 >
+                  <FetcherErrors errors={commentEditErrors} />
                   <Textarea
                     placeholder="Type your comment here."
                     name="content"
                     defaultValue={comment.content}
                     required
                   />
-                </Form>
+                </commentEditFetcher.Form>
                 <DialogFooter>
                   <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>
@@ -86,19 +92,22 @@ export default function CommentCard({ comment, user }: any) {
                   Please confirm you want to delete this comment.
                 </DialogDescription>
               </DialogHeader>
-              <article>
-                <CommentData comment={comment} />
-              </article>
+              <div>
+                <FetcherErrors errors={commentDeleteErrors} />
+                <article>
+                  <CommentData comment={comment} />
+                </article>
+              </div>
               <DialogFooter>
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
-                <Form
+                <commentDeleteFetcher.Form
                   action={"comments/" + comment.id + "/delete"}
                   method="post"
                 >
                   <Button type="submit">Delete</Button>
-                </Form>
+                </commentDeleteFetcher.Form>
               </DialogFooter>
             </DialogContent>
           </Dialog>

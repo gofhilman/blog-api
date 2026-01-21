@@ -1,6 +1,6 @@
 import { use } from "react";
 import CommentCard from "./CommentCard";
-import { Form, useFetcher } from "react-router";
+import { useFetcher } from "react-router";
 import {
   Dialog,
   DialogClose,
@@ -15,12 +15,14 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import FetcherErrors from "./FetcherErrors";
 
 export default function Comments({ commentsAndUser }: any) {
   const [{ comments }, { user }]: any = use(commentsAndUser);
   const loginFetcher = useFetcher();
   const signupFetcher = useFetcher();
   const commentAddFetcher = useFetcher();
+  const logoutFetcher = useFetcher();
   const loginErrors = loginFetcher.data?.errors;
   const signupErrors = signupFetcher.data?.errors;
   const commentAddErrors = commentAddFetcher.data?.errors;
@@ -44,22 +46,16 @@ export default function Comments({ commentsAndUser }: any) {
                 <Label htmlFor="comment-content">
                   Comment as {user.username}
                 </Label>
-                <Form action="logout" method="post">
+                <logoutFetcher.Form action="/logout" method="post">
                   <Button type="submit">Log out</Button>
-                </Form>
+                </logoutFetcher.Form>
               </div>
               <commentAddFetcher.Form
                 id="comment-add"
                 action="comments"
                 method="post"
               >
-                {commentAddErrors && (
-                  <ul>
-                    {commentAddErrors.map((message: any, index: any) => (
-                      <li key={index}>{message}</li>
-                    ))}
-                  </ul>
-                )}
+                <FetcherErrors errors={commentAddErrors} />
                 <Textarea
                   placeholder="Type your comment here."
                   id="comment-content"
@@ -85,14 +81,8 @@ export default function Comments({ commentsAndUser }: any) {
                     Enter your credentials to access your account.
                   </DialogDescription>
                 </DialogHeader>
-                <loginFetcher.Form id="login" action="login" method="post">
-                  {loginErrors && (
-                    <ul>
-                      {loginErrors.map((message: any, index: any) => (
-                        <li key={index}>{message}</li>
-                      ))}
-                    </ul>
-                  )}
+                <loginFetcher.Form id="login" action="/login" method="post">
+                  <FetcherErrors errors={loginErrors} />
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="login-username">Username</Label>
@@ -156,13 +146,7 @@ export default function Comments({ commentsAndUser }: any) {
                     }
                   }}
                 >
-                  {signupErrors && (
-                    <ul>
-                      {signupErrors.map((message: any, index: any) => (
-                        <li key={index}>{message}</li>
-                      ))}
-                    </ul>
-                  )}
+                  <FetcherErrors errors={signupErrors} />
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="signup-username">Username</Label>

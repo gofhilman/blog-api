@@ -11,9 +11,6 @@ export default [
     index("routes/home.tsx"),
     ...prefix(":postUri", [
       index("routes/post.tsx"),
-      route("login", "routes/login.tsx"),
-      route("logout", "routes/logout.tsx"),
-      route("signup", "routes/signup.tsx"),
       ...prefix("comments", [
         index("routes/comment-add.tsx"),
         route(":commentId/edit", "routes/comment-edit.tsx"),
@@ -21,4 +18,7 @@ export default [
       ]),
     ]),
   ]),
+  route("login", "routes/login.tsx"),
+  route("logout", "routes/logout.tsx"),
+  route("signup", "routes/signup.tsx"),
 ] satisfies RouteConfig;

@@ -2,18 +2,23 @@ import {
   type RouteConfig,
   index,
   layout,
+  prefix,
   route,
 } from "@react-router/dev/routes";
 
 export default [
   layout("layouts/main-layout.tsx", [
     index("routes/home.tsx"),
-    route(":postUri", "routes/post.tsx"),
-    route(":postUri/comments", "routes/comment-add.tsx"),
-    route(":postUri/comments/:commentId/edit", "routes/comment-edit.tsx"),
-    route(":postUri/comments/:commentId/delete", "routes/comment-delete.tsx"),
-    route(":postUri/login", "routes/login.tsx"),
-    route(":postUri/logout", "routes/logout.tsx"),
-    route(":postUri/signup", "routes/signup.tsx"),
+    ...prefix(":postUri", [
+      index("routes/post.tsx"),
+      route("login", "routes/login.tsx"),
+      route("logout", "routes/logout.tsx"),
+      route("signup", "routes/signup.tsx"),
+      ...prefix("comments", [
+        index("routes/comment-add.tsx"),
+        route(":commentId/edit", "routes/comment-edit.tsx"),
+        route(":commentId/delete", "routes/comment-delete.tsx"),
+      ]),
+    ]),
   ]),
 ] satisfies RouteConfig;

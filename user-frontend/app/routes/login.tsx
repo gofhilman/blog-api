@@ -1,20 +1,15 @@
 import { postLogin } from "~/api/authApi";
 import type { Route } from "./+types/login";
-import { isRouteErrorResponse, redirect } from "react-router";
-import { errorContext } from "~/context";
+import { data, redirect } from "react-router";
 
-export async function clientAction({
-  params,
-  request,
-  context,
-}: Route.ActionArgs) {
+export async function clientAction({ params, request }: Route.ActionArgs) {
   const formData = await request.formData();
   const user = Object.fromEntries(formData);
   try {
     await postLogin(user);
   } catch (error: any) {
-    const message = await error.text();
-    context.set(errorContext, { code: error.status, message });
+    const errors = await error.json();
+    return data({ errors }, { status: error.status });
   }
   return redirect("/" + params.postUri);
 }

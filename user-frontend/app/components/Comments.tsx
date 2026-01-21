@@ -1,6 +1,6 @@
 import { use } from "react";
 import CommentCard from "./CommentCard";
-import { Form } from "react-router";
+import { Form, useFetcher } from "react-router";
 import {
   Dialog,
   DialogClose,
@@ -18,6 +18,12 @@ import { Textarea } from "./ui/textarea";
 
 export default function Comments({ commentsAndUser }: any) {
   const [{ comments }, { user }]: any = use(commentsAndUser);
+  const loginFetcher = useFetcher();
+  const signupFetcher = useFetcher();
+  const commentAddFetcher = useFetcher();
+  const loginErrors = loginFetcher.data?.errors;
+  const signupErrors = signupFetcher.data?.errors;
+  const commentAddErrors = commentAddFetcher.data?.errors;
 
   return (
     <div>
@@ -42,14 +48,25 @@ export default function Comments({ commentsAndUser }: any) {
                   <Button type="submit">Log out</Button>
                 </Form>
               </div>
-              <Form id="comment-add" action="comments" method="post">
+              <commentAddFetcher.Form
+                id="comment-add"
+                action="comments"
+                method="post"
+              >
+                {commentAddErrors && (
+                  <ul>
+                    {commentAddErrors.map((message: any, index: any) => (
+                      <li key={index}>{message}</li>
+                    ))}
+                  </ul>
+                )}
                 <Textarea
                   placeholder="Type your comment here."
                   id="comment-content"
                   name="content"
                   required
                 />
-              </Form>
+              </commentAddFetcher.Form>
             </div>
             <Button type="submit" form="comment-add">
               Post comment
@@ -68,7 +85,14 @@ export default function Comments({ commentsAndUser }: any) {
                     Enter your credentials to access your account.
                   </DialogDescription>
                 </DialogHeader>
-                <Form id="login" action="login" method="post">
+                <loginFetcher.Form id="login" action="login" method="post">
+                  {loginErrors && (
+                    <ul>
+                      {loginErrors.map((message: any, index: any) => (
+                        <li key={index}>{message}</li>
+                      ))}
+                    </ul>
+                  )}
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="login-username">Username</Label>
@@ -84,7 +108,7 @@ export default function Comments({ commentsAndUser }: any) {
                       />
                     </div>
                   </div>
-                </Form>
+                </loginFetcher.Form>
                 <DialogFooter>
                   <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>
@@ -107,7 +131,7 @@ export default function Comments({ commentsAndUser }: any) {
                     Sign up to join the discussion.
                   </DialogDescription>
                 </DialogHeader>
-                <Form
+                <signupFetcher.Form
                   id="signup"
                   action="/signup"
                   method="post"
@@ -132,6 +156,13 @@ export default function Comments({ commentsAndUser }: any) {
                     }
                   }}
                 >
+                  {signupErrors && (
+                    <ul>
+                      {signupErrors.map((message: any, index: any) => (
+                        <li key={index}>{message}</li>
+                      ))}
+                    </ul>
+                  )}
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="signup-username">Username</Label>
@@ -159,7 +190,7 @@ export default function Comments({ commentsAndUser }: any) {
                     </div>
                     <Input type="hidden" name="role" value="USER" />
                   </div>
-                </Form>
+                </signupFetcher.Form>
                 <DialogFooter>
                   <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>

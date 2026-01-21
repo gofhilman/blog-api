@@ -32,18 +32,29 @@ export default function Comments({ commentsAndUser }: any) {
       </div>
       <div>
         {user ? (
-          <Form action="comments" method="post">
+          <div>
             <div className="grid gap-3">
-              <Label htmlFor="comment-content">Leave a comment</Label>
-              <Textarea
-                placeholder="Type your comment here."
-                id="comment-content"
-                name="content"
-                required
-              />
+              <div>
+                <Label htmlFor="comment-content">
+                  Comment as {user.username}
+                </Label>
+                <Form action="logout" method="post">
+                  <Button type="submit">Log out</Button>
+                </Form>
+              </div>
+              <Form id="comment-add" action="comments" method="post">
+                <Textarea
+                  placeholder="Type your comment here."
+                  id="comment-content"
+                  name="content"
+                  required
+                />
+              </Form>
             </div>
-            <Button>Post comment</Button>
-          </Form>
+            <Button type="submit" form="comment-add">
+              Post comment
+            </Button>
+          </div>
         ) : (
           <div>
             <Dialog>
@@ -86,39 +97,41 @@ export default function Comments({ commentsAndUser }: any) {
             </Dialog>
             or
             <Dialog>
-              <Form
-                action="/signup"
-                method="post"
-                onSubmit={(event) => {
-                  const form = event.currentTarget;
-                  const password =
-                    form.querySelector<HTMLInputElement>("#signup-password");
-                  const confirmPassword = form.querySelector<HTMLInputElement>(
-                    "#signup-confirm-password",
-                  );
-                  if (confirmPassword) {
-                    confirmPassword.setCustomValidity("");
-                    if (confirmPassword.value !== password?.value) {
-                      confirmPassword.setCustomValidity(
-                        "Passwords must match, darling.",
+              <DialogTrigger asChild>
+                <Button variant="outline">Sign up</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Sign up</DialogTitle>
+                  <DialogDescription>
+                    Sign up to join the discussion.
+                  </DialogDescription>
+                </DialogHeader>
+                <Form
+                  id="signup"
+                  action="/signup"
+                  method="post"
+                  onSubmit={(event) => {
+                    const form = event.currentTarget;
+                    const password =
+                      form.querySelector<HTMLInputElement>("#signup-password");
+                    const confirmPassword =
+                      form.querySelector<HTMLInputElement>(
+                        "#signup-confirm-password",
                       );
+                    if (confirmPassword) {
+                      confirmPassword.setCustomValidity("");
+                      if (confirmPassword.value !== password?.value) {
+                        confirmPassword.setCustomValidity(
+                          "Passwords must match, darling.",
+                        );
+                      }
                     }
-                  }
-                  if (!form.reportValidity()) {
-                    event.preventDefault();
-                  }
-                }}
-              >
-                <DialogTrigger asChild>
-                  <Button variant="outline">Sign up</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Sign up</DialogTitle>
-                    <DialogDescription>
-                      Sign up to join the discussion.
-                    </DialogDescription>
-                  </DialogHeader>
+                    if (!form.reportValidity()) {
+                      event.preventDefault();
+                    }
+                  }}
+                >
                   <div className="grid gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="signup-username">Username</Label>
@@ -146,14 +159,16 @@ export default function Comments({ commentsAndUser }: any) {
                     </div>
                     <Input type="hidden" name="role" value="USER" />
                   </div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button type="submit">Sign up</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Form>
+                </Form>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button type="submit" form="signup">
+                    Sign up
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
             </Dialog>
             to comment
           </div>

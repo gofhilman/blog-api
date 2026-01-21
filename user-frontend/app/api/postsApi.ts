@@ -25,4 +25,46 @@ async function getComments(postUri: any) {
   return await response.json();
 }
 
-export { getPosts, getSpecificPost, getComments };
+async function postComment(postUri: any, content: any) {
+  const headers = new Headers();
+  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  const response = await fetch(postsUrl + postUri + "/comments", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ content }),
+  });
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+async function putComment(postUri: any, commentId: any, content: any) {
+  const headers = new Headers();
+  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  const response = await fetch(postsUrl + postUri + "/comments/" + commentId, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ content }),
+  });
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+async function deleteComment(postUri: any, commentId: any) {
+  const headers = new Headers();
+  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  const response = await fetch(postsUrl + postUri + "/comments/" + commentId, {
+    method: "DELETE",
+    headers,
+  });
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+export {
+  getPosts,
+  getSpecificPost,
+  getComments,
+  postComment,
+  putComment,
+  deleteComment,
+};

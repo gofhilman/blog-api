@@ -42,56 +42,65 @@ export default function CommentCard({ comment, user }: any) {
         <div>
           {user.username === comment.user.username && (
             <Dialog>
-              <Form action={"comments/" + comment.id + "/edit"} method="post">
-                <DialogTrigger asChild>
-                  <Button variant="outline">Edit</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Edit comment</DialogTitle>
-                    <DialogDescription>
-                      Edit your comment here. Click save when you're done.
-                    </DialogDescription>
-                  </DialogHeader>
+              <DialogTrigger asChild>
+                <Button variant="outline">Edit</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit comment</DialogTitle>
+                  <DialogDescription>
+                    Edit your comment here. Click save when you're done.
+                  </DialogDescription>
+                </DialogHeader>
+                <Form
+                  id="comment-edit"
+                  action={"comments/" + comment.id + "/edit"}
+                  method="post"
+                >
                   <Textarea
                     placeholder="Type your comment here."
                     name="content"
                     defaultValue={comment.content}
                     required
                   />
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button type="submit">Save</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Form>
-            </Dialog>
-          )}
-          <Dialog>
-            <Form action={"comments/" + comment.id + "/delete"} method="post">
-              <DialogTrigger asChild>
-                <Button variant="outline">Delete</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Delete comment</DialogTitle>
-                  <DialogDescription>
-                    Please confirm you want to delete this comment.
-                  </DialogDescription>
-                </DialogHeader>
-                <article>
-                  <CommentData comment={comment} />
-                </article>
+                </Form>
                 <DialogFooter>
                   <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DialogClose>
-                  <Button type="submit">Delete</Button>
+                  <Button type="submit" form="comment-edit">
+                    Save
+                  </Button>
                 </DialogFooter>
               </DialogContent>
-            </Form>
+            </Dialog>
+          )}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">Delete</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Delete comment</DialogTitle>
+                <DialogDescription>
+                  Please confirm you want to delete this comment.
+                </DialogDescription>
+              </DialogHeader>
+              <article>
+                <CommentData comment={comment} />
+              </article>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Form
+                  action={"comments/" + comment.id + "/delete"}
+                  method="post"
+                >
+                  <Button type="submit">Delete</Button>
+                </Form>
+              </DialogFooter>
+            </DialogContent>
           </Dialog>
         </div>
       )}

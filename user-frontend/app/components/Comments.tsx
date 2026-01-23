@@ -1,4 +1,4 @@
-import { use } from "react";
+import { use, useEffect, useRef } from "react";
 import CommentCard from "./CommentCard";
 import { useFetcher } from "react-router";
 import {
@@ -23,9 +23,16 @@ export default function Comments({ commentsAndUser }: any) {
   const signupFetcher = useFetcher();
   const commentAddFetcher = useFetcher();
   const logoutFetcher = useFetcher();
+  const commentAddFormRef = useRef<HTMLFormElement | null>(null);
   const loginErrors = loginFetcher.data?.errors;
   const signupErrors = signupFetcher.data?.errors;
   const commentAddErrors = commentAddFetcher.data?.errors;
+
+  useEffect(() => {
+    if (commentAddFetcher.state === "idle" && !commentAddErrors) {
+      commentAddFormRef.current?.reset();
+    }
+  }, [commentAddFetcher.state, commentAddErrors]);
 
   return (
     <div>
@@ -54,6 +61,7 @@ export default function Comments({ commentsAndUser }: any) {
                 id="comment-add"
                 action="comments"
                 method="post"
+                ref={commentAddFormRef}
               >
                 <FetcherErrors errors={commentAddErrors} />
                 <Textarea

@@ -14,6 +14,7 @@ import { Button } from "./ui/button";
 import { useFetcher } from "react-router";
 import { Textarea } from "./ui/textarea";
 import FetcherErrors from "./FetcherErrors";
+import { useEffect, useRef, useState } from "react";
 
 function CommentData({ comment }: any) {
   return (
@@ -38,15 +39,25 @@ function CommentData({ comment }: any) {
 export default function CommentCard({ comment, user }: any) {
   const commentEditFetcher = useFetcher();
   const commentDeleteFetcher = useFetcher();
+  const commentEditFormRef = useRef<HTMLFormElement | null>(null);
+  const [open, setOpen] = useState(false);
   const commentEditErrors = commentEditFetcher.data?.errors;
   const commentDeleteErrors = commentDeleteFetcher.data?.errors;
+
+  useEffect(() => {
+    if (commentEditFetcher.state === "idle" && !commentEditErrors) {
+      commentEditFormRef.current?.reset();
+      setOpen(false);
+    }
+  }, [commentEditFetcher.state, commentEditErrors]);
+
   return (
     <article>
       <CommentData comment={comment} />
       {(user.role === "ADMIN" || user.username === comment.user.username) && (
         <div>
           {user.username === comment.user.username && (
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline">Edit</Button>
               </DialogTrigger>
@@ -61,6 +72,7 @@ export default function CommentCard({ comment, user }: any) {
                   id="comment-edit"
                   action={"comments/" + comment.id + "/edit"}
                   method="post"
+                  ref={commentEditFormRef}
                 >
                   <FetcherErrors errors={commentEditErrors} />
                   <Textarea

@@ -21,7 +21,46 @@ async function getSpecificPost(postUri: any) {
 }
 
 async function postPost(post: any) {
-  
+  const headers = jsonContentJwtHeaders(new Headers());
+  const response = await fetch(postsUrl, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(post),
+  });
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+async function putPost(postUri: any, post: any) {
+  const headers = jsonContentJwtHeaders(new Headers());
+  const response = await fetch(postsUrl + postUri, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(post),
+  });
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+async function patchPostPublished(postUri: any, post: any) {
+  const headers = jsonContentJwtHeaders(new Headers());
+  const response = await fetch(postsUrl + postUri, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify(post),
+  });
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+async function deletePost(postUri: any) {
+  const headers = jwtHeaders(new Headers());
+  const response = await fetch(postsUrl + postUri, {
+    method: "DELETE",
+    headers,
+  });
+  if (!response.ok) await throwError(response);
+  return await response.json();
 }
 
 async function getComments(postUri: any) {
@@ -65,6 +104,10 @@ async function deleteComment(postUri: any, commentId: any) {
 export {
   getPosts,
   getSpecificPost,
+  postPost,
+  putPost,
+  patchPostPublished,
+  deletePost,
   getComments,
   postComment,
   putComment,

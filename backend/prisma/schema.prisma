@@ -15,7 +15,7 @@ datasource db {
 
 model Post {
   id         Int        @id @default(autoincrement())
-  createdAt  DateTime   @default(now())
+  createdAt  DateTime?
   updatedAt  DateTime?
   title      String
   subtitle   String

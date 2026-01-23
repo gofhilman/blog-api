@@ -1,3 +1,4 @@
+import { jsonContentJwtHeaders, jwtHeaders } from "~/lib/httpHeaders";
 import throwError from "./throwError";
 
 const postsUrl = import.meta.env.VITE_API_ROOT_URL + "/posts/";
@@ -19,6 +20,10 @@ async function getSpecificPost(postUri: any) {
   return await response.json();
 }
 
+async function postPost(post: any) {
+  
+}
+
 async function getComments(postUri: any) {
   const response = await fetch(postsUrl + postUri + "/comments");
   if (!response.ok) await throwError(response);
@@ -26,9 +31,7 @@ async function getComments(postUri: any) {
 }
 
 async function postComment(postUri: any, content: any) {
-  const headers = new Headers();
-  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
-  headers.append("Content-Type", "application/json");
+  const headers = jsonContentJwtHeaders(new Headers());
   const response = await fetch(postsUrl + postUri + "/comments", {
     method: "POST",
     headers,
@@ -39,9 +42,7 @@ async function postComment(postUri: any, content: any) {
 }
 
 async function putComment(postUri: any, commentId: any, content: any) {
-  const headers = new Headers();
-  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
-  headers.append("Content-Type", "application/json");
+  const headers = jsonContentJwtHeaders(new Headers());
   const response = await fetch(postsUrl + postUri + "/comments/" + commentId, {
     method: "PUT",
     headers,
@@ -52,8 +53,7 @@ async function putComment(postUri: any, commentId: any, content: any) {
 }
 
 async function deleteComment(postUri: any, commentId: any) {
-  const headers = new Headers();
-  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  const headers = jwtHeaders(new Headers());
   const response = await fetch(postsUrl + postUri + "/comments/" + commentId, {
     method: "DELETE",
     headers,

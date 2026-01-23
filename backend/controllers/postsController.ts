@@ -67,12 +67,14 @@ async function commentsGet(req: any, res: any) {
 
 async function postPost(req: any, res: any) {
   const { title, subtitle, published, content, categories } = req.body;
+  const createdAt = published ? new Date() : null;
   const connectOrCreate = categories.map((name: any) => ({
     create: { name, uri: slugify(name) },
     where: { name },
   }));
   let post = await prisma.post.create({
     data: {
+      createdAt,
       title,
       subtitle,
       published,
@@ -101,7 +103,8 @@ async function commentPost(req: any, res: any) {
 }
 
 async function postPut(req: any, res: any) {
-  const { title, subtitle, published, content, categories } = req.body;
+  let { createdAt, title, subtitle, published, content, categories } = req.body;
+  createdAt = !createdAt && published ? new Date() : null;
   const connectOrCreate = categories.map((name: any) => ({
     create: { name, uri: slugify(name) },
     where: { name },
@@ -116,6 +119,7 @@ async function postPut(req: any, res: any) {
       id: postId,
     },
     data: {
+      createdAt,
       title,
       subtitle,
       published,
@@ -141,9 +145,11 @@ async function commentPut(req: any, res: any) {
 }
 
 async function postPublishedPatch(req: any, res: any) {
+  let { createdAt, published } = req.body;
+  createdAt = !createdAt && published ? new Date() : null;
   const post = await prisma.post.update({
     where: { uri: req.params.postUri },
-    data: { published: req.body.published },
+    data: { createdAt, published },
   });
   res.json({ post });
 }

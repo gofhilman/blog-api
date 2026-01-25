@@ -22,6 +22,8 @@ export default [
     ]),
     route("categories/:categoryUri/edit", "routes/category-edit.tsx"),
     route("categories/:categoryUri/delete", "routes/category-delete.tsx"),
+  ]),
+  layout("layouts/auth-layout.tsx", [
     route("login", "routes/login.tsx"),
     route("logout", "routes/logout.tsx"),
     route("signup", "routes/signup.tsx"),

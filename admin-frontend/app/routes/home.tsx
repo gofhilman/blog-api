@@ -2,11 +2,14 @@ import { getPosts } from "~/api/postsApi";
 import type { Route } from "./+types/home";
 import { getCategories } from "~/api/categoriesApi";
 import PostItem from "~/components/PostItem";
-import { Form } from "react-router";
+import { Form, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import CategoryItem from "~/components/CategoryItem";
+import { getMe } from "~/api/authApi";
 
 export async function clientLoader() {
+  const { user } = await getMe();
+  if (!user) return redirect("login");
   const { posts } = await getPosts();
   const { categories } = await getCategories();
   return { posts, categories };

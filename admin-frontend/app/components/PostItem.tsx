@@ -1,32 +1,50 @@
 import { Dot } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { format } from "date-fns";
-import { Form, useSubmit } from "react-router";
+import { Form, useFetcher, useSubmit } from "react-router";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useState } from "react";
+import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+
+function PostData({ post }: any) {
+  return (
+    <div>
+      <h3>{post.title}</h3>
+      {(post.createdAt || post.categories.length > 0) && (
+        <>
+          <Separator orientation="vertical" />
+          <p>
+            {post.createdAt && format(post.createdAt, "MMMM d, y")}
+            {post.createdAt &&
+              post.categories.length > 0 &&
+              " " + <Dot /> + " "}
+            {post.categories.join(", ")}
+          </p>
+        </>
+      )}
+    </div>
+  );
+}
 
 export default function PostItem({ post }: any) {
   const [published, setPublished] = useState(post.published);
   const submit = useSubmit();
+  const fetcher = useFetcher();
 
   return (
     <div>
-      <div>
-        <h3>{post.title}</h3>
-        {(post.createdAt || post.categories.length > 0) && (
-          <>
-            <Separator orientation="vertical" />
-            <p>
-              {post.createdAt && format(post.createdAt, "MMMM d, y")}
-              {post.createdAt &&
-                post.categories.length > 0 &&
-                " " + <Dot /> + " "}
-              {post.categories.join(", ")}
-            </p>
-          </>
-        )}
-      </div>
+      <PostData post={post} />
       <div>
         <div>
           <Switch
@@ -48,9 +66,34 @@ export default function PostItem({ post }: any) {
           </Label>
         </div>
       </div>
-      <Form>
-        
+      <Form action={"posts/" + post.uri + "/edit"}>
+        <Button type="submit">Edit</Button>
       </Form>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Delete</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Delete post</DialogTitle>
+            <DialogDescription>
+              Please confirm you want to delete this post.
+            </DialogDescription>
+          </DialogHeader>
+          <PostData post={post} />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <fetcher.Form
+              action={"posts/" + post.uri + "/delete"}
+              method="post"
+            >
+              <Button type="submit">Delete</Button>
+            </fetcher.Form>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

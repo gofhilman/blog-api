@@ -2,6 +2,8 @@ import { getPosts } from "~/api/postsApi";
 import type { Route } from "./+types/home";
 import { getCategories } from "~/api/categoriesApi";
 import PostItem from "~/components/PostItem";
+import { Form } from "react-router";
+import { Button } from "~/components/ui/button";
 
 export async function clientLoader() {
   const { posts } = await getPosts();
@@ -18,6 +20,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <meta property="og:title" content="Stacked Control" />
       <section>
         <h2>Posts</h2>
+        <Form action="posts">
+          <Button type="submit">Create new post</Button>
+        </Form>
         <div>
           {posts.map((post: any) => (
             <PostItem key={post.id} post={post} />

@@ -126,6 +126,13 @@ const validatePost = [
           400,
         );
       }
+      if (array.some((item: any) => !/[\p{L}\p{N}]/u.test(item))) {
+        throw new AppError(
+          "Honey, each category needs at least one letter or number. " +
+            "No ghost names, no empty vibes—serve us something worthy of the marquee!",
+          400,
+        );
+      }
       return true;
     }),
 ];

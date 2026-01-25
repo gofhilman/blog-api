@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import FetcherErrors from "./FetcherErrors";
 
 function PostData({ post }: any) {
   return (
@@ -41,6 +42,7 @@ export default function PostItem({ post }: any) {
   const [published, setPublished] = useState(post.published);
   const submit = useSubmit();
   const fetcher = useFetcher();
+  const errors = fetcher.data?.errors;
 
   return (
     <div>
@@ -65,35 +67,38 @@ export default function PostItem({ post }: any) {
             {published ? "Published" : "Unpublished"}
           </Label>
         </div>
+        <Form action={"posts/" + post.uri + "/edit"}>
+          <Button type="submit">Edit</Button>
+        </Form>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Delete</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Delete post</DialogTitle>
+              <DialogDescription>
+                Please confirm you want to delete this post.
+              </DialogDescription>
+            </DialogHeader>
+            <div>
+              <FetcherErrors errors={errors} />
+              <PostData post={post} />
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <fetcher.Form
+                action={"posts/" + post.uri + "/delete"}
+                method="post"
+              >
+                <Button type="submit">Delete</Button>
+              </fetcher.Form>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-      <Form action={"posts/" + post.uri + "/edit"}>
-        <Button type="submit">Edit</Button>
-      </Form>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">Delete</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Delete post</DialogTitle>
-            <DialogDescription>
-              Please confirm you want to delete this post.
-            </DialogDescription>
-          </DialogHeader>
-          <PostData post={post} />
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <fetcher.Form
-              action={"posts/" + post.uri + "/delete"}
-              method="post"
-            >
-              <Button type="submit">Delete</Button>
-            </fetcher.Form>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

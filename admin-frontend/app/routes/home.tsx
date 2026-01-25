@@ -4,6 +4,7 @@ import { getCategories } from "~/api/categoriesApi";
 import PostItem from "~/components/PostItem";
 import { Form } from "react-router";
 import { Button } from "~/components/ui/button";
+import CategoryItem from "~/components/CategoryItem";
 
 export async function clientLoader() {
   const { posts } = await getPosts();
@@ -33,7 +34,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <h2>Categories</h2>
         <div>
           {categories.map((category: any) => (
-            <PostItem key={category.id} category={category} />
+            <CategoryItem key={category.id} category={category} />
           ))}
         </div>
       </section>

@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer>
       <h4>
-        <Link to="/">Stacked Stories Control</Link>
+        <Link to="/">Stacked Control</Link>
       </h4>
       <p>
         An admin dashboard for <a href="/">Stacked Stories</a>

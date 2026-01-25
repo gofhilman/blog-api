@@ -4,7 +4,7 @@ export default function Header() {
   return (
     <header>
       <h1>
-        <Link to="/">Stacked Stories Control</Link>
+        <Link to="/">Stacked Control</Link>
       </h1>
     </header>
   );

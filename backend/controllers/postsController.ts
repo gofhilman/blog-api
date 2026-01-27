@@ -69,7 +69,7 @@ async function postPost(req: any, res: any) {
   const { title, subtitle, published, content, categories } = req.body;
   const createdAt = published ? new Date() : null;
   const connectOrCreate = categories.map((name: any) => ({
-    create: { name, uri: slugify(name) },
+    create: { name },
     where: { name },
   }));
   let post = await prisma.post.create({
@@ -82,10 +82,20 @@ async function postPost(req: any, res: any) {
       categories: { connectOrCreate },
       authorId: req.user.id,
     },
+    include: { categories: true },
   });
+  for (const category of post.categories) {
+    if (!category.uri) {
+      await prisma.category.update({
+        where: { id: category.id },
+        data: { uri: slugify(category.name) + "-" + category.id },
+      });
+    }
+  }
   post = await prisma.post.update({
     where: { id: post.id },
     data: { uri: slugify(post.title) + "-" + post.id },
+    include: { categories: true },
   });
   res.json({ post });
 }
@@ -104,9 +114,9 @@ async function commentPost(req: any, res: any) {
 
 async function postPut(req: any, res: any) {
   let { createdAt, title, subtitle, published, content, categories } = req.body;
-  createdAt = !createdAt && published ? new Date() : null;
+  createdAt = createdAt ? createdAt : published ? new Date() : null;
   const connectOrCreate = categories.map((name: any) => ({
-    create: { name, uri: slugify(name) },
+    create: { name },
     where: { name },
   }));
   const postId = uriToId(req.params.postUri);
@@ -114,7 +124,7 @@ async function postPut(req: any, res: any) {
     where: { id: postId },
     data: { categories: { set: [] } },
   });
-  const post = await prisma.post.update({
+  const updatedPost = await prisma.post.update({
     where: {
       id: postId,
     },
@@ -129,9 +139,22 @@ async function postPut(req: any, res: any) {
       uri: slugify(title) + "-" + postId,
       updatedAt: new Date(),
     },
+    include: { categories: true },
   });
+  for (const category of updatedPost.categories) {
+    if (!category.uri) {
+      await prisma.category.update({
+        where: { id: category.id },
+        data: { uri: slugify(category.name) + "-" + category.id },
+      });
+    }
+  }
   await prisma.category.deleteMany({
     where: { posts: { none: {} } },
+  });
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    include: { categories: true },
   });
   res.json({ post });
 }
@@ -146,7 +169,7 @@ async function commentPut(req: any, res: any) {
 
 async function postPublishedPatch(req: any, res: any) {
   let { createdAt, published } = req.body;
-  createdAt = !createdAt && published ? new Date() : null;
+  createdAt = createdAt ? createdAt : published ? new Date() : null;
   const post = await prisma.post.update({
     where: { uri: req.params.postUri },
     data: { createdAt, published },

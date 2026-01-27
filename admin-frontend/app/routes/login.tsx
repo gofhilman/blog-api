@@ -1,4 +1,4 @@
-import { useFetcher } from "react-router";
+import { data, Form, redirect, useFetcher } from "react-router";
 import FetcherErrors from "~/components/FetcherErrors";
 import { Button } from "~/components/ui/button";
 import {
@@ -11,6 +11,20 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import type { Route } from "./+types/login";
+import { postLogin } from "~/api/authApi";
+
+export async function clientAction({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const user = Object.fromEntries(formData);
+  try {
+    await postLogin(user);
+    return redirect("/");
+  } catch (error: any) {
+    const errors = await error.json();
+    return data({ errors }, { status: error.status });
+  }
+}
 
 export default function Login() {
   const fetcher = useFetcher();
@@ -32,18 +46,24 @@ export default function Login() {
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" name="username" required></Input>
+                <Input id="username" name="username" required />
               </div>
               <div className="grid gap-2">
-                <Label></Label>
-                <Input></Input>
+                <Label htmlFor="password">Password</Label>
+                <Input type="password" id="password" name="password" required />
               </div>
             </div>
           </fetcher.Form>
         </CardContent>
-        <CardFooter>
-          <Button></Button>
-          <Button></Button>
+        <CardFooter className="flex-col gap-2">
+          <Button type="submit" form="login" className="w-full">
+            Log in
+          </Button>
+          <Form action="/signup">
+            <Button variant="outline" className="w-full">
+              Sign up
+            </Button>
+          </Form>
         </CardFooter>
       </Card>
     </main>

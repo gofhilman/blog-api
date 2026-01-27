@@ -6,7 +6,6 @@ const postsUrl = import.meta.env.VITE_API_ROOT_URL + "/posts/";
 async function getPosts(categoryUri?: any, page?: any) {
   const response = await fetch(
     postsUrl +
-      "?published=1" +
       (categoryUri ? "&category=" + categoryUri : "") +
       (page ? "&page=" + page : "&page=1"),
   );
@@ -15,7 +14,7 @@ async function getPosts(categoryUri?: any, page?: any) {
 }
 
 async function getSpecificPost(postUri: any) {
-  const response = await fetch(postsUrl + postUri + "?published=1");
+  const response = await fetch(postsUrl + postUri);
   if (!response.ok) await throwError(response);
   return await response.json();
 }

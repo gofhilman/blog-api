@@ -33,7 +33,7 @@ export default function Signup() {
 
   return (
     <main>
-      <title>Sign Up &mdash; Stacked Stories</title>
+      <title>Sign Up &mdash; Stacked Control</title>
       <Card>
         <CardHeader>
           <CardTitle>Let's get started!</CardTitle>

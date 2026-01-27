@@ -32,7 +32,7 @@ export default function Login() {
 
   return (
     <main>
-      <title>Log In &mdash; Stacked Stories</title>
+      <title>Log In &mdash; Stacked Control</title>
       <Card>
         <CardHeader>
           <CardTitle>Log in to your account</CardTitle>

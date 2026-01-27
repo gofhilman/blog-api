@@ -59,7 +59,7 @@ export default function Login() {
           <Button type="submit" form="login" className="w-full">
             Log in
           </Button>
-          <Form action="/signup">
+          <Form action="/signup" className="w-full">
             <Button variant="outline" className="w-full">
               Sign up
             </Button>

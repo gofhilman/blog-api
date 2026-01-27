@@ -31,7 +31,7 @@ export default function CategoryItem({ category }: any) {
 
   return (
     <div>
-      <h4>{category.title}</h4>
+      <h4>{category.name}</h4>
       <div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>

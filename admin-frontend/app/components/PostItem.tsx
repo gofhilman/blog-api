@@ -27,10 +27,10 @@ function PostData({ post }: any) {
           <Separator orientation="vertical" />
           <p>
             {post.createdAt && format(post.createdAt, "MMMM d, y")}
-            {post.createdAt &&
-              post.categories.length > 0 &&
-              " " + <Dot /> + " "}
-            {post.categories.join(", ")}
+            {post.createdAt && post.categories.length > 0 && (
+              <Dot className="inline" />
+            )}
+            {post.categories.map((category: any) => category.name).join(", ")}
           </p>
         </>
       )}

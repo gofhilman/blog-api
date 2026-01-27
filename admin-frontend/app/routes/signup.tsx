@@ -3,6 +3,7 @@ import FetcherErrors from "~/components/FetcherErrors";
 import { Button } from "~/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -39,6 +40,11 @@ export default function Signup() {
           <CardDescription>
             Fill in your details to register and access your dashboard.
           </CardDescription>
+          <CardAction>
+            <Form action="/login">
+              <Button variant="link">Log in</Button>
+            </Form>
+          </CardAction>
         </CardHeader>
         <CardContent>
           <fetcher.Form

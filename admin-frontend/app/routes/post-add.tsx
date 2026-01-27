@@ -6,6 +6,7 @@ import { Switch } from "~/components/ui/switch";
 import { useState } from "react";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
+import CreatableCombobox from "~/components/CreatableCombobox";
 
 export async function clientLoader() {
   const { user } = await getMe();
@@ -47,7 +48,9 @@ export default function PostAdd({
             <Label htmlFor="subtitle">Subtitle</Label>
             <Input id="subtitle" name="subtitle" required />
           </div>
-
+          <div className="w-100">
+            <CreatableCombobox categoryNames={loaderData.categoryNames} />
+          </div>
           <Input type="hidden" name="published" value={published ? "1" : ""} />
         </div>
       </Form>

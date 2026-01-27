@@ -55,7 +55,7 @@ export default function PostItem({ post }: any) {
             onCheckedChange={(checked) => {
               setPublished(checked);
               submit(
-                { published: checked },
+                { createdAt: post.createdAt, published: checked },
                 {
                   action: "posts/" + post.uri + "/published-patch",
                   method: "post",

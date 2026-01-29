@@ -3,11 +3,13 @@ import type { Route } from "./+types/post-add";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
 import CreatableCombobox from "~/components/CreatableCombobox";
 import BundledEditor from "~/components/BundledEditor";
+import { postImage } from "~/api/imageApi";
+import { Button } from "~/components/ui/button";
 
 export async function clientLoader() {
   const { user } = await getMe();
@@ -22,12 +24,6 @@ export default function PostAdd({
   actionData,
 }: Route.ComponentProps) {
   const [published, setPublished] = useState(true);
-  const editorRef = useRef<any>(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
 
   return (
     <main>
@@ -52,6 +48,9 @@ export default function PostAdd({
                 {published ? "Published" : "Unpublished"}
               </Label>
             </div>
+            <Button type="submit">
+              {published ? "Save and publish" : "Save"}
+            </Button>
           </div>
           <div>
             <Label htmlFor="subtitle">Subtitle</Label>
@@ -65,46 +64,43 @@ export default function PostAdd({
               categoryNames={loaderData.categoryNames}
             />
           </div>
-          <div>
-            <BundledEditor
-              name="content"
-              onInit={(_evt: any, editor: any) => (editorRef.current = editor)}
-              initialValue="<p>This is the initial content of the editor.</p>"
-              init={{
-                height: 500,
-                menubar: false,
-                plugins: [
-                  "advlist",
-                  "autolink",
-                  "lists",
-                  "link",
-                  "image",
-                  "charmap",
-                  "anchor",
-                  "searchreplace",
-                  "visualblocks",
-                  "code",
-                  "fullscreen",
-                  "insertdatetime",
-                  "media",
-                  "table",
-                  "preview",
-                  "help",
-                  "wordcount",
-                ],
-                toolbar:
-                  "undo redo | blocks | " +
-                  "bold italic forecolor | alignleft aligncenter " +
-                  "alignright alignjustify | bullist numlist outdent indent | " +
-                  "removeformat | help",
-                content_style:
-                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-              }}
-            />
-          </div>
-          <button type="button" onClick={log}>
-            Log editor content
-          </button>
+          <BundledEditor
+            name="content"
+            init={{
+              placeholder: "Compose your thoughts here.",
+              height: 500,
+              plugins: [
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "preview",
+                "help",
+                "wordcount",
+                "codesample",
+                "autoresize",
+                "autosave",
+              ],
+              toolbar:
+                "undo redo | blocks | " +
+                "bold italic forecolor codesample | alignleft aligncenter " +
+                "alignright alignjustify | bullist numlist outdent indent | " +
+                "removeformat | help",
+              images_upload_handler: postImage,
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            }}
+          />
         </div>
       </Form>
     </main>

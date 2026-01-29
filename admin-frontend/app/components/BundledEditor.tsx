@@ -35,6 +35,10 @@ import "tinymce/plugins/searchreplace";
 import "tinymce/plugins/table";
 import "tinymce/plugins/wordcount";
 
+import "tinymce/plugins/codesample";
+import "tinymce/plugins/autoresize";
+import "tinymce/plugins/autosave";
+
 export default function BundledEditor(props: any) {
   return <Editor licenseKey="gpl" {...props} />;
 }

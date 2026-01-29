@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Combobox,
   ComboboxChip,
@@ -23,13 +23,11 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Plus } from "lucide-react";
 
-export default function CreatableCombobox({ categoryNames }: any) {
+export default function CreatableCombobox({ id, name, categoryNames }: any) {
   const initialLabels: LabelItem[] = categoryNames.map((name: string) => ({
     id: name.replace(/\s+/g, "-"),
     value: name,
   }));
-
-  const id = useId();
 
   const [labels, setLabels] = useState<LabelItem[]>(initialLabels);
   const [selected, setSelected] = useState<LabelItem[]>([]);
@@ -161,6 +159,7 @@ export default function CreatableCombobox({ categoryNames }: any) {
           setSelected(clean);
           setQuery("");
         }}
+        name={name}
         value={selected}
         inputValue={query}
         onInputValueChange={setQuery}
@@ -168,28 +167,25 @@ export default function CreatableCombobox({ categoryNames }: any) {
           highlightedItemRef.current = item;
         }}
       >
-        <div>
-          <label htmlFor={id}>Labels</label>
-          <ComboboxChips ref={containerRef}>
-            <ComboboxValue>
-              {(value: LabelItem[]) => (
-                <>
-                  {value.map((label) => (
-                    <ComboboxChip key={label.id} aria-label={label.value}>
-                      {label.value}
-                    </ComboboxChip>
-                  ))}
-                  <ComboboxChipsInput
-                    ref={comboboxInputRef}
-                    id={id}
-                    placeholder={value.length > 0 ? "" : "e.g. bug"}
-                    onKeyDown={handleInputKeyDown}
-                  />
-                </>
-              )}
-            </ComboboxValue>
-          </ComboboxChips>
-        </div>
+        <ComboboxChips ref={containerRef}>
+          <ComboboxValue>
+            {(value: LabelItem[]) => (
+              <>
+                {value.map((label) => (
+                  <ComboboxChip key={label.id} aria-label={label.value}>
+                    {label.value}
+                  </ComboboxChip>
+                ))}
+                <ComboboxChipsInput
+                  ref={comboboxInputRef}
+                  id={id}
+                  placeholder={value.length > 0 ? "" : "e.g. bug"}
+                  onKeyDown={handleInputKeyDown}
+                />
+              </>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
 
         <ComboboxContent sideOffset={4} anchor={containerRef}>
           <ComboboxEmpty>No labels found.</ComboboxEmpty>

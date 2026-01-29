@@ -3,10 +3,11 @@ import type { Route } from "./+types/post-add";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
 import CreatableCombobox from "~/components/CreatableCombobox";
+import BundledEditor from "~/components/BundledEditor";
 
 export async function clientLoader() {
   const { user } = await getMe();
@@ -21,6 +22,12 @@ export default function PostAdd({
   actionData,
 }: Route.ComponentProps) {
   const [published, setPublished] = useState(true);
+  const editorRef = useRef<any>(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
 
   return (
     <main>
@@ -38,6 +45,8 @@ export default function PostAdd({
                 id="published"
                 checked={published}
                 onCheckedChange={setPublished}
+                name="published"
+                value="1"
               />
               <Label htmlFor="published">
                 {published ? "Published" : "Unpublished"}
@@ -48,10 +57,54 @@ export default function PostAdd({
             <Label htmlFor="subtitle">Subtitle</Label>
             <Input id="subtitle" name="subtitle" required />
           </div>
-          <div className="w-100">
-            <CreatableCombobox categoryNames={loaderData.categoryNames} />
+          <div>
+            <Label htmlFor="categories">Categories</Label>
+            <CreatableCombobox
+              id="categories"
+              name="categories"
+              categoryNames={loaderData.categoryNames}
+            />
           </div>
-          <Input type="hidden" name="published" value={published ? "1" : ""} />
+          <div>
+            <BundledEditor
+              name="content"
+              onInit={(_evt: any, editor: any) => (editorRef.current = editor)}
+              initialValue="<p>This is the initial content of the editor.</p>"
+              init={{
+                height: 500,
+                menubar: false,
+                plugins: [
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "preview",
+                  "help",
+                  "wordcount",
+                ],
+                toolbar:
+                  "undo redo | blocks | " +
+                  "bold italic forecolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat | help",
+                content_style:
+                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              }}
+            />
+          </div>
+          <button type="button" onClick={log}>
+            Log editor content
+          </button>
         </div>
       </Form>
     </main>

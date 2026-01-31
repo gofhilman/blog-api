@@ -1,5 +1,5 @@
-import { data, Form, redirect, useFetcher } from "react-router";
-import FetcherErrors from "~/components/FetcherErrors";
+import { data, Form, redirect } from "react-router";
+import FormErrors from "~/components/FormErrors";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -14,7 +14,7 @@ import { Label } from "~/components/ui/label";
 import type { Route } from "./+types/login";
 import { postLogin } from "~/api/authApi";
 
-export async function clientAction({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const user = Object.fromEntries(formData);
   try {
@@ -26,9 +26,8 @@ export async function clientAction({ request }: Route.ActionArgs) {
   }
 }
 
-export default function Login() {
-  const fetcher = useFetcher();
-  const errors = fetcher.data?.errors;
+export default function Login({ actionData }: Route.ComponentProps) {
+  const errors = actionData?.errors;
 
   return (
     <main>
@@ -41,8 +40,8 @@ export default function Login() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <fetcher.Form id="login" method="post">
-            <FetcherErrors errors={errors} />
+          <Form id="login" method="post">
+            <FormErrors errors={errors} />
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
@@ -53,7 +52,7 @@ export default function Login() {
                 <Input type="password" id="password" name="password" required />
               </div>
             </div>
-          </fetcher.Form>
+          </Form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" form="login" className="w-full">

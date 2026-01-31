@@ -2,7 +2,7 @@ import { deleteCategory } from "~/api/categoriesApi";
 import type { Route } from "./+types/category-delete";
 import { data } from "react-router";
 
-export async function clientAction({ params }: Route.ActionArgs) {
+export async function clientAction({ params }: Route.ClientActionArgs) {
   try {
     return await deleteCategory(params.categoryUri);
   } catch (error: any) {

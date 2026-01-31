@@ -11,7 +11,7 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { useEffect, useRef, useState } from "react";
-import FetcherErrors from "./FetcherErrors";
+import FormErrors from "./FormErrors";
 import { Input } from "./ui/input";
 
 export default function CategoryItem({ category }: any) {
@@ -50,7 +50,7 @@ export default function CategoryItem({ category }: any) {
               method="post"
               ref={editFormRef}
             >
-              <FetcherErrors errors={editErrors} />
+              <FormErrors errors={editErrors} />
               <Input
                 placeholder="Type the category name here."
                 name="name"
@@ -80,7 +80,7 @@ export default function CategoryItem({ category }: any) {
                 <strong>{category.name}</strong> category.
               </DialogDescription>
             </DialogHeader>
-            <FetcherErrors errors={deleteErrors} />
+            <FormErrors errors={deleteErrors} />
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>

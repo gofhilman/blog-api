@@ -38,7 +38,48 @@ import "tinymce/plugins/wordcount";
 import "tinymce/plugins/codesample";
 import "tinymce/plugins/autoresize";
 import "tinymce/plugins/autosave";
+import { postImage } from "~/api/imageApi";
+import { Input } from "./ui/input";
 
 export default function BundledEditor(props: any) {
-  return <Editor licenseKey="gpl" {...props} />;
+  return (
+    <Editor
+      licenseKey="gpl"
+      init={{
+        placeholder: "Compose your thoughts here.",
+        height: 500,
+        plugins: [
+          "advlist",
+          "autolink",
+          "lists",
+          "link",
+          "image",
+          "charmap",
+          "anchor",
+          "searchreplace",
+          "visualblocks",
+          "code",
+          "fullscreen",
+          "insertdatetime",
+          "media",
+          "table",
+          "preview",
+          "help",
+          "wordcount",
+          "codesample",
+          "autoresize",
+          "autosave",
+        ],
+        toolbar:
+          "undo redo | blocks | " +
+          "bold italic forecolor codesample | alignleft aligncenter " +
+          "alignright alignjustify | bullist numlist outdent indent | " +
+          "removeformat | help",
+        images_upload_handler: postImage,
+        content_style:
+          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+      }}
+      {...props}
+    />
+  );
 }

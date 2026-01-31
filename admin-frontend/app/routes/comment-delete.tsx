@@ -2,7 +2,7 @@ import { deleteComment } from "~/api/postsApi";
 import type { Route } from "./+types/comment-delete";
 import { data } from "react-router";
 
-export async function clientAction({ params }: Route.ActionArgs) {
+export async function clientAction({ params }: Route.ClientActionArgs) {
   const { postUri, commentId } = params;
   try {
     return await deleteComment(postUri, commentId);

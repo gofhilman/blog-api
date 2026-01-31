@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import FetcherErrors from "./FetcherErrors";
+import FormErrors from "./FormErrors";
 
 function PostData({ post }: any) {
   return (
@@ -82,7 +82,7 @@ export default function PostItem({ post }: any) {
               </DialogDescription>
             </DialogHeader>
             <div>
-              <FetcherErrors errors={errors} />
+              <FormErrors errors={errors} />
               <PostData post={post} />
             </div>
             <DialogFooter>

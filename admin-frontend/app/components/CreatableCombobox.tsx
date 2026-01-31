@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Combobox,
   ComboboxChip,
@@ -33,12 +33,24 @@ export default function CreatableCombobox({ id, name, categoryNames }: any) {
   const [selected, setSelected] = useState<LabelItem[]>([]);
   const [query, setQuery] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const createInputRef = useRef<HTMLInputElement | null>(null);
   const comboboxInputRef = useRef<HTMLInputElement | null>(null);
   const pendingQueryRef = useRef("");
   const highlightedItemRef = useRef<LabelItem | undefined>(undefined);
+
+  useEffect(() => {
+    const handleBlur = () => {
+      if (document.activeElement?.tagName === "IFRAME") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("blur", handleBlur);
+    return () => window.removeEventListener("blur", handleBlur);
+  }, []);
 
   function handleInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key !== "Enter" || highlightedItemRef.current) {
@@ -140,6 +152,11 @@ export default function CreatableCombobox({ id, name, categoryNames }: any) {
 
   return (
     <>
+      <Input
+        type="hidden"
+        name={name}
+        value={selected.map((item) => item.value).join(", ")}
+      />
       <Combobox
         items={itemsForView}
         multiple
@@ -159,13 +176,14 @@ export default function CreatableCombobox({ id, name, categoryNames }: any) {
           setSelected(clean);
           setQuery("");
         }}
-        name={name}
         value={selected}
         inputValue={query}
         onInputValueChange={setQuery}
         onItemHighlighted={(item) => {
           highlightedItemRef.current = item;
         }}
+        open={open}
+        onOpenChange={setOpen}
       >
         <ComboboxChips ref={containerRef}>
           <ComboboxValue>

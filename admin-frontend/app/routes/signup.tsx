@@ -1,5 +1,5 @@
-import { data, Form, redirect, useFetcher } from "react-router";
-import FetcherErrors from "~/components/FetcherErrors";
+import { data, Form, redirect } from "react-router";
+import FormErrors from "~/components/FormErrors";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -15,7 +15,7 @@ import { Label } from "~/components/ui/label";
 import type { Route } from "./+types/signup";
 import { postSignup } from "~/api/authApi";
 
-export async function clientAction({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const user = Object.fromEntries(formData);
   try {
@@ -27,9 +27,8 @@ export async function clientAction({ request }: Route.ActionArgs) {
   }
 }
 
-export default function Signup() {
-  const fetcher = useFetcher();
-  const errors = fetcher.data?.errors;
+export default function Signup({ actionData }: Route.ComponentProps) {
+  const errors = actionData?.errors;
 
   return (
     <main>
@@ -47,7 +46,7 @@ export default function Signup() {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <fetcher.Form
+          <Form
             id="signup"
             method="post"
             onSubmit={(event) => {
@@ -69,7 +68,7 @@ export default function Signup() {
               }
             }}
           >
-            <FetcherErrors errors={errors} />
+            <FormErrors errors={errors} />
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
@@ -99,7 +98,7 @@ export default function Signup() {
               </div>
               <Input type="hidden" name="role" value="ADMIN" />
             </div>
-          </fetcher.Form>
+          </Form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" form="signup" className="w-full">

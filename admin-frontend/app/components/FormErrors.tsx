@@ -1,4 +1,4 @@
-export default function FetcherErrors({ errors }: any) {
+export default function FormErrors({ errors }: any) {
   return (
     <>
       {errors && (

@@ -1,15 +1,30 @@
-import { Form, redirect } from "react-router";
+import { data, Form, redirect, useSubmit } from "react-router";
 import type { Route } from "./+types/post-add";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
 import CreatableCombobox from "~/components/CreatableCombobox";
 import BundledEditor from "~/components/BundledEditor";
-import { postImage } from "~/api/imageApi";
 import { Button } from "~/components/ui/button";
+import { postPost } from "~/api/postsApi";
+import FormErrors from "~/components/FormErrors";
+
+export async function clientAction({ request }: Route.ClientActionArgs) {
+  const formData = await request.formData();
+  const post: any = Object.fromEntries(formData);
+  post.published = post.published === "1";
+  post.categories = post.categories ? post.categories.split(", ") : [];
+  try {
+    return await postPost(post);
+  } catch (error: any) {
+    const errors = await error.json();
+    console.log(post);
+    return data({ errors }, { status: error.status });
+  }
+}
 
 export async function clientLoader() {
   const { user } = await getMe();
@@ -23,13 +38,30 @@ export default function PostAdd({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
+  const errors = actionData?.errors;
   const [published, setPublished] = useState(true);
+  const editorRef = useRef<any>(null);
+  const [dirty, setDirty] = useState(false);
+  const submit = useSubmit();
 
   return (
     <main>
       <title>Create New Post &mdash; Stacked Stories</title>
-      <Form method="post">
+      <Form
+        method="post"
+        onSubmit={(event: any) => {
+          if (event.nativeEvent.submitter.id === "form-submit") {
+            event.preventDefault();
+            setDirty(false);
+            editorRef.current.setDirty(false);
+            const formData = new FormData(event.currentTarget);
+            formData.set("content", editorRef.current.getContent());
+            submit(formData, { method: "post" });
+          }
+        }}
+      >
         <h2>Create New Post</h2>
+        <FormErrors errors={errors} />
         <div>
           <div>
             <div>
@@ -48,7 +80,7 @@ export default function PostAdd({
                 {published ? "Published" : "Unpublished"}
               </Label>
             </div>
-            <Button type="submit">
+            <Button id="form-submit" type="submit" disabled={!dirty}>
               {published ? "Save and publish" : "Save"}
             </Button>
           </div>
@@ -64,43 +96,13 @@ export default function PostAdd({
               categoryNames={loaderData.categoryNames}
             />
           </div>
-          <BundledEditor
-            name="content"
-            init={{
-              placeholder: "Compose your thoughts here.",
-              height: 500,
-              plugins: [
-                "advlist",
-                "autolink",
-                "lists",
-                "link",
-                "image",
-                "charmap",
-                "anchor",
-                "searchreplace",
-                "visualblocks",
-                "code",
-                "fullscreen",
-                "insertdatetime",
-                "media",
-                "table",
-                "preview",
-                "help",
-                "wordcount",
-                "codesample",
-                "autoresize",
-                "autosave",
-              ],
-              toolbar:
-                "undo redo | blocks | " +
-                "bold italic forecolor codesample | alignleft aligncenter " +
-                "alignright alignjustify | bullist numlist outdent indent | " +
-                "removeformat | help",
-              images_upload_handler: postImage,
-              content_style:
-                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-            }}
-          />
+          <div>
+            {dirty && <p>(Unsaved)</p>}
+            <BundledEditor
+              onInit={(evt: any, editor: any) => (editorRef.current = editor)}
+              onDirty={() => setDirty(true)}
+            />
+          </div>
         </div>
       </Form>
     </main>

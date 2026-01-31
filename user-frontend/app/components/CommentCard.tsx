@@ -22,7 +22,7 @@ function CommentData({ comment }: any) {
       <div>
         <p>
           {comment.user.username}
-          {comment.user.role === "ADMIN" && " " + <span>(Author)</span>}
+          {comment.user.role === "ADMIN" && <span> (Author)</span>}
         </p>
         <Dot />
         <p>

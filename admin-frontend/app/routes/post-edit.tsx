@@ -11,6 +11,7 @@ import { Switch } from "~/components/ui/switch";
 import { Button } from "~/components/ui/button";
 import CreatableCombobox from "~/components/CreatableCombobox";
 import BundledEditor from "~/components/BundledEditor";
+import Comments from "~/components/Comments";
 
 export async function clientAction({
   params,
@@ -134,7 +135,10 @@ export default function PostEdit({
           </div>
         </Form>
       </section>
-      <section></section>
+      <section>
+        <h2>Comments</h2>
+        <Comments comments={comments} />
+      </section>
     </main>
   );
 }

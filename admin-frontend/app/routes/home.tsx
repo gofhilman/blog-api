@@ -9,7 +9,7 @@ import { getMe } from "~/api/authApi";
 
 export async function clientLoader() {
   const { user } = await getMe();
-  if (!user) return redirect("login");
+  if (!user) return redirect("/login");
   const { posts } = await getPosts();
   const { categories } = await getCategories();
   return { posts, categories };

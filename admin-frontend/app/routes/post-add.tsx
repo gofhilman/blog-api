@@ -21,14 +21,13 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
     return await postPost(post);
   } catch (error: any) {
     const errors = await error.json();
-    console.log(post);
     return data({ errors }, { status: error.status });
   }
 }
 
 export async function clientLoader() {
   const { user } = await getMe();
-  if (!user) return redirect("login");
+  if (!user) return redirect("/login");
   const { categories } = await getCategories();
   const categoryNames = categories.map((category: any) => category.name);
   return { categoryNames };
@@ -46,7 +45,7 @@ export default function PostAdd({
 
   return (
     <main>
-      <title>Create New Post &mdash; Stacked Stories</title>
+      <title>Create New Post &mdash; Stacked Control</title>
       <Form
         method="post"
         onSubmit={(event: any) => {
@@ -80,7 +79,7 @@ export default function PostAdd({
                 {published ? "Published" : "Unpublished"}
               </Label>
             </div>
-            <Button id="form-submit" type="submit" disabled={!dirty}>
+            <Button id="form-submit" type="submit">
               {published ? "Save and publish" : "Save"}
             </Button>
           </div>
@@ -97,7 +96,7 @@ export default function PostAdd({
             />
           </div>
           <div>
-            {dirty && <p>(Unsaved)</p>}
+            <p>{dirty && "(Unsaved)"}</p>
             <BundledEditor
               onInit={(evt: any, editor: any) => (editorRef.current = editor)}
               onDirty={() => setDirty(true)}

@@ -23,14 +23,22 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Plus } from "lucide-react";
 
-export default function CreatableCombobox({ id, name, categoryNames }: any) {
+export default function CreatableCombobox({
+  id,
+  name,
+  categoryNames,
+  defaultCategories,
+}: any) {
   const initialLabels: LabelItem[] = categoryNames.map((name: string) => ({
     id: name.replace(/\s+/g, "-"),
     value: name,
   }));
+  const initialSelected = defaultCategories
+    ? initialLabels.filter((label) => defaultCategories.includes(label.value))
+    : [];
 
   const [labels, setLabels] = useState<LabelItem[]>(initialLabels);
-  const [selected, setSelected] = useState<LabelItem[]>([]);
+  const [selected, setSelected] = useState<LabelItem[]>(initialSelected);
   const [query, setQuery] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);

@@ -10,11 +10,6 @@ async function getPosts(categoryUri?: any, page?: any) {
       (categoryUri ? "&category=" + categoryUri : "") +
       (page ? "&page=" + page : "&page=1"),
   );
-  console.log(
-    postsUrl +
-      (categoryUri ? "&category=" + categoryUri : "") +
-      (page ? "&page=" + page : "&page=1"),
-  );
   if (!response.ok) await throwError(response);
   return await response.json();
 }

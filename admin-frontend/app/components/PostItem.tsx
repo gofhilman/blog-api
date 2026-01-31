@@ -1,7 +1,7 @@
 import { Dot } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { format } from "date-fns";
-import { Form, useFetcher, useSubmit } from "react-router";
+import { Form, useFetcher } from "react-router";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useState } from "react";
@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import FormErrors from "./FormErrors";
+import { Input } from "./ui/input";
 
 function PostData({ post }: any) {
   return (
@@ -40,9 +41,9 @@ function PostData({ post }: any) {
 
 export default function PostItem({ post }: any) {
   const [published, setPublished] = useState(post.published);
-  const submit = useSubmit();
-  const fetcher = useFetcher();
-  const errors = fetcher.data?.errors;
+  const publishedFetcher = useFetcher();
+  const deleteFetcher = useFetcher();
+  const errors = deleteFetcher.data?.errors;
 
   return (
     <div>
@@ -52,10 +53,13 @@ export default function PostItem({ post }: any) {
           <Switch
             id={"published-" + post.id}
             checked={published}
-            onCheckedChange={(checked) => {
+            onCheckedChange={(checked: any) => {
               setPublished(checked);
-              submit(
-                { createdAt: post.createdAt, published: checked },
+              publishedFetcher.submit(
+                {
+                  createdAt: post.createdAt ?? "",
+                  published: checked ? "1" : "",
+                },
                 {
                   action: "posts/" + post.uri + "/published-patch",
                   method: "post",
@@ -89,12 +93,12 @@ export default function PostItem({ post }: any) {
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <fetcher.Form
+              <deleteFetcher.Form
                 action={"posts/" + post.uri + "/delete"}
                 method="post"
               >
                 <Button type="submit">Delete</Button>
-              </fetcher.Form>
+              </deleteFetcher.Form>
             </DialogFooter>
           </DialogContent>
         </Dialog>

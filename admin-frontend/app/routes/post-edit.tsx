@@ -1,0 +1,140 @@
+import { getComments, getSpecificPost, putPost } from "~/api/postsApi";
+import type { Route } from "./+types/post-edit";
+import { data, Form, redirect, useSubmit } from "react-router";
+import { getMe } from "~/api/authApi";
+import { getCategories } from "~/api/categoriesApi";
+import { useRef, useState } from "react";
+import FormErrors from "~/components/FormErrors";
+import { Label } from "~/components/ui/label";
+import { Input } from "~/components/ui/input";
+import { Switch } from "~/components/ui/switch";
+import { Button } from "~/components/ui/button";
+import CreatableCombobox from "~/components/CreatableCombobox";
+import BundledEditor from "~/components/BundledEditor";
+
+export async function clientAction({
+  params,
+  request,
+}: Route.ClientActionArgs) {
+  const formData = await request.formData();
+  const post: any = Object.fromEntries(formData);
+  if (!post.createdAt) post.createdAt = null;
+  post.published = post.published === "1";
+  post.categories = post.categories ? post.categories.split(", ") : [];
+  try {
+    return await putPost(params.postUri, post);
+  } catch (error: any) {
+    const errors = await error.json();
+    return data({ errors }, { status: error.status });
+  }
+}
+
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+  const { postUri } = params;
+  const { user } = await getMe();
+  if (!user) return redirect("/login");
+  const { categories } = await getCategories();
+  const categoryNames = categories.map((category: any) => category.name);
+  const { post } = await getSpecificPost(postUri);
+  const { comments } = await getComments(postUri);
+  return { categoryNames, post, comments };
+}
+
+export default function PostEdit({
+  loaderData,
+  actionData,
+}: Route.ComponentProps) {
+  let { categoryNames, post, comments } = loaderData;
+  post = actionData?.post ?? post;
+  const errors = actionData?.errors;
+  const [published, setPublished] = useState(post.published);
+  const editorRef = useRef<any>(null);
+  const [dirty, setDirty] = useState(false);
+  const submit = useSubmit();
+
+  return (
+    <main>
+      <title>Edit {post.title} &mdash; Stacked Control</title>
+      <section>
+        <Form
+          method="post"
+          onSubmit={(event: any) => {
+            if (event.nativeEvent.submitter.id === "form-submit") {
+              event.preventDefault();
+              setDirty(false);
+              editorRef.current.setDirty(false);
+              const formData = new FormData(event.currentTarget);
+              formData.set("content", editorRef.current.getContent());
+              submit(formData, { method: "post" });
+            }
+          }}
+        >
+          <h2>Edit {post.title}</h2>
+          <FormErrors errors={errors} />
+          <div>
+            <Input
+              type="hidden"
+              name="createdAt"
+              value={post.createdAt ?? ""}
+            />
+            <div>
+              <div>
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  name="title"
+                  defaultValue={post.title}
+                  required
+                />
+              </div>
+              <div>
+                <Switch
+                  id="published"
+                  checked={published}
+                  onCheckedChange={setPublished}
+                  name="published"
+                  value="1"
+                />
+                <Label htmlFor="published">
+                  {published ? "Published" : "Unpublished"}
+                </Label>
+              </div>
+              <Button id="form-submit" type="submit">
+                {published ? "Save and publish" : "Save"}
+              </Button>
+            </div>
+            <div>
+              <Label htmlFor="subtitle">Subtitle</Label>
+              <Input
+                id="subtitle"
+                name="subtitle"
+                defaultValue={post.subtitle}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="categories">Categories</Label>
+              <CreatableCombobox
+                id="categories"
+                name="categories"
+                categoryNames={categoryNames}
+                defaultCategories={post.categories.map(
+                  (category: any) => category.name,
+                )}
+              />
+            </div>
+            <div>
+              <p>{dirty && "(Unsaved)"}</p>
+              <BundledEditor
+                initialValue={post.content}
+                onInit={(evt: any, editor: any) => (editorRef.current = editor)}
+                onDirty={() => setDirty(true)}
+              />
+            </div>
+          </div>
+        </Form>
+      </section>
+      <section></section>
+    </main>
+  );
+}

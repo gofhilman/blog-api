@@ -40,7 +40,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form id="login" method="post">
+          <Form id="login" method="post" viewTransition>
             <FormErrors errors={errors} />
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">

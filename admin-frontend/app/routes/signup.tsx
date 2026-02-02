@@ -67,6 +67,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 event.preventDefault();
               }
             }}
+            viewTransition
           >
             <FormErrors errors={errors} />
             <div className="flex flex-col gap-6">

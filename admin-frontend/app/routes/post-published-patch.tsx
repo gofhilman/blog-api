@@ -1,5 +1,6 @@
 import { patchPostPublished } from "~/api/postsApi";
 import type { Route } from "./+types/post-published-patch";
+import { data } from "react-router";
 
 export async function clientAction({
   params,
@@ -9,5 +10,10 @@ export async function clientAction({
   const post: any = Object.fromEntries(formData);
   if (!post.createdAt) post.createdAt = null;
   post.published = post.published === "1";
-  return patchPostPublished(params.postUri, post);
+  try {
+    return await patchPostPublished(params.postUri, post);
+  } catch (error: any) {
+    const errors = await error.json();
+    return data({ errors }, { status: error.status });
+  }
 }

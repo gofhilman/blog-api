@@ -5,18 +5,32 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import FormErrors from "./FormErrors";
+import { toast } from "sonner";
 
 export default function Comments({ comments }: any) {
   const commentAddFetcher = useFetcher();
   const commentAddFormRef = useRef<HTMLFormElement | null>(null);
   const commentAddErrors = commentAddFetcher.data?.errors;
+  const loadingToasts = useRef(new Map());
 
   useEffect(() => {
-    if (commentAddFetcher.state === "idle" && !commentAddErrors) {
+    if (commentAddFetcher.data && !commentAddErrors) {
       commentAddFormRef.current?.reset();
     }
-  }, [commentAddFetcher.state, commentAddErrors]);
-  
+  }, [commentAddFetcher.data, commentAddErrors]);
+
+  if (commentAddFetcher.data) {
+    const id = loadingToasts.current.get("comment-add");
+    if (id) {
+      loadingToasts.current.delete("comment-add");
+      if (commentAddErrors) {
+        toast.error("Failed to add comment", { id });
+      } else {
+        toast.success("Comment has been added", { id });
+      }
+    }
+  }
+
   const postPath =
     useLocation().pathname.split("/").slice(0, -1).join("/") + "/";
 
@@ -39,9 +53,13 @@ export default function Comments({ comments }: any) {
             </div>
             <commentAddFetcher.Form
               id="comment-add"
-              action={postPath+"comments"}
+              action={postPath + "comments"}
               method="post"
               ref={commentAddFormRef}
+              onSubmit={() => {
+                const id = toast.loading("Adding comment...");
+                loadingToasts.current.set("comment-add", id);
+              }}
             >
               <FormErrors errors={commentAddErrors} />
               <Textarea

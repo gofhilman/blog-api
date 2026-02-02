@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import { useEffect, useRef, useState } from "react";
 import FormErrors from "./FormErrors";
 import { Input } from "./ui/input";
+import { toast } from "sonner";
 
 export default function CategoryItem({ category }: any) {
   const editFetcher = useFetcher();
@@ -21,13 +22,38 @@ export default function CategoryItem({ category }: any) {
   const [open, setOpen] = useState(false);
   const editErrors = editFetcher.data?.errors;
   const deleteErrors = deleteFetcher.data?.errors;
+  const loadingToasts = useRef(new Map());
 
   useEffect(() => {
-    if (editFetcher.state === "idle" && !editErrors) {
+    if (editFetcher.data && !editErrors) {
       editFormRef.current?.reset();
       setOpen(false);
     }
-  }, [editFetcher.state, editErrors]);
+  }, [editFetcher.data, editErrors]);
+
+  if (editFetcher.data) {
+    const id = loadingToasts.current.get("category-edit");
+    if (id) {
+      loadingToasts.current.delete("category-edit");
+      if (editErrors) {
+        toast.error("Failed to edit category", { id });
+      } else {
+        toast.success("Category has been edited", { id });
+      }
+    }
+  }
+
+  if (deleteFetcher.data) {
+    const id = loadingToasts.current.get("category-delete");
+    if (id) {
+      loadingToasts.current.delete("category-delete");
+      if (deleteErrors) {
+        toast.error("Failed to delete category", { id });
+      } else {
+        toast.success("Category has been deleted", { id });
+      }
+    }
+  }
 
   return (
     <div>
@@ -49,6 +75,10 @@ export default function CategoryItem({ category }: any) {
               action={"categories/" + category.uri + "/edit"}
               method="post"
               ref={editFormRef}
+              onSubmit={() => {
+                const id = toast.loading("Updating category...");
+                loadingToasts.current.set("category-edit", id);
+              }}
             >
               <FormErrors errors={editErrors} />
               <Input
@@ -88,6 +118,10 @@ export default function CategoryItem({ category }: any) {
               <deleteFetcher.Form
                 action={"categories/" + category.uri + "/delete"}
                 method="post"
+                onSubmit={() => {
+                  const id = toast.loading("Deleting category...");
+                  loadingToasts.current.set("category-delete", id);
+                }}
               >
                 <Button type="submit">Delete</Button>
               </deleteFetcher.Form>

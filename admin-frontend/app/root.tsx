@@ -8,6 +8,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import LoadingThreeDotsPulse from "./components/ui/LoadingThreeDotsPulse";
+import { Toaster } from "./components/ui/sonner";
 
 export async function HydrateFallback() {
   return (
@@ -26,6 +27,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        <Toaster position="top-center" />
       </body>
     </html>
   );

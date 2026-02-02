@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { Form, useFetcher } from "react-router";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -17,7 +17,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import FormErrors from "./FormErrors";
-import { Input } from "./ui/input";
+import { toast } from "sonner";
 
 function PostData({ post }: any) {
   return (
@@ -44,6 +44,38 @@ export default function PostItem({ post }: any) {
   const publishedFetcher = useFetcher();
   const deleteFetcher = useFetcher();
   const errors = deleteFetcher.data?.errors;
+  const loadingToasts = useRef(new Map());
+
+  if (publishedFetcher.data) {
+    const id = loadingToasts.current.get("post-patch");
+    if (id) {
+      loadingToasts.current.delete("post-patch");
+      if (publishedFetcher.data.errors) {
+        toast.error(`Failed to ${published ? "publish" : "unpublish"} post`, {
+          id,
+        });
+      } else {
+        toast.success(
+          `Post has been ${published ? "published" : "unpublished"}`,
+          {
+            id,
+          },
+        );
+      }
+    }
+  }
+
+  if (deleteFetcher.data) {
+    const id = loadingToasts.current.get("post-delete");
+    if (id) {
+      loadingToasts.current.delete("post-delete");
+      if (errors) {
+        toast.error("Failed to delete post", { id });
+      } else {
+        toast.success("Post has been deleted", { id });
+      }
+    }
+  }
 
   return (
     <div>
@@ -55,6 +87,10 @@ export default function PostItem({ post }: any) {
             checked={published}
             onCheckedChange={(checked: any) => {
               setPublished(checked);
+              const id = toast.loading(
+                `${published ? "Publishing" : "Unpublishing"} post...`,
+              );
+              loadingToasts.current.set("post-patch", id);
               publishedFetcher.submit(
                 {
                   createdAt: post.createdAt ?? "",
@@ -96,6 +132,10 @@ export default function PostItem({ post }: any) {
               <deleteFetcher.Form
                 action={"posts/" + post.uri + "/delete"}
                 method="post"
+                onSubmit={() => {
+                  const id = toast.loading("Deleting post...");
+                  loadingToasts.current.set("post-delete", id);
+                }}
               >
                 <Button type="submit">Delete</Button>
               </deleteFetcher.Form>

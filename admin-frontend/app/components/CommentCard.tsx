@@ -15,6 +15,7 @@ import { useFetcher, useLocation } from "react-router";
 import { Textarea } from "./ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import FormErrors from "./FormErrors";
+import { toast } from "sonner";
 
 function CommentData({ comment }: any) {
   return (
@@ -43,16 +44,41 @@ export default function CommentCard({ comment }: any) {
   const [open, setOpen] = useState(false);
   const commentEditErrors = commentEditFetcher.data?.errors;
   const commentDeleteErrors = commentDeleteFetcher.data?.errors;
+  const loadingToasts = useRef(new Map());
 
   const postPath =
     useLocation().pathname.split("/").slice(0, -1).join("/") + "/";
 
   useEffect(() => {
-    if (commentEditFetcher.state === "idle" && !commentEditErrors) {
+    if (commentEditFetcher.data && !commentEditErrors) {
       commentEditFormRef.current?.reset();
       setOpen(false);
     }
-  }, [commentEditFetcher.state, commentEditErrors]);
+  }, [commentEditFetcher.data, commentEditErrors]);
+
+  if (commentEditFetcher.data) {
+    const id = loadingToasts.current.get("comment-edit");
+    if (id) {
+      loadingToasts.current.delete("comment-edit");
+      if (commentEditErrors) {
+        toast.error("Failed to edit comment", { id });
+      } else {
+        toast.success("Comment has been edited", { id });
+      }
+    }
+  }
+
+  if (commentDeleteFetcher.data) {
+    const id = loadingToasts.current.get("comment-delete");
+    if (id) {
+      loadingToasts.current.delete("comment-delete");
+      if (commentDeleteErrors) {
+        toast.error("Failed to delete comment", { id });
+      } else {
+        toast.success("Comment has been deleted", { id });
+      }
+    }
+  }
 
   return (
     <article>
@@ -75,6 +101,10 @@ export default function CommentCard({ comment }: any) {
                 action={postPath + "comments/" + comment.id + "/edit"}
                 method="post"
                 ref={commentEditFormRef}
+                onSubmit={() => {
+                  const id = toast.loading("Editing comment...");
+                  loadingToasts.current.set("comment-edit", id);
+                }}
               >
                 <FormErrors errors={commentEditErrors} />
                 <Textarea
@@ -119,6 +149,10 @@ export default function CommentCard({ comment }: any) {
               <commentDeleteFetcher.Form
                 action={postPath + "comments/" + comment.id + "/delete"}
                 method="post"
+                onSubmit={() => {
+                  const id = toast.loading("Deleting comment...");
+                  loadingToasts.current.set("comment-delete", id);
+                }}
               >
                 <Button type="submit">Delete</Button>
               </commentDeleteFetcher.Form>

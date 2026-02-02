@@ -12,6 +12,7 @@ import { Button } from "~/components/ui/button";
 import CreatableCombobox from "~/components/CreatableCombobox";
 import BundledEditor from "~/components/BundledEditor";
 import Comments from "~/components/Comments";
+import { toast } from "sonner";
 
 export async function clientAction({
   params,
@@ -52,6 +53,19 @@ export default function PostEdit({
   const editorRef = useRef<any>(null);
   const [dirty, setDirty] = useState(false);
   const submit = useSubmit();
+  const loadingToast = useRef<any>(null);
+
+  if (actionData) {
+    const id = loadingToast.current;
+    if (id) {
+      loadingToast.current = null;
+      if (errors) {
+        toast.error("Failed to edit post", { id });
+      } else {
+        toast.success("Post has been edited", { id });
+      }
+    }
+  }
 
   return (
     <main>
@@ -66,6 +80,8 @@ export default function PostEdit({
               editorRef.current.setDirty(false);
               const formData = new FormData(event.currentTarget);
               formData.set("content", editorRef.current.getContent());
+              const id = toast.loading("Editing post...");
+              loadingToast.current = id;
               submit(formData, { method: "post" });
             }
           }}

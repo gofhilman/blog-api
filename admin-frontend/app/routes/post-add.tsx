@@ -11,6 +11,7 @@ import BundledEditor from "~/components/BundledEditor";
 import { Button } from "~/components/ui/button";
 import { postPost } from "~/api/postsApi";
 import FormErrors from "~/components/FormErrors";
+import { toast } from "sonner";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
@@ -42,6 +43,19 @@ export default function PostAdd({
   const editorRef = useRef<any>(null);
   const [dirty, setDirty] = useState(false);
   const submit = useSubmit();
+  const loadingToast = useRef<any>(null);
+
+  if (actionData) {
+    const id = loadingToast.current;
+    if (id) {
+      loadingToast.current = null;
+      if (errors) {
+        toast.error("Failed to add post", { id });
+      } else {
+        toast.success("Post has been added", { id });
+      }
+    }
+  }
 
   return (
     <main>
@@ -55,6 +69,8 @@ export default function PostAdd({
             editorRef.current.setDirty(false);
             const formData = new FormData(event.currentTarget);
             formData.set("content", editorRef.current.getContent());
+            const id = toast.loading("Adding post...");
+            loadingToast.current = id;
             submit(formData, { method: "post" });
           }
         }}

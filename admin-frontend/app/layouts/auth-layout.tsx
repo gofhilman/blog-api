@@ -6,7 +6,9 @@ export default function AuthLayout() {
     <div>
       <header>
         <h1>
-          <Link to="/">Stacked Control</Link>
+          <Link to="/" viewTransition>
+            Stacked Control
+          </Link>
         </h1>
       </header>
       <p>Welcome to Stacked Stories Admin Dashboard.</p>

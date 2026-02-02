@@ -8,7 +8,9 @@ export default function MainLayout() {
     <div>
       <header>
         <h1>
-          <Link to="/">Stacked Control</Link>
+          <Link to="/" viewTransition>
+            Stacked Control
+          </Link>
         </h1>
         <fetcher.Form action="/logout" method="post">
           <Button type="submit">Log out</Button>
@@ -17,7 +19,9 @@ export default function MainLayout() {
       <Outlet />
       <footer>
         <h4>
-          <Link to="/">Stacked Control</Link>
+          <Link to="/" viewTransition>
+            Stacked Control
+          </Link>
         </h4>
         <p>
           An admin dashboard for <a href="/">Stacked Stories</a>

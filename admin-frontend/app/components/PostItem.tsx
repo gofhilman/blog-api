@@ -107,7 +107,7 @@ export default function PostItem({ post }: any) {
             {published ? "Published" : "Unpublished"}
           </Label>
         </div>
-        <Form action={"posts/" + post.uri + "/edit"}>
+        <Form action={"posts/" + post.uri + "/edit"} viewTransition>
           <Button type="submit">Edit</Button>
         </Form>
         <Dialog>

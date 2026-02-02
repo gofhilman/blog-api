@@ -40,7 +40,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
             Fill in your details to register and access your dashboard.
           </CardDescription>
           <CardAction>
-            <Form action="/login">
+            <Form action="/login" viewTransition>
               <Button variant="link">Log in</Button>
             </Form>
           </CardAction>

@@ -24,7 +24,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <meta property="og:title" content="Stacked Control" />
       <section>
         <h2>Posts</h2>
-        <Form action="posts">
+        <Form action="posts" viewTransition>
           <Button type="submit">Create new post</Button>
         </Form>
         <div>

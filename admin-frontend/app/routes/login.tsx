@@ -58,7 +58,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
           <Button type="submit" form="login" className="w-full">
             Log in
           </Button>
-          <Form action="/signup" className="w-full">
+          <Form action="/signup" className="w-full" viewTransition>
             <Button variant="outline" className="w-full">
               Sign up
             </Button>

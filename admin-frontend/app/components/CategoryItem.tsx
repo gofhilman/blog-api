@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import FormErrors from "./FormErrors";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
+import { SquarePen, Trash2 } from "lucide-react";
 
 export default function CategoryItem({ category }: any) {
   const editFetcher = useFetcher();
@@ -56,12 +57,14 @@ export default function CategoryItem({ category }: any) {
   }
 
   return (
-    <div>
-      <h4>{category.name}</h4>
-      <div>
+    <div className="grid grid-cols-2">
+      <h4 className="text-lg font-medium">{category.name}</h4>
+      <div className="flex items-center gap-3">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline">Edit</Button>
+            <Button variant="outline" size="icon">
+              <SquarePen />
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -100,7 +103,9 @@ export default function CategoryItem({ category }: any) {
         </Dialog>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline">Delete</Button>
+            <Button variant="destructive" size="icon">
+              <Trash2 />
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -123,7 +128,7 @@ export default function CategoryItem({ category }: any) {
                   loadingToasts.current.set("category-delete", id);
                 }}
               >
-                <Button type="submit">Delete</Button>
+                <Button type="submit" className="w-full" variant="destructive">Delete</Button>
               </deleteFetcher.Form>
             </DialogFooter>
           </DialogContent>

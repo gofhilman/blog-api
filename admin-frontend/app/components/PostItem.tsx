@@ -1,5 +1,3 @@
-import { Dot } from "lucide-react";
-import { Separator } from "./ui/separator";
 import { format } from "date-fns";
 import { Form, useFetcher } from "react-router";
 import { Switch } from "./ui/switch";
@@ -18,13 +16,18 @@ import {
 } from "./ui/dialog";
 import FormErrors from "./FormErrors";
 import { toast } from "sonner";
+import { SquarePen, Trash2 } from "lucide-react";
 
 function PostData({ post }: any) {
   return (
     <div>
       <h3 className="text-lg font-medium">{post.title}</h3>
-      <p>{post.createdAt && format(post.createdAt, "MMMM d, y")}</p>
-      <p>{post.categories.map((category: any) => category.name).join(", ")}</p>
+      <p className="text-secondary-foreground text-sm">
+        {post.createdAt && format(post.createdAt, "MMMM d, y")}
+      </p>
+      <p className="font-medium">
+        {post.categories.map((category: any) => category.name).join(", ")}
+      </p>
     </div>
   );
 }
@@ -68,10 +71,10 @@ export default function PostItem({ post }: any) {
   }
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="grid grid-cols-[auto_180px] gap-3">
       <PostData post={post} />
-      <div>
-        <div>
+      <div className="grid grid-cols-[85px_1fr_1fr] place-items-center gap-2">
+        <div className="justify-self-start">
           <Switch
             id={"published-" + post.id}
             checked={published}
@@ -98,11 +101,15 @@ export default function PostItem({ post }: any) {
           </Label>
         </div>
         <Form action={"posts/" + post.uri + "/edit"} viewTransition>
-          <Button type="submit">Edit</Button>
+          <Button type="submit" variant="outline" size="icon">
+            <SquarePen />
+          </Button>
         </Form>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline">Delete</Button>
+            <Button variant="destructive" size="icon">
+              <Trash2 />
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -127,7 +134,7 @@ export default function PostItem({ post }: any) {
                   loadingToasts.current.set("post-delete", id);
                 }}
               >
-                <Button type="submit">Delete</Button>
+                <Button className="w-full" variant="destructive" type="submit">Delete</Button>
               </deleteFetcher.Form>
             </DialogFooter>
           </DialogContent>

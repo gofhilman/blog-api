@@ -24,7 +24,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <title>Stacked Control</title>
       <meta property="og:title" content="Stacked Control" />
       <section className="flex flex-col gap-5">
-        <h2 className="text-4xl font-black">Posts</h2>
+        <h2 className="text-3xl font-black">Posts</h2>
         <Form action="posts" viewTransition>
           <Button type="submit" className="text-lg/tight">
             <Plus strokeWidth={3} /> Create new post
@@ -36,9 +36,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           ))}
         </div>
       </section>
-      <section>
-        <h2>Categories</h2>
-        <div>
+      <section className="flex flex-col gap-5">
+        <h2 className="text-3xl font-black">Categories</h2>
+        <div className="flex flex-col gap-5">
           {categories.map((category: any) => (
             <CategoryItem key={category.id} category={category} />
           ))}

@@ -22,19 +22,9 @@ import { toast } from "sonner";
 function PostData({ post }: any) {
   return (
     <div>
-      <h3>{post.title}</h3>
-      {(post.createdAt || post.categories.length > 0) && (
-        <>
-          <Separator orientation="vertical" />
-          <p>
-            {post.createdAt && format(post.createdAt, "MMMM d, y")}
-            {post.createdAt && post.categories.length > 0 && (
-              <Dot className="inline" />
-            )}
-            {post.categories.map((category: any) => category.name).join(", ")}
-          </p>
-        </>
-      )}
+      <h3 className="text-lg font-medium">{post.title}</h3>
+      <p>{post.createdAt && format(post.createdAt, "MMMM d, y")}</p>
+      <p>{post.categories.map((category: any) => category.name).join(", ")}</p>
     </div>
   );
 }
@@ -78,7 +68,7 @@ export default function PostItem({ post }: any) {
   }
 
   return (
-    <div>
+    <div className="flex items-center justify-between">
       <PostData post={post} />
       <div>
         <div>

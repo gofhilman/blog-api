@@ -6,6 +6,7 @@ import { Form, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import CategoryItem from "~/components/CategoryItem";
 import { getMe } from "~/api/authApi";
+import { Plus } from "lucide-react";
 
 export async function clientLoader() {
   const { user } = await getMe();
@@ -19,15 +20,17 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const { posts, categories } = loaderData;
 
   return (
-    <main>
+    <main className="flex flex-col gap-10">
       <title>Stacked Control</title>
       <meta property="og:title" content="Stacked Control" />
-      <section>
-        <h2>Posts</h2>
+      <section className="flex flex-col gap-5">
+        <h2 className="text-4xl font-black">Posts</h2>
         <Form action="posts" viewTransition>
-          <Button type="submit">Create new post</Button>
+          <Button type="submit" className="text-lg/tight">
+            <Plus strokeWidth={3} /> Create new post
+          </Button>
         </Form>
-        <div>
+        <div className="flex flex-col gap-5">
           {posts.map((post: any) => (
             <PostItem key={post.id} post={post} />
           ))}

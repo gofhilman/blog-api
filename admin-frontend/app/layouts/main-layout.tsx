@@ -5,7 +5,7 @@ export default function MainLayout() {
   const fetcher = useFetcher();
 
   return (
-    <div>
+    <div className="flex min-h-screen flex-col px-5 py-12">
       <header>
         <h1>
           <Link to="/" viewTransition>

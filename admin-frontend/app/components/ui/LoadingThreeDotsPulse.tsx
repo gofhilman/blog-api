@@ -44,10 +44,14 @@ function StyleSheet() {
                 width: 20px;
                 height: 20px;
                 border-radius: 50%;
-                background-color: #ff0088;
-                will-change: transform;
+                background: linear-gradient(to bottom right, oklch(62.7% 0.265 303.9), oklch(65.6% 0.241 354.308));
+                background-size: 100px; 
             }
-            `}
+
+            .dot:nth-child(1) { background-position: 0 0; }
+            .dot:nth-child(2) { background-position: -40px 0; }
+            .dot:nth-child(3) { background-position: -80px 0; }
+      `}
     </style>
   );
 }

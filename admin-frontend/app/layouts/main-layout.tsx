@@ -5,20 +5,22 @@ export default function MainLayout() {
   const fetcher = useFetcher();
 
   return (
-    <div className="flex min-h-screen flex-col px-5 py-12">
-      <header>
-        <h1>
+    <div className="flex min-h-screen flex-col gap-10 px-5 py-12">
+      <header className="flex items-center justify-between">
+        <h1 className="text-2xl font-black colored">
           <Link to="/" viewTransition>
             Stacked Control
           </Link>
         </h1>
         <fetcher.Form action="/logout" method="post">
-          <Button type="submit">Log out</Button>
+          <Button type="submit" variant="outline">
+            Log out
+          </Button>
         </fetcher.Form>
       </header>
       <Outlet />
-      <footer>
-        <h4>
+      <footer className="flex flex-col gap-1">
+        <h4 className="text-2xl font-black colored">
           <Link to="/" viewTransition>
             Stacked Control
           </Link>

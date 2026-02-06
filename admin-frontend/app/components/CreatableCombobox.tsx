@@ -205,7 +205,7 @@ export default function CreatableCombobox({
                 <ComboboxChipsInput
                   ref={comboboxInputRef}
                   id={id}
-                  placeholder={value.length > 0 ? "" : "e.g. bug"}
+                  placeholder={value.length > 0 ? "" : "e.g. Web Development"}
                   onKeyDown={handleInputKeyDown}
                   className="text-base"
                 />

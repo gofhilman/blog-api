@@ -8,11 +8,11 @@ import "tinymce/models/dom/model";
 import "tinymce/themes/silver";
 // Toolbar icons
 import "tinymce/icons/default";
-// Editor styles
-import "tinymce/skins/ui/oxide-dark/skin";
-// Content styles, including inline UI like fake cursors
-import "tinymce/skins/content/dark/content";
-import "tinymce/skins/ui/oxide-dark/content";
+// // Editor styles
+// import "tinymce/skins/ui/oxide-dark/skin";
+// // Content styles, including inline UI like fake cursors
+// import "tinymce/skins/content/dark/content";
+// import "tinymce/skins/ui/oxide-dark/content";
 
 // Import plugins
 import "tinymce/plugins/anchor";
@@ -75,10 +75,10 @@ export default function BundledEditor(props: any) {
           "alignright alignjustify | bullist numlist outdent indent | " +
           "removeformat | help",
         images_upload_handler: postImage,
-        content_style:
-          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-        skin: "oxide-dark",
-        content_css: "dark",
+        skin_url: "/app/styles/dark-zinc",
+        content_css: "/app/styles/editor-content.css",
+        // skin: "oxide-dark",
+        // content_css:"dark",
       }}
       {...props}
     />

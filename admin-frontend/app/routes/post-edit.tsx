@@ -86,26 +86,18 @@ export default function PostEdit({
               submit(formData, { method: "post" });
             }
           }}
+          className="flex flex-col gap-5"
         >
-          <h2>Edit {post.title}</h2>
+          <h2 className="colored text-3xl font-black">Edit {post.title}</h2>
           <FormErrors errors={errors} />
-          <div>
+          <div className="flex flex-col gap-5">
             <Input
               type="hidden"
               name="createdAt"
               value={post.createdAt ?? ""}
             />
-            <div>
-              <div>
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  name="title"
-                  defaultValue={post.title}
-                  required
-                />
-              </div>
-              <div>
+            <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">
+              <div className="grid gap-1">
                 <Switch
                   id="published"
                   checked={published}
@@ -120,8 +112,24 @@ export default function PostEdit({
               <Button id="form-submit" type="submit">
                 {published ? "Save and publish" : "Save"}
               </Button>
+              <Button
+                type="button"
+                onClick={() => navigate(-1)}
+                variant="outline"
+              >
+                Cancel
+              </Button>
             </div>
-            <div>
+            <div className="grid gap-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                name="title"
+                defaultValue={post.title}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="subtitle">Subtitle</Label>
               <Input
                 id="subtitle"
@@ -130,7 +138,7 @@ export default function PostEdit({
                 required
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="categories">Categories</Label>
               <CreatableCombobox
                 id="categories"
@@ -141,8 +149,8 @@ export default function PostEdit({
                 )}
               />
             </div>
-            <div>
-              <p>{dirty && "(Unsaved)"}</p>
+            <div className="grid gap-1">
+              {dirty ? <p>(Unsaved)</p> : <p>&nbsp;</p>}
               <BundledEditor
                 initialValue={post.content}
                 onInit={(evt: any, editor: any) => (editorRef.current = editor)}
@@ -152,8 +160,8 @@ export default function PostEdit({
           </div>
         </Form>
       </section>
-      <section>
-        <h2>Comments</h2>
+      <section className="flex flex-col gap-5">
+        <h2 className="colored text-3xl font-black">Comments</h2>
         <Comments comments={comments} />
       </section>
     </main>

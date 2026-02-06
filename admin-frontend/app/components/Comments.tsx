@@ -35,45 +35,43 @@ export default function Comments({ comments }: any) {
     useLocation().pathname.split("/").slice(0, -1).join("/") + "/";
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
       <div>
         {comments.length ? (
           comments.map((comment: any) => (
             <CommentCard key={comment.id} comment={comment} />
           ))
         ) : (
-          <p>No comments yet</p>
+          <p><i>No comments yet</i></p>
         )}
       </div>
-      <div>
-        <div>
-          <div className="grid gap-3">
-            <div>
-              <Label htmlFor="comment-content">Comment as the author</Label>
-            </div>
-            <commentAddFetcher.Form
-              id="comment-add"
-              action={postPath + "comments"}
-              method="post"
-              ref={commentAddFormRef}
-              onSubmit={() => {
-                const id = toast.loading("Adding comment...");
-                loadingToasts.current.set("comment-add", id);
-              }}
-            >
-              <FormErrors errors={commentAddErrors} />
-              <Textarea
-                placeholder="Type your comment here."
-                id="comment-content"
-                name="content"
-                required
-              />
-            </commentAddFetcher.Form>
+      <div className="flex flex-col gap-3">
+        <div className="grid gap-3">
+          <div>
+            <Label htmlFor="comment-content">Comment as the author</Label>
           </div>
-          <Button type="submit" form="comment-add">
-            Post comment
-          </Button>
+          <commentAddFetcher.Form
+            id="comment-add"
+            action={postPath + "comments"}
+            method="post"
+            ref={commentAddFormRef}
+            onSubmit={() => {
+              const id = toast.loading("Adding comment...");
+              loadingToasts.current.set("comment-add", id);
+            }}
+          >
+            <FormErrors errors={commentAddErrors} />
+            <Textarea
+              placeholder="Type your comment here."
+              id="comment-content"
+              name="content"
+              required
+            />
+          </commentAddFetcher.Form>
         </div>
+        <Button type="submit" form="comment-add" className="self-start">
+          Post comment
+        </Button>
       </div>
     </div>
   );

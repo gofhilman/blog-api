@@ -120,8 +120,8 @@ export default function PostAdd({
               categoryNames={loaderData.categoryNames}
             />
           </div>
-          <div>
-            <p>{dirty && "(Unsaved)"}</p>
+          <div className="grid gap-1">
+            {dirty ? <p>(Unsaved)</p> : <p>&nbsp;</p>}
             <BundledEditor
               onInit={(evt: any, editor: any) => (editorRef.current = editor)}
               onDirty={() => setDirty(true)}

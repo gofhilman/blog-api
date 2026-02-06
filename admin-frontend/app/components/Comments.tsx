@@ -36,13 +36,15 @@ export default function Comments({ comments }: any) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div>
+      <div className="flex flex-col items-start gap-5">
         {comments.length ? (
           comments.map((comment: any) => (
             <CommentCard key={comment.id} comment={comment} />
           ))
         ) : (
-          <p><i>No comments yet</i></p>
+          <p>
+            <i>No comments yet</i>
+          </p>
         )}
       </div>
       <div className="flex flex-col gap-3">

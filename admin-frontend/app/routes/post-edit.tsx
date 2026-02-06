@@ -70,7 +70,7 @@ export default function PostEdit({
 
   return (
     <main className="flex flex-col gap-10">
-      <title>Edit {post.title} &mdash; Stacked Control</title>
+      <title>{`Edit ${post.title} \u2014 Stacked Control`}</title>
       <section>
         <Form
           method="post"

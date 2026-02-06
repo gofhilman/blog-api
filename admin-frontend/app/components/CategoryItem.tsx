@@ -128,7 +128,9 @@ export default function CategoryItem({ category }: any) {
                   loadingToasts.current.set("category-delete", id);
                 }}
               >
-                <Button type="submit" className="w-full" variant="destructive">Delete</Button>
+                <Button type="submit" className="w-full" variant="destructive">
+                  Delete
+                </Button>
               </deleteFetcher.Form>
             </DialogFooter>
           </DialogContent>

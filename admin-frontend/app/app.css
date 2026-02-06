@@ -3,6 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html,
+body {
+  color-scheme: dark;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -79,7 +84,8 @@
   --sidebar-ring: oklch(0.705 0.015 286.067);
 } */
 
-:root, .dark {
+:root,
+.dark {
   --radius: 0.625rem;
   --background: oklch(21% 0.006 285.885);
   --foreground: oklch(96.7% 0.001 286.375);

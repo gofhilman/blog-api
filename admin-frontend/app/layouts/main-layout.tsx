@@ -1,13 +1,16 @@
-import { Link, Outlet, useFetcher } from "react-router";
+import { Link, Outlet, useFetcher, useLocation } from "react-router";
 import { Button } from "~/components/ui/button";
 
 export default function MainLayout() {
   const fetcher = useFetcher();
+  const path = useLocation().pathname;
 
   return (
     <div className="flex min-h-screen flex-col gap-10 px-5 py-12">
       <header className="flex items-center justify-between">
-        <h1 className="colored text-2xl font-black">
+        <h1
+          className={"text-2xl font-black" + (path === "/" ? " colored" : "")}
+        >
           <Link to="/" viewTransition>
             Stacked Control
           </Link>
@@ -20,7 +23,9 @@ export default function MainLayout() {
       </header>
       <Outlet />
       <footer className="mt-auto flex flex-col gap-1">
-        <h4 className="colored text-2xl font-black">
+        <h4
+          className={"text-2xl font-black" + (path === "/" ? " colored" : "")}
+        >
           <Link to="/" viewTransition>
             Stacked Control
           </Link>

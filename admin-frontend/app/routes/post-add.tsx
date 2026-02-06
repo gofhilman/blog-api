@@ -1,4 +1,4 @@
-import { data, Form, redirect, useSubmit } from "react-router";
+import { data, Form, redirect, useNavigate, useSubmit } from "react-router";
 import type { Route } from "./+types/post-add";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
@@ -44,6 +44,7 @@ export default function PostAdd({
   const [dirty, setDirty] = useState(false);
   const submit = useSubmit();
   const loadingToast = useRef<any>(null);
+  const navigate = useNavigate();
 
   if (actionData) {
     const id = loadingToast.current;
@@ -58,7 +59,7 @@ export default function PostAdd({
   }
 
   return (
-    <main>
+    <main className="flex flex-col gap-10">
       <title>Create New Post &mdash; Stacked Control</title>
       <Form
         method="post"
@@ -74,16 +75,13 @@ export default function PostAdd({
             submit(formData, { method: "post" });
           }
         }}
+        className="flex flex-col gap-5"
       >
-        <h2>Create New Post</h2>
+        <h2 className="colored text-3xl font-black">Create New Post</h2>
         <FormErrors errors={errors} />
-        <div>
-          <div>
-            <div>
-              <Label htmlFor="title">Title</Label>
-              <Input id="title" name="title" required />
-            </div>
-            <div>
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">
+            <div className="grid gap-1">
               <Switch
                 id="published"
                 checked={published}
@@ -98,12 +96,23 @@ export default function PostAdd({
             <Button id="form-submit" type="submit">
               {published ? "Save and publish" : "Save"}
             </Button>
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              variant="outline"
+            >
+              Cancel
+            </Button>
           </div>
-          <div>
+          <div className="grid gap-2">
+            <Label htmlFor="title">Title</Label>
+            <Input id="title" name="title" required />
+          </div>
+          <div className="grid gap-2">
             <Label htmlFor="subtitle">Subtitle</Label>
             <Input id="subtitle" name="subtitle" required />
           </div>
-          <div>
+          <div className="grid gap-2">
             <Label htmlFor="categories">Categories</Label>
             <CreatableCombobox
               id="categories"

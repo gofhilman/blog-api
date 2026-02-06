@@ -1,6 +1,6 @@
 import { getComments, getSpecificPost, putPost } from "~/api/postsApi";
 import type { Route } from "./+types/post-edit";
-import { data, Form, redirect, useSubmit } from "react-router";
+import { data, Form, redirect, useNavigate, useSubmit } from "react-router";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
 import { useRef, useState } from "react";
@@ -54,6 +54,7 @@ export default function PostEdit({
   const [dirty, setDirty] = useState(false);
   const submit = useSubmit();
   const loadingToast = useRef<any>(null);
+  const navigate = useNavigate();
 
   if (actionData) {
     const id = loadingToast.current;
@@ -68,7 +69,7 @@ export default function PostEdit({
   }
 
   return (
-    <main>
+    <main className="flex flex-col gap-10">
       <title>Edit {post.title} &mdash; Stacked Control</title>
       <section>
         <Form

@@ -207,6 +207,7 @@ export default function CreatableCombobox({
                   id={id}
                   placeholder={value.length > 0 ? "" : "e.g. bug"}
                   onKeyDown={handleInputKeyDown}
+                  className="text-base"
                 />
               </>
             )}

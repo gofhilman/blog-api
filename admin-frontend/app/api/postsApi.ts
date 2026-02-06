@@ -3,13 +3,8 @@ import throwError from "./throwError";
 
 const postsUrl = import.meta.env.VITE_API_ROOT_URL + "/posts/";
 
-async function getPosts(categoryUri?: any, page?: any) {
-  const response = await fetch(
-    postsUrl +
-      "?" +
-      (categoryUri ? "&category=" + categoryUri : "") +
-      (page ? "&page=" + page : "&page=1"),
-  );
+async function getPosts() {
+  const response = await fetch(postsUrl);
   if (!response.ok) await throwError(response);
   return await response.json();
 }

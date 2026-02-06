@@ -10,7 +10,9 @@ import { Plus } from "lucide-react";
 
 export async function clientLoader() {
   const { user } = await getMe();
-  if (!user) return redirect("/login");
+  if (!user || !["ADMIN", "GUEST"].includes(user.role)) {
+    return redirect("/login");
+  }
   const { posts } = await getPosts();
   const { categories } = await getCategories();
   return { posts, categories };

@@ -28,7 +28,9 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 export async function clientLoader() {
   const { user } = await getMe();
-  if (!user) return redirect("/login");
+  if (!user || !["ADMIN", "GUEST"].includes(user.role)) {
+    return redirect("/login");
+  }
   const { categories } = await getCategories();
   const categoryNames = categories.map((category: any) => category.name);
   return { categoryNames };

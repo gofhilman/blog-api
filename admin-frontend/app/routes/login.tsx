@@ -63,6 +63,17 @@ export default function Login({ actionData }: Route.ComponentProps) {
               Sign up
             </Button>
           </Form>
+          <p>or</p>
+          <Form
+            action="/login-guest"
+            method="post"
+            className="w-full"
+            viewTransition
+          >
+            <Input type="hidden" name="username" value="glam_guest" />
+            <Input type="hidden" name="password" value="StrutInStyle123" />
+            <Button className="w-full">Log in as a guest</Button>
+          </Form>
         </CardFooter>
       </Card>
     </main>

@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { Form, useFetcher } from "react-router";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -36,14 +36,21 @@ export default function PostItem({ post }: any) {
   const [published, setPublished] = useState(post.published);
   const publishedFetcher = useFetcher();
   const deleteFetcher = useFetcher();
-  const errors = deleteFetcher.data?.errors;
+  const publishedErrors = publishedFetcher.data?.errors;
+  const deleteErrors = deleteFetcher.data?.errors;
   const loadingToasts = useRef(new Map());
+
+  useEffect(() => {
+    if (publishedErrors) {
+      setPublished(post.published);
+    }
+  }, [publishedErrors]);
 
   if (publishedFetcher.data) {
     const id = loadingToasts.current.get("post-patch");
     if (id) {
       loadingToasts.current.delete("post-patch");
-      if (publishedFetcher.data.errors) {
+      if (publishedErrors) {
         toast.error(`Failed to ${published ? "publish" : "unpublish"} post`, {
           id,
         });
@@ -62,7 +69,7 @@ export default function PostItem({ post }: any) {
     const id = loadingToasts.current.get("post-delete");
     if (id) {
       loadingToasts.current.delete("post-delete");
-      if (errors) {
+      if (deleteErrors) {
         toast.error("Failed to delete post", { id });
       } else {
         toast.success("Post has been deleted", { id });
@@ -119,7 +126,7 @@ export default function PostItem({ post }: any) {
               </DialogDescription>
             </DialogHeader>
             <div>
-              <FormErrors errors={errors} />
+              <FormErrors errors={deleteErrors} />
               <PostData post={post} />
             </div>
             <DialogFooter>
@@ -134,7 +141,9 @@ export default function PostItem({ post }: any) {
                   loadingToasts.current.set("post-delete", id);
                 }}
               >
-                <Button className="w-full" variant="destructive" type="submit">Delete</Button>
+                <Button className="w-full" variant="destructive" type="submit">
+                  Delete
+                </Button>
               </deleteFetcher.Form>
             </DialogFooter>
           </DialogContent>

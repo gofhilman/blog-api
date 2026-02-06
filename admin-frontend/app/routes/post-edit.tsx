@@ -34,7 +34,9 @@ export async function clientAction({
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const { postUri } = params;
   const { user } = await getMe();
-  if (!user) return redirect("/login");
+  if (!user || !["ADMIN", "GUEST"].includes(user.role)) {
+    return redirect("/login");
+  }
   const { categories } = await getCategories();
   const categoryNames = categories.map((category: any) => category.name);
   const { post } = await getSpecificPost(postUri);

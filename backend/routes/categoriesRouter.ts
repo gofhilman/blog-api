@@ -6,7 +6,7 @@ import {
   categoryPut,
   specificCategoryGet,
 } from "../controllers/categoriesController";
-import auth from "../middleware/auth";
+import { isAdminAuth } from "../middleware/auth";
 import { validateCategory } from "../middleware/validators";
 import { handleValidation } from "../middleware/handleValidation";
 
@@ -17,20 +17,20 @@ categoriesRouter.get("/:categoryUri", specificCategoryGet);
 
 categoriesRouter.post(
   "/",
-  auth,
+  isAdminAuth,
   validateCategory,
   handleValidation,
-  categoryPost
+  categoryPost,
 );
 
 categoriesRouter.put(
   "/:categoryUri",
-  auth,
+  isAdminAuth,
   validateCategory,
   handleValidation,
-  categoryPut
+  categoryPut,
 );
 
-categoriesRouter.delete("/:categoryUri", auth, categoryDelete);
+categoriesRouter.delete("/:categoryUri", isAdminAuth, categoryDelete);
 
 export default categoriesRouter;

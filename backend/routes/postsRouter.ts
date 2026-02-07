@@ -11,7 +11,7 @@ import {
   postsGet,
   specificPostGet,
 } from "../controllers/postsController";
-import { isAdminAuth, isAuth } from "../middleware/auth";
+import { isAdminAuth, isMemberAuth } from "../middleware/auth";
 import { validateComment, validatePost } from "../middleware/validators";
 import { handleValidation } from "../middleware/handleValidation";
 
@@ -24,24 +24,34 @@ postsRouter.get("/:postUri/comments", commentsGet);
 postsRouter.post("/", isAdminAuth, validatePost, handleValidation, postPost);
 postsRouter.post(
   "/:postUri/comments",
-  isAuth,
+  isMemberAuth,
   validateComment,
   handleValidation,
-  commentPost
+  commentPost,
 );
 
-postsRouter.put("/:postUri", isAdminAuth, validatePost, handleValidation, postPut);
+postsRouter.put(
+  "/:postUri",
+  isAdminAuth,
+  validatePost,
+  handleValidation,
+  postPut,
+);
 postsRouter.put(
   "/:postUri/comments/:commentId",
-  isAuth,
+  isMemberAuth,
   validateComment,
   handleValidation,
-  commentPut
+  commentPut,
 );
 
 postsRouter.patch("/:postUri", isAdminAuth, postPublishedPatch);
 
 postsRouter.delete("/:postUri", isAdminAuth, postDelete);
-postsRouter.delete("/:postUri/comments/:commentId", isAuth, commentDelete);
+postsRouter.delete(
+  "/:postUri/comments/:commentId",
+  isMemberAuth,
+  commentDelete,
+);
 
 export default postsRouter;

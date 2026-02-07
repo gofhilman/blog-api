@@ -19,3 +19,18 @@ export const isAdminAuth = [
     }
   },
 ];
+
+export const isMemberAuth = [
+  isAuth,
+  (req: any, res: any, next: any) => {
+    if (["ADMIN", "USER"].includes(req.user.role)) {
+      return next();
+    } else {
+      throw new AppError(
+        "Access denied, friend! This lounge is reserved for registered members. " +
+          "Grab your membership card if you want to join the party.",
+        403,
+      );
+    }
+  },
+];

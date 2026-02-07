@@ -37,14 +37,17 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
         </div>
       </header>
       <Outlet />
-      <footer className="mt-auto flex flex-col gap-1">
-        <article>
-          <h3>Categories</h3>
+      <footer className="mt-auto flex flex-col gap-5">
+        <article className="flex flex-col gap-1">
+          <h3 className="text-xl font-extrabold">Categories</h3>
           <ul className={path === "/" ? "colored-container" : ""}>
             {categories.map((category: any) => (
               <li
                 key={category.id}
-                className={path === "/" ? "colored-children" : ""}
+                className={
+                  "text-lg font-bold" +
+                  (path === "/" ? " colored-children" : "")
+                }
               >
                 <Link to={"/?category=" + category.uri} viewTransition>
                   {category.name}

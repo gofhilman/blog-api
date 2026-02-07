@@ -36,6 +36,30 @@ export default function Comments({ commentsAndUser }: any) {
     }
   }, [commentAddFetcher.data, commentAddErrors]);
 
+  if (loginFetcher.data) {
+    const id = loadingToasts.current.get("login");
+    if (id) {
+      loadingToasts.current.delete("login");
+      if (loginErrors) {
+        toast.error("Failed to log in", { id });
+      } else {
+        toast.success("You're now logged in", { id });
+      }
+    }
+  }
+
+  if (signupFetcher.data) {
+    const id = loadingToasts.current.get("signup");
+    if (id) {
+      loadingToasts.current.delete("signup");
+      if (signupErrors) {
+        toast.error("Failed to sign up", { id });
+      } else {
+        toast.success("Account created successfully", { id });
+      }
+    }
+  }
+
   if (commentAddFetcher.data) {
     const id = loadingToasts.current.get("comment-add");
     if (id) {
@@ -109,7 +133,15 @@ export default function Comments({ commentsAndUser }: any) {
                     Enter your credentials to access your account.
                   </DialogDescription>
                 </DialogHeader>
-                <loginFetcher.Form id="login" action="/login" method="post">
+                <loginFetcher.Form
+                  id="login"
+                  action="/login"
+                  method="post"
+                  onSubmit={() => {
+                    const id = toast.loading("Logging in...");
+                    loadingToasts.current.set("login", id);
+                  }}
+                >
                   <FetcherErrors errors={loginErrors} />
                   <div className="grid gap-4">
                     <div className="grid gap-3">
@@ -170,8 +202,10 @@ export default function Comments({ commentsAndUser }: any) {
                       }
                     }
                     if (!form.reportValidity()) {
-                      event.preventDefault();
+                      return event.preventDefault();
                     }
+                    const id = toast.loading("Signing you up...");
+                    loadingToasts.current.set("signup", id);
                   }}
                 >
                   <FetcherErrors errors={signupErrors} />

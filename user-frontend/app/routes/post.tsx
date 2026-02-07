@@ -23,10 +23,13 @@ export default function Post({ loaderData }: Route.ComponentProps) {
         content={post.title + " \u2014 Stacked Stories"}
       />
       <article className="flex flex-col gap-10">
-        <section className="flex flex-col gap-5">
+        <section className="flex flex-col gap-0.5">
           <h2 className="text-3xl font-black">{post.title}</h2>
-          <p>{format(post.createdAt, "MMMM d, y")}</p>
-          <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+          <p className="text-sm">{format(post.createdAt, "MMMM d, y")}</p>
+          <div
+            dangerouslySetInnerHTML={{ __html: post.content }}
+            className="mt-5"
+          ></div>
         </section>
         <section className="flex flex-col gap-5">
           <h3 className="text-xl font-black">Comments</h3>

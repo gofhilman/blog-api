@@ -7,7 +7,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
   const user = Object.fromEntries(formData);
   try {
     await postLogin(user);
-    return redirect("/");
+    return redirect(`/?id=${user.toastId}`);
   } catch (error: any) {
     const errors = await error.json();
     return data({ errors }, { status: error.status });

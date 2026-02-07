@@ -2,11 +2,13 @@ import { getPosts } from "~/api/postsApi";
 import type { Route } from "./+types/home";
 import { getCategories } from "~/api/categoriesApi";
 import PostItem from "~/components/PostItem";
-import { Form, redirect } from "react-router";
+import { Form, redirect, useSearchParams } from "react-router";
 import { Button } from "~/components/ui/button";
 import CategoryItem from "~/components/CategoryItem";
 import { getMe } from "~/api/authApi";
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 export async function clientLoader() {
   const { user } = await getMe();
@@ -20,6 +22,16 @@ export async function clientLoader() {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { posts, categories } = loaderData;
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      toast.success("You're now logged in", { id: +id });
+      searchParams.delete("id");
+      setSearchParams(searchParams);
+    }
+  }, [searchParams, setSearchParams]);
 
   return (
     <main className="flex flex-col gap-10">

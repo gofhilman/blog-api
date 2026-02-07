@@ -45,7 +45,7 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
               <li
                 key={category.id}
                 className={
-                  "text-lg font-bold" +
+                  "font-bold" +
                   (path === "/" ? " colored-children" : "")
                 }
               >

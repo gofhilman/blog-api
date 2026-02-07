@@ -1,4 +1,4 @@
-import { data, Form, redirect } from "react-router";
+import { data, Form, redirect, useSubmit } from "react-router";
 import FormErrors from "~/components/FormErrors";
 import { Button } from "~/components/ui/button";
 import {
@@ -13,13 +13,15 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import type { Route } from "./+types/login";
 import { postLogin } from "~/api/authApi";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const user = Object.fromEntries(formData);
   try {
     await postLogin(user);
-    return redirect("/");
+    return redirect(`/?id=${user.toastId}`);
   } catch (error: any) {
     const errors = await error.json();
     return data({ errors }, { status: error.status });
@@ -28,6 +30,16 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 export default function Login({ actionData }: Route.ComponentProps) {
   const errors = actionData?.errors;
+  const loadingToast = useRef<any>(null);
+  const submit = useSubmit();
+
+  if (errors) {
+    const id = loadingToast.current;
+    if (id) {
+      loadingToast.current = null;
+      toast.error("Failed to log in", { id });
+    }
+  }
 
   return (
     <main>
@@ -40,7 +52,19 @@ export default function Login({ actionData }: Route.ComponentProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form id="login" method="post" viewTransition>
+          <Form
+            id="login"
+            method="post"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const id = toast.loading("Logging in...");
+              loadingToast.current = id;
+              const formData: any = new FormData(event.currentTarget);
+              formData.set("toastId", id);
+              submit(formData, { action: "/login", method: "post" });
+            }}
+            viewTransition
+          >
             <FormErrors errors={errors} />
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
@@ -68,6 +92,14 @@ export default function Login({ actionData }: Route.ComponentProps) {
             action="/login-guest"
             method="post"
             className="w-full"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const id = toast.loading("Logging in...");
+              loadingToast.current = id;
+              const formData: any = new FormData(event.currentTarget);
+              formData.set("toastId", id);
+              submit(formData, { action: "/login-guest", method: "post" });
+            }}
             viewTransition
           >
             <Input type="hidden" name="username" value="glam_guest" />

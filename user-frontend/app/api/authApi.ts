@@ -24,11 +24,13 @@ async function postAuth(type: any, user: any) {
 async function postSignup(user: any) {
   await postAuth("signup", user);
   await postLogin(user);
+  return { user: { username: user.username } };
 }
 
 async function postLogin(user: any) {
   const { token } = await postAuth("login", user);
   localStorage.setItem("JWT", token);
+  return { user: { username: user.username } };
 }
 
 function postLogout() {

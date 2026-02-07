@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import Comments from "~/components/Comments";
 import LoadingThreeDotsJumping from "~/components/ui/LoadingThreeDotsJumping";
 
-export async function clientLoader({ params }: Route.LoaderArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const { post } = await getSpecificPost(params.postUri);
   const commentsAndUser = Promise.all([getComments(params.postUri), getMe()]);
   return { post, commentsAndUser };
@@ -17,19 +17,19 @@ export default function Post({ loaderData }: Route.ComponentProps) {
 
   return (
     <main>
-      <title>{post.title} &mdash; Stacked Stories</title>
+      <title>{`${post.title} \u2014 Stacked Stories`}</title>
       <meta
         property="og:title"
         content={post.title + " \u2014 Stacked Stories"}
       />
-      <article>
-        <section>
-          <h2>{post.title}</h2>
+      <article className="flex flex-col gap-10">
+        <section className="flex flex-col gap-5">
+          <h2 className="colored text-3xl font-black">{post.title}</h2>
           <p>{format(post.createdAt, "MMMM d, y")}</p>
           {post.content}
         </section>
-        <section>
-          <h3>Comments</h3>
+        <section className="flex flex-col gap-5">
+          <h3 className="text-xl font-black">Comments</h3>
           <Suspense fallback={<LoadingThreeDotsJumping />}>
             <Comments commentsAndUser={commentsAndUser} />
           </Suspense>

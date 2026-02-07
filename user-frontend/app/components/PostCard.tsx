@@ -6,24 +6,26 @@ import { Fragment } from "react/jsx-runtime";
 export default function PostCard({ post }: any) {
   return (
     <article>
-      <Link to={post.uri}>
+      <Link to={post.uri} viewTransition>
         <h2>{post.title}</h2>
       </Link>
       <div className="flex h-5 items-center space-x-4 text-sm">
-        <Link to={post.uri}>
+        <Link to={post.uri} viewTransition>
           <p>{format(post.createdAt, "MMMM d, y")}</p>
         </Link>
         <Separator orientation="vertical" />
         <p>
           {post.categories.map((category: any, index: any, array: any) => (
             <Fragment key={category.id}>
-              <Link to={"?category=" + category.uri}>{category.name}</Link>
+              <Link to={"?category=" + category.uri} viewTransition>
+                {category.name}
+              </Link>
               {index < array.length - 1 && ", "}
             </Fragment>
           ))}
         </p>
       </div>
-      <Link to={post.uri}>
+      <Link to={post.uri} viewTransition>
         <p>{post.subtitle}</p>
       </Link>
     </article>

@@ -3,7 +3,7 @@ import type { Route } from "./+types/home";
 import PostCard from "~/components/PostCard";
 import HomePagination from "~/components/Pagination";
 
-export async function clientLoader({ request }: Route.LoaderArgs) {
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const categoryUri = url.searchParams.get("category");
   const page = url.searchParams.get("page");
@@ -15,10 +15,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const { posts, postCount, page } = loaderData;
 
   return (
-    <main>
+    <main className="flex flex-col gap-10">
       <title>Stacked Stories</title>
       <meta property="og:title" content="Stacked Stories" />
-      <div>
+      <div className="flex flex-col gap-5">
         {posts.map((post: any) => (
           <PostCard key={post.id} post={post} />
         ))}

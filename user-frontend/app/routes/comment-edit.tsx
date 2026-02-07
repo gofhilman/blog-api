@@ -2,7 +2,10 @@ import { putComment } from "~/api/postsApi";
 import type { Route } from "./+types/comment-edit";
 import { data } from "react-router";
 
-export async function clientAction({ params, request }: Route.ActionArgs) {
+export async function clientAction({
+  params,
+  request,
+}: Route.ClientActionArgs) {
   const { postUri, commentId } = params;
   const formData = await request.formData();
   try {

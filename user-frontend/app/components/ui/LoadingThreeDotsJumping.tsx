@@ -45,8 +45,13 @@ function StyleSheet() {
                 width: 20px;
                 height: 20px;
                 border-radius: 50%;
-                background-color: #ff0088;
+                background: linear-gradient(to bottom right, oklch(62.7% 0.265 303.9), oklch(65.6% 0.241 354.308));
+                background-size: 80px;              
                 will-change: transform;
+
+            .dot:nth-child(1) { background-position: 0 0; }
+            .dot:nth-child(2) { background-position: -30px 0; }
+            .dot:nth-child(3) { background-position: -60px 0; }
             }
             `}
     </style>

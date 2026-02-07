@@ -23,8 +23,8 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
         </h1>
         <div className="flex items-center gap-2">
           <span>by</span>
-          <a
-            href="https://github.com/gofhilman"
+          <Link
+            to="https://github.com/gofhilman"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -33,7 +33,7 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
               alt="Author avatar"
               className="h-8 w-8 rounded-full object-cover"
             />
-          </a>
+          </Link>
         </div>
       </header>
       <Outlet />

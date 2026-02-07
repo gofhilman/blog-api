@@ -90,7 +90,7 @@ export default function PostEdit({
           }}
           className="flex flex-col gap-5"
         >
-          <h2 className="colored text-3xl font-black">Edit {post.title}</h2>
+          <h2 className="text-3xl font-black">Edit {post.title}</h2>
           <FormErrors errors={errors} />
           <div className="flex flex-col gap-5">
             <Input
@@ -163,7 +163,7 @@ export default function PostEdit({
         </Form>
       </section>
       <section className="flex flex-col gap-5">
-        <h2 className="colored text-3xl font-black">Comments</h2>
+        <h2 className="text-3xl font-black">Comments</h2>
         <Comments comments={comments} />
       </section>
     </main>

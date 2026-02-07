@@ -5,13 +5,13 @@ export default function AuthLayout() {
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-10 px-5 py-12">
       <header>
-        <h1 className="colored text-2xl font-black">
+        <h1 className="text-2xl font-black">
           <Link to="/" viewTransition>
             Stacked Control
           </Link>
         </h1>
       </header>
-      <p className="text-3xl font-semibold">
+      <p className="colored text-3xl font-bold">
         Welcome to Stacked Stories Admin Dashboard.
       </p>
       <Outlet />

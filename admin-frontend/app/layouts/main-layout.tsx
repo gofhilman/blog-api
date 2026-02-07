@@ -9,7 +9,7 @@ export default function MainLayout() {
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-10 px-5 py-12">
       <header className="flex items-center justify-between">
         <h1
-          className={"text-2xl font-black" + (path === "/" ? " colored" : "")}
+          className={"text-2xl font-black" + (path === "/" ? "" : " colored")}
         >
           <Link to="/" viewTransition>
             Stacked Control
@@ -24,7 +24,7 @@ export default function MainLayout() {
       <Outlet />
       <footer className="mt-auto flex flex-col gap-1">
         <h4
-          className={"text-2xl font-black" + (path === "/" ? " colored" : "")}
+          className={"text-2xl font-black" + (path === "/" ? "" : " colored")}
         >
           <Link to="/" viewTransition>
             Stacked Control

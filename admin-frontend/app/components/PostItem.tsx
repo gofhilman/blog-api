@@ -21,7 +21,7 @@ import { SquarePen, Trash2 } from "lucide-react";
 function PostData({ post }: any) {
   return (
     <div>
-      <h3 className="text-lg font-medium">{post.title}</h3>
+      <h3 className="colored text-lg font-medium">{post.title}</h3>
       <p className="text-secondary-foreground text-sm">
         {post.createdAt && format(post.createdAt, "MMMM d, y")}
       </p>

@@ -58,7 +58,7 @@ export default function CategoryItem({ category }: any) {
 
   return (
     <div className="grid grid-cols-2">
-      <h4 className="text-lg font-medium">{category.name}</h4>
+      <h4 className="colored text-lg font-medium">{category.name}</h4>
       <div className="flex items-center gap-3">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>

@@ -79,7 +79,7 @@ export default function PostAdd({
         }}
         className="flex flex-col gap-5"
       >
-        <h2 className="colored text-3xl font-black">Create New Post</h2>
+        <h2 className="text-3xl font-black">Create New Post</h2>
         <FormErrors errors={errors} />
         <div className="flex flex-col gap-5">
           <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">

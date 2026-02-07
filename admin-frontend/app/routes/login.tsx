@@ -61,7 +61,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
               loadingToast.current = id;
               const formData: any = new FormData(event.currentTarget);
               formData.set("toastId", id);
-              submit(formData, { action: "/login", method: "post" });
+              submit(formData, { method: "post" });
             }}
             viewTransition
           >

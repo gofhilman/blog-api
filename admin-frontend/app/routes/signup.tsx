@@ -1,4 +1,4 @@
-import { data, Form, redirect } from "react-router";
+import { data, Form, redirect, useSubmit } from "react-router";
 import FormErrors from "~/components/FormErrors";
 import { Button } from "~/components/ui/button";
 import {
@@ -14,13 +14,15 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import type { Route } from "./+types/signup";
 import { postSignup } from "~/api/authApi";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
   const user = Object.fromEntries(formData);
   try {
     await postSignup(user);
-    return redirect("/");
+    return redirect(`/?id=${user.toastId}`);
   } catch (error: any) {
     const errors = await error.json();
     return data({ errors }, { status: error.status });
@@ -29,6 +31,16 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 export default function Signup({ actionData }: Route.ComponentProps) {
   const errors = actionData?.errors;
+  const loadingToast = useRef<any>(null);
+  const submit = useSubmit();
+
+  if (errors) {
+    const id = loadingToast.current;
+    if (id) {
+      loadingToast.current = null;
+      toast.error("Failed to sign up", { id });
+    }
+  }
 
   return (
     <main>
@@ -64,8 +76,14 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 }
               }
               if (!form.reportValidity()) {
-                event.preventDefault();
+                return event.preventDefault();
               }
+              event.preventDefault();
+              const id = toast.loading("Signing you up...");
+              loadingToast.current = id;
+              const formData: any = new FormData(event.currentTarget);
+              formData.set("toastId", id);
+              submit(formData, { method: "post" });
             }}
             viewTransition
           >

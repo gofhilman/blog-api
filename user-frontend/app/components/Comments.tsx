@@ -90,12 +90,12 @@ export default function Comments({ commentsAndUser }: any) {
         {user ? (
           <div className="flex flex-col gap-3">
             <div className="grid gap-3">
-              <div>
-                <Label htmlFor="comment-content">
+              <div className="flex items-center gap-4">
+                <Label htmlFor="comment-content" className="text-lg">
                   Comment as {user.username}
                 </Label>
                 <logoutFetcher.Form action="/logout" method="post">
-                  <Button type="submit">Log out</Button>
+                  <Button type="submit" variant="outline" size="sm">Log out</Button>
                 </logoutFetcher.Form>
               </div>
               <commentAddFetcher.Form

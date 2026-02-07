@@ -84,7 +84,7 @@ export default function CommentCard({ comment, user }: any) {
       <div className="flex flex-col gap-0.5">
         <CommentData comment={comment} />
       </div>
-      {(user.role === "ADMIN" || user.username === comment.user.username) && (
+      {(user?.role === "ADMIN" || user?.username === comment.user.username) && (
         <div className="flex items-center gap-3">
           {user.username === comment.user.username && (
             <Dialog open={open} onOpenChange={setOpen}>

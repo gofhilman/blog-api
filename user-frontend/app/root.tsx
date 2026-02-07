@@ -8,7 +8,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import LoadingThreeDotsPulse from "./components/ui/LoadingThreeDotsPulse";
-import { Toaster } from "sonner";
+import { Toaster } from "./components/ui/sonner";
 
 export async function HydrateFallback() {
   return (

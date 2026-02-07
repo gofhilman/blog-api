@@ -3,7 +3,7 @@ import { Link, Outlet } from "react-router";
 
 export default function AuthLayout() {
   return (
-    <div className="flex min-h-screen flex-col gap-10 px-5 py-12">
+    <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-10 px-5 py-12">
       <header>
         <h1 className="colored text-2xl font-black">
           <Link to="/" viewTransition>

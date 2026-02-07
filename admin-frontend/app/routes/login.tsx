@@ -32,7 +32,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
   return (
     <main>
       <title>Log In &mdash; Stacked Control</title>
-      <Card>
+      <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle>Log in to your account</CardTitle>
           <CardDescription>

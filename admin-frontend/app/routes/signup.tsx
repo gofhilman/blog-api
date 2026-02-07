@@ -33,7 +33,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
   return (
     <main>
       <title>Sign Up &mdash; Stacked Control</title>
-      <Card>
+      <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle>Let's get started!</CardTitle>
           <CardDescription>

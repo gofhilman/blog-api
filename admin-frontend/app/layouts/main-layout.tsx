@@ -6,7 +6,7 @@ export default function MainLayout() {
   const path = useLocation().pathname;
 
   return (
-    <div className="flex min-h-screen flex-col gap-10 px-5 py-12">
+    <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-10 px-5 py-12">
       <header className="flex items-center justify-between">
         <h1
           className={"text-2xl font-black" + (path === "/" ? " colored" : "")}

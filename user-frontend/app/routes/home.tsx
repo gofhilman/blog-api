@@ -18,7 +18,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     <main className="flex flex-col gap-10">
       <title>Stacked Stories</title>
       <meta property="og:title" content="Stacked Stories" />
-      <div className="flex flex-col gap-5">
+      <div className="colored-container flex flex-col gap-5">
         {posts.map((post: any) => (
           <PostCard key={post.id} post={post} />
         ))}

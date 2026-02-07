@@ -32,13 +32,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <Plus strokeWidth={3} /> Create new post
           </Button>
         </Form>
-        <div className="flex flex-col gap-5">
+        <div className="colored-container flex flex-col gap-5">
           {posts.map((post: any) => (
             <PostItem key={post.id} post={post} />
           ))}
         </div>
       </section>
-      <section className="flex flex-col gap-5">
+      <section className="colored-container flex flex-col gap-5">
         <h2 className="text-3xl font-black">Categories</h2>
         <div className="flex flex-col gap-5">
           {categories.map((category: any) => (

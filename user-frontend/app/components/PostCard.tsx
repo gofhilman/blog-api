@@ -7,7 +7,7 @@ export default function PostCard({ post }: any) {
   return (
     <article>
       <Link to={post.uri} viewTransition>
-        <h2>{post.title}</h2>
+        <h2 className="colored-children">{post.title}</h2>
       </Link>
       <div className="flex h-5 items-center space-x-4 text-sm">
         <Link to={post.uri} viewTransition>

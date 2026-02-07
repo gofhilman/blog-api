@@ -15,7 +15,7 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-10 px-5 py-12">
       <header className="flex w-full items-center justify-between">
         <h1
-          className={"text-2xl font-black" + (path === "/" ? " colored" : "")}
+          className={"text-2xl font-black" + (path === "/" ? "" : " colored")}
         >
           <Link to="/" viewTransition>
             Stacked Stories
@@ -40,9 +40,12 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
       <footer className="mt-auto flex flex-col gap-1">
         <article>
           <h3>Categories</h3>
-          <ul>
+          <ul className={path === "/" ? "colored-container" : ""}>
             {categories.map((category: any) => (
-              <li key={category.id}>
+              <li
+                key={category.id}
+                className={path === "/" ? "colored-children" : ""}
+              >
                 <Link to={"/?category=" + category.uri} viewTransition>
                   {category.name}
                 </Link>
@@ -50,7 +53,7 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
             ))}
           </ul>
         </article>
-        <p className={"text-2xl font-black" + (path === "/" ? " colored" : "")}>
+        <p className={"text-2xl font-black" + (path === "/" ? "" : " colored")}>
           <Link to="/" viewTransition>
             Stacked Stories
           </Link>

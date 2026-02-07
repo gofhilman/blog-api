@@ -24,9 +24,9 @@ export default function Post({ loaderData }: Route.ComponentProps) {
       />
       <article className="flex flex-col gap-10">
         <section className="flex flex-col gap-5">
-          <h2 className="colored text-3xl font-black">{post.title}</h2>
+          <h2 className="text-3xl font-black">{post.title}</h2>
           <p>{format(post.createdAt, "MMMM d, y")}</p>
-          {post.content}
+          <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
         </section>
         <section className="flex flex-col gap-5">
           <h3 className="text-xl font-black">Comments</h3>

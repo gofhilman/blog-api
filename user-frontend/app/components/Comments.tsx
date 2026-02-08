@@ -95,7 +95,9 @@ export default function Comments({ commentsAndUser }: any) {
                   Comment as {user.username}
                 </Label>
                 <logoutFetcher.Form action="/logout" method="post">
-                  <Button type="submit" variant="outline" size="sm">Log out</Button>
+                  <Button type="submit" variant="outline" size="sm">
+                    Log out
+                  </Button>
                 </logoutFetcher.Form>
               </div>
               <commentAddFetcher.Form
@@ -199,7 +201,6 @@ export default function Comments({ commentsAndUser }: any) {
                             "#signup-confirm-password",
                           );
                         if (confirmPassword) {
-                          confirmPassword.setCustomValidity("");
                           if (confirmPassword.value !== password?.value) {
                             confirmPassword.setCustomValidity(
                               "Passwords must match, darling.",
@@ -240,6 +241,9 @@ export default function Comments({ commentsAndUser }: any) {
                             type="password"
                             id="signup-confirm-password"
                             name="confirm-password"
+                            onChange={(event) =>
+                              event.target.setCustomValidity("")
+                            }
                             required
                           />
                         </div>

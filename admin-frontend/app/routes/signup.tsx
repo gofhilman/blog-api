@@ -68,7 +68,6 @@ export default function Signup({ actionData }: Route.ComponentProps) {
               const confirmPassword =
                 form.querySelector<HTMLInputElement>("#confirm-password");
               if (confirmPassword) {
-                confirmPassword.setCustomValidity("");
                 if (confirmPassword.value !== password?.value) {
                   confirmPassword.setCustomValidity(
                     "Passwords must match, darling.",
@@ -103,6 +102,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                   type="password"
                   id="confirm-password"
                   name="confirm-password"
+                  onChange={(event) => event.target.setCustomValidity("")}
                   required
                 />
               </div>

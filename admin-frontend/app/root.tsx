@@ -1,12 +1,13 @@
 import {
   isRouteErrorResponse,
+  Links,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import appStylesHref from "./app.css?url";
+import "./app.css";
 import LoadingThreeDotsPulse from "./components/ui/LoadingThreeDotsPulse";
 import { Toaster } from "./components/ui/sonner";
 
@@ -22,7 +23,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href={appStylesHref} />
+        <Links />
       </head>
       <body>
         {children}

@@ -2,7 +2,7 @@ import { format, formatRelative } from "date-fns";
 import { enUS } from "date-fns/locale";
 
 export default function formatTime(time: any) {
-  return formatRelative(time, new Date(), {
+  const fTime = formatRelative(time, new Date(), {
     locale: {
       ...enUS,
       formatRelative: (token, date, baseDate) => {
@@ -14,4 +14,5 @@ export default function formatTime(time: any) {
       },
     },
   });
+  return fTime[0].toUpperCase() + fTime.slice(1);
 }

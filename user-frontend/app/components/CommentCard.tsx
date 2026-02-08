@@ -1,4 +1,4 @@
-import { Dot, SquarePen, Trash2 } from "lucide-react";
+import { Dot } from "lucide-react";
 import formatTime from "~/lib/formatTime";
 import {
   Dialog,
@@ -33,7 +33,6 @@ function CommentData({ comment }: any) {
             : formatTime(comment.createdAt)}
         </p>
       </div>
-      <Separator />
       <p>{comment.content}</p>
     </>
   );
@@ -80,59 +79,65 @@ export default function CommentCard({ comment, user }: any) {
   }
 
   return (
-    <article className="flex flex-col items-start gap-2">
-      <div className="flex flex-col gap-0.5">
+    <article className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <CommentData comment={comment} />
       </div>
       {(user?.role === "ADMIN" || user?.username === comment.user.username) && (
-        <div className="flex items-center gap-3">
+        <div className="flex h-5 items-center gap-2">
           {user.username === comment.user.username && (
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="icon-sm">
-                  <SquarePen />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Edit comment</DialogTitle>
-                  <DialogDescription>
-                    Edit your comment here. Click save when you're done.
-                  </DialogDescription>
-                </DialogHeader>
-                <commentEditFetcher.Form
-                  id="comment-edit"
-                  action={"comments/" + comment.id + "/edit"}
-                  method="post"
-                  ref={commentEditFormRef}
-                  onSubmit={() => {
-                    const id = toast.loading("Editing comment...");
-                    loadingToasts.current.set("comment-edit", id);
-                  }}
-                >
-                  <FetcherErrors errors={commentEditErrors} />
-                  <Textarea
-                    placeholder="Type your comment here."
-                    name="content"
-                    defaultValue={comment.content}
-                    required
-                  />
-                </commentEditFetcher.Form>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                  <Button type="submit" form="comment-edit">
-                    Save
+            <>
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="link" size="sm">
+                    Edit
                   </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Edit comment</DialogTitle>
+                    <DialogDescription>
+                      Edit your comment here. Click save when you're done.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <commentEditFetcher.Form
+                    id="comment-edit"
+                    action={"comments/" + comment.id + "/edit"}
+                    method="post"
+                    ref={commentEditFormRef}
+                    onSubmit={() => {
+                      const id = toast.loading("Editing comment...");
+                      loadingToasts.current.set("comment-edit", id);
+                    }}
+                  >
+                    <FetcherErrors errors={commentEditErrors} />
+                    <Textarea
+                      placeholder="Type your comment here."
+                      name="content"
+                      defaultValue={comment.content}
+                      required
+                    />
+                  </commentEditFetcher.Form>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button type="submit" form="comment-edit">
+                      Save
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Separator
+                orientation="vertical"
+                className="bg-muted-foreground"
+              />
+            </>
           )}
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="destructive" size="icon-sm">
-                <Trash2 />
+              <Button variant="link" size="sm">
+                Delete
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

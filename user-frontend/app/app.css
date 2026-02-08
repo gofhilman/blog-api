@@ -127,6 +127,12 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .post-content h3 {
+    @apply text-xl font-bold;
+  }
+  .post-content h4 {
+    @apply text-lg font-semibold;
+  }
 }
 
 @layer components {

@@ -7,6 +7,7 @@ import Comments from "~/components/Comments";
 import LoadingThreeDotsJumping from "~/components/ui/LoadingThreeDotsJumping";
 import { useNavigation } from "react-router";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
+import "~/styles/editor-content.css";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const { post } = await getSpecificPost(params.postUri);
@@ -29,12 +30,12 @@ export default function Post({ loaderData }: Route.ComponentProps) {
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <article className="flex flex-col gap-10">
-          <section className="flex flex-col gap-0.5">
+          <section className="flex flex-col gap-1">
             <h2 className="text-3xl font-black">{post.title}</h2>
             <p className="text-sm">{format(post.createdAt, "MMMM d, y")}</p>
             <div
               dangerouslySetInnerHTML={{ __html: post.content }}
-              className="mt-5"
+              className="post-content mt-8"
             ></div>
           </section>
           <section className="flex flex-col gap-5">

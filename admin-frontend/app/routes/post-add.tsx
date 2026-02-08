@@ -1,4 +1,11 @@
-import { data, Form, redirect, useNavigate, useSubmit } from "react-router";
+import {
+  data,
+  Form,
+  redirect,
+  useNavigate,
+  useNavigation,
+  useSubmit,
+} from "react-router";
 import type { Route } from "./+types/post-add";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
@@ -12,6 +19,7 @@ import { Button } from "~/components/ui/button";
 import { postPost } from "~/api/postsApi";
 import FormErrors from "~/components/FormErrors";
 import { toast } from "sonner";
+import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
@@ -47,6 +55,7 @@ export default function PostAdd({
   const submit = useSubmit();
   const loadingToast = useRef<any>(null);
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
   if (actionData) {
     const id = loadingToast.current;
@@ -63,74 +72,78 @@ export default function PostAdd({
   return (
     <main className="flex flex-col gap-10">
       <title>Create New Post &mdash; Stacked Control</title>
-      <Form
-        method="post"
-        onSubmit={(event: any) => {
-          if (event.nativeEvent.submitter.id === "form-submit") {
-            event.preventDefault();
-            setDirty(false);
-            editorRef.current.setDirty(false);
-            const formData = new FormData(event.currentTarget);
-            formData.set("content", editorRef.current.getContent());
-            const id = toast.loading("Adding post...");
-            loadingToast.current = id;
-            submit(formData, { method: "post" });
-          }
-        }}
-        className="flex flex-col gap-5"
-      >
-        <h2 className="text-3xl font-black">Create New Post</h2>
-        <FormErrors errors={errors} />
-        <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">
-            <div className="grid gap-1">
-              <Switch
-                id="published"
-                checked={published}
-                onCheckedChange={setPublished}
-                name="published"
-                value="1"
-              />
-              <Label htmlFor="published">
-                {published ? "Published" : "Unpublished"}
-              </Label>
+      {navigation.state === "loading" ? (
+        <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      ) : (
+        <Form
+          method="post"
+          onSubmit={(event: any) => {
+            if (event.nativeEvent.submitter.id === "form-submit") {
+              event.preventDefault();
+              setDirty(false);
+              editorRef.current.setDirty(false);
+              const formData = new FormData(event.currentTarget);
+              formData.set("content", editorRef.current.getContent());
+              const id = toast.loading("Adding post...");
+              loadingToast.current = id;
+              submit(formData, { method: "post" });
+            }
+          }}
+          className="flex flex-col gap-5"
+        >
+          <h2 className="text-3xl font-black">Create New Post</h2>
+          <FormErrors errors={errors} />
+          <div className="flex flex-col gap-5">
+            <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">
+              <div className="grid gap-1">
+                <Switch
+                  id="published"
+                  checked={published}
+                  onCheckedChange={setPublished}
+                  name="published"
+                  value="1"
+                />
+                <Label htmlFor="published">
+                  {published ? "Published" : "Unpublished"}
+                </Label>
+              </div>
+              <Button id="form-submit" type="submit">
+                {published ? "Save and publish" : "Save"}
+              </Button>
+              <Button
+                type="button"
+                onClick={() => navigate(-1)}
+                variant="outline"
+              >
+                Cancel
+              </Button>
             </div>
-            <Button id="form-submit" type="submit">
-              {published ? "Save and publish" : "Save"}
-            </Button>
-            <Button
-              type="button"
-              onClick={() => navigate(-1)}
-              variant="outline"
-            >
-              Cancel
-            </Button>
+            <div className="grid gap-2">
+              <Label htmlFor="title">Title</Label>
+              <Input id="title" name="title" required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="subtitle">Subtitle</Label>
+              <Input id="subtitle" name="subtitle" required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="categories">Categories</Label>
+              <CreatableCombobox
+                id="categories"
+                name="categories"
+                categoryNames={loaderData.categoryNames}
+              />
+            </div>
+            <div className="grid gap-1">
+              {dirty ? <p>(Unsaved)</p> : <p>&nbsp;</p>}
+              <BundledEditor
+                onInit={(evt: any, editor: any) => (editorRef.current = editor)}
+                onDirty={() => setDirty(true)}
+              />
+            </div>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="title">Title</Label>
-            <Input id="title" name="title" required />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="subtitle">Subtitle</Label>
-            <Input id="subtitle" name="subtitle" required />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="categories">Categories</Label>
-            <CreatableCombobox
-              id="categories"
-              name="categories"
-              categoryNames={loaderData.categoryNames}
-            />
-          </div>
-          <div className="grid gap-1">
-            {dirty ? <p>(Unsaved)</p> : <p>&nbsp;</p>}
-            <BundledEditor
-              onInit={(evt: any, editor: any) => (editorRef.current = editor)}
-              onDirty={() => setDirty(true)}
-            />
-          </div>
-        </div>
-      </Form>
+        </Form>
+      )}
     </main>
   );
 }

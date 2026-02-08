@@ -13,6 +13,8 @@ import CreatableCombobox from "~/components/CreatableCombobox";
 import BundledEditor from "~/components/BundledEditor";
 import Comments from "~/components/Comments";
 import { toast } from "sonner";
+import { useNavigation } from "react-router";
+import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
 
 export async function clientAction({
   params,
@@ -57,6 +59,7 @@ export default function PostEdit({
   const submit = useSubmit();
   const loadingToast = useRef<any>(null);
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
   if (actionData) {
     const id = loadingToast.current;
@@ -73,99 +76,107 @@ export default function PostEdit({
   return (
     <main className="flex flex-col gap-10">
       <title>{`Edit ${post.title} \u2014 Stacked Control`}</title>
-      <section>
-        <Form
-          method="post"
-          onSubmit={(event: any) => {
-            if (event.nativeEvent.submitter.id === "form-submit") {
-              event.preventDefault();
-              setDirty(false);
-              editorRef.current.setDirty(false);
-              const formData = new FormData(event.currentTarget);
-              formData.set("content", editorRef.current.getContent());
-              const id = toast.loading("Editing post...");
-              loadingToast.current = id;
-              submit(formData, { method: "post" });
-            }
-          }}
-          className="flex flex-col gap-5"
-        >
-          <h2 className="text-3xl font-black">Edit {post.title}</h2>
-          <FormErrors errors={errors} />
-          <div className="flex flex-col gap-5">
-            <Input
-              type="hidden"
-              name="createdAt"
-              value={post.createdAt ?? ""}
-            />
-            <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">
-              <div className="grid gap-1">
-                <Switch
-                  id="published"
-                  checked={published}
-                  onCheckedChange={setPublished}
-                  name="published"
-                  value="1"
+      {navigation.state === "loading" ? (
+        <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      ) : (
+        <>
+          <section>
+            <Form
+              method="post"
+              onSubmit={(event: any) => {
+                if (event.nativeEvent.submitter.id === "form-submit") {
+                  event.preventDefault();
+                  setDirty(false);
+                  editorRef.current.setDirty(false);
+                  const formData = new FormData(event.currentTarget);
+                  formData.set("content", editorRef.current.getContent());
+                  const id = toast.loading("Editing post...");
+                  loadingToast.current = id;
+                  submit(formData, { method: "post" });
+                }
+              }}
+              className="flex flex-col gap-5"
+            >
+              <h2 className="text-3xl font-black">Edit {post.title}</h2>
+              <FormErrors errors={errors} />
+              <div className="flex flex-col gap-5">
+                <Input
+                  type="hidden"
+                  name="createdAt"
+                  value={post.createdAt ?? ""}
                 />
-                <Label htmlFor="published">
-                  {published ? "Published" : "Unpublished"}
-                </Label>
+                <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">
+                  <div className="grid gap-1">
+                    <Switch
+                      id="published"
+                      checked={published}
+                      onCheckedChange={setPublished}
+                      name="published"
+                      value="1"
+                    />
+                    <Label htmlFor="published">
+                      {published ? "Published" : "Unpublished"}
+                    </Label>
+                  </div>
+                  <Button id="form-submit" type="submit">
+                    {published ? "Save and publish" : "Save"}
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    id="title"
+                    name="title"
+                    defaultValue={post.title}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="subtitle">Subtitle</Label>
+                  <Input
+                    id="subtitle"
+                    name="subtitle"
+                    defaultValue={post.subtitle}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="categories">Categories</Label>
+                  <CreatableCombobox
+                    id="categories"
+                    name="categories"
+                    categoryNames={categoryNames}
+                    defaultCategories={post.categories.map(
+                      (category: any) => category.name,
+                    )}
+                  />
+                </div>
+                <div className="grid gap-1">
+                  {dirty ? <p>(Unsaved)</p> : <p>&nbsp;</p>}
+                  <BundledEditor
+                    initialValue={post.content}
+                    onInit={(evt: any, editor: any) =>
+                      (editorRef.current = editor)
+                    }
+                    onDirty={() => setDirty(true)}
+                  />
+                </div>
               </div>
-              <Button id="form-submit" type="submit">
-                {published ? "Save and publish" : "Save"}
-              </Button>
-              <Button
-                type="button"
-                onClick={() => navigate(-1)}
-                variant="outline"
-              >
-                Cancel
-              </Button>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                name="title"
-                defaultValue={post.title}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="subtitle">Subtitle</Label>
-              <Input
-                id="subtitle"
-                name="subtitle"
-                defaultValue={post.subtitle}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="categories">Categories</Label>
-              <CreatableCombobox
-                id="categories"
-                name="categories"
-                categoryNames={categoryNames}
-                defaultCategories={post.categories.map(
-                  (category: any) => category.name,
-                )}
-              />
-            </div>
-            <div className="grid gap-1">
-              {dirty ? <p>(Unsaved)</p> : <p>&nbsp;</p>}
-              <BundledEditor
-                initialValue={post.content}
-                onInit={(evt: any, editor: any) => (editorRef.current = editor)}
-                onDirty={() => setDirty(true)}
-              />
-            </div>
-          </div>
-        </Form>
-      </section>
-      <section className="flex flex-col gap-5">
-        <h2 className="text-3xl font-black">Comments</h2>
-        <Comments comments={comments} />
-      </section>
+            </Form>
+          </section>
+          <section className="flex flex-col gap-5">
+            <h2 className="text-3xl font-black">Comments</h2>
+            <Comments comments={comments} />
+          </section>
+        </>
+      )}
     </main>
   );
 }

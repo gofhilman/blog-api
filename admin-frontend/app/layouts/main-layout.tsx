@@ -31,7 +31,14 @@ export default function MainLayout() {
           </Link>
         </h4>
         <p>
-          The admin dashboard for <a href="/">Stacked Stories</a>
+          The admin dashboard for{" "}
+          <Link
+            to={import.meta.env.VITE_BLOG_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Stacked Stories
+          </Link>
         </p>
       </footer>
     </div>

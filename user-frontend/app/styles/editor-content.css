@@ -14,8 +14,10 @@
       "Open Sans",
       "Helvetica Neue",
       sans-serif;
-    font-optical-sizing: auto;
     line-height: 1.75;
+  }
+  p {
+    font-size: 1.1rem;
   }
   body {
     background-color: #18181b;

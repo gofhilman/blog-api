@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Form, useFetcher } from "react-router";
+import { Form, Link, useFetcher } from "react-router";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useEffect, useRef, useState } from "react";
@@ -21,7 +21,15 @@ import { SquarePen, Trash2 } from "lucide-react";
 function PostData({ post }: any) {
   return (
     <div>
-      <h3 className="colored-children text-lg font-medium">{post.title}</h3>
+      <h3 className="colored-children text-lg font-medium">
+        <Link
+          to={import.meta.env.VITE_BLOG_URL + post.uri}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {post.title}
+        </Link>
+      </h3>
       <p className="text-secondary-foreground text-sm">
         {post.createdAt && format(post.createdAt, "MMMM d, y")}
       </p>

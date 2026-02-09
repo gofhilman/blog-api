@@ -34,6 +34,8 @@ import "tinymce/plugins/autoresize";
 import "tinymce/plugins/autosave";
 
 import { postImage } from "~/api/imageApi";
+import "~/lib/prism.js";
+import "~/styles/prism.css";
 
 export default function BundledEditor(props: any) {
   return (
@@ -66,12 +68,30 @@ export default function BundledEditor(props: any) {
         ],
         toolbar:
           "undo redo | blocks | " +
-          "bold italic forecolor codesample | alignleft aligncenter " +
+          "bold italic forecolor | alignleft aligncenter " +
           "alignright alignjustify | bullist numlist outdent indent | " +
           "removeformat | help",
         images_upload_handler: postImage,
         skin_url: "dark-zinc",
         content_css: "editor-content.css",
+        codesample_global_prismjs: true,
+        codesample_languages: [
+          { text: "HTML/XML", value: "markup" },
+          { text: "JavaScript", value: "javascript" },
+          { text: "CSS", value: "css" },
+          { text: "SQL", value: "sql" },
+          { text: "Go", value: "go" },
+          { text: "PHP", value: "php" },
+          { text: "Ruby", value: "ruby" },
+          { text: "Python", value: "python" },
+          { text: "Java", value: "java" },
+          { text: "C", value: "c" },
+          { text: "C#", value: "csharp" },
+          { text: "C++", value: "cpp" },
+          { text: "Bash", value: "bash" },
+          { text: "YAML", value: "yaml" },
+          { text: "Docker", value: "docker" },
+        ],
       }}
       {...props}
     />

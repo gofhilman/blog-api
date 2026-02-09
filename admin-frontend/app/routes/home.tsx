@@ -56,9 +56,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               ))}
             </div>
           </section>
-          <section className="colored-container flex flex-col gap-5">
+          <section className="flex flex-col gap-5">
             <h2 className="text-3xl font-black">Categories</h2>
-            <div className="flex flex-col gap-5">
+            <div className="colored-container flex flex-col gap-5">
               {categories.map((category: any) => (
                 <CategoryItem key={category.id} category={category} />
               ))}

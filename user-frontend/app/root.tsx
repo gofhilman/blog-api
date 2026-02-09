@@ -5,7 +5,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
 import type { Route } from "./+types/root";
 import "./app.css";
 import LoadingThreeDotsPulse from "./components/ui/LoadingThreeDotsPulse";
@@ -27,9 +26,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster position="top-center" />
         <ScrollRestoration />
         <Scripts />
-        <Toaster position="top-center" />
       </body>
     </html>
   );

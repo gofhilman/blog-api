@@ -95,7 +95,7 @@ export default function BundledEditor(props: any) {
         ],
         relative_urls: false,
         remove_script_host: false,
-        document_base_url: "https://stacked-stories.netlify.app/",
+        document_base_url: import.meta.env.VITE_BLOG_URL,
       }}
       {...props}
     />

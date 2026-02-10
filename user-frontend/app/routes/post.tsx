@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { Suspense, useEffect, useRef } from "react";
 import Comments from "~/components/Comments";
 import LoadingThreeDotsJumping from "~/components/ui/LoadingThreeDotsJumping";
-import { useNavigation } from "react-router";
+import { useFetchers, useNavigation } from "react-router";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
 import "~/styles/editor-content.css";
 import "~/styles/prism.css";
@@ -27,12 +27,13 @@ export default function Post({ loaderData }: Route.ComponentProps) {
   const { post, commentsAndUser } = loaderData;
   const navigation = useNavigation();
   const contentRef = useRef<HTMLDivElement>(null);
+  const fetchers = useFetchers();
 
   useEffect(() => {
     if (window.Prism && contentRef.current) {
       window.Prism.highlightAllUnder(contentRef.current);
     }
-  }, [contentRef.current]);
+  }, [contentRef.current, fetchers.length]);
 
   return (
     <main>

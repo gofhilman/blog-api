@@ -19,6 +19,16 @@
   p {
     font-size: 1.1rem;
   }
+  code {
+    font-family:
+      "Source Mono",
+      PT Mono,
+      Consolas,
+      Monaco,
+      "Andale Mono",
+      "Ubuntu Mono",
+      monospace;
+  }
   body {
     background-color: #18181b;
     color: #f4f4f5;

@@ -34,8 +34,9 @@ import "tinymce/plugins/autoresize";
 import "tinymce/plugins/autosave";
 
 import { postImage } from "~/api/imageApi";
+import editorContent from "~/styles/editor-content.css?url";
+import editorCodeSample from "~/styles/prism.css?url";
 import "~/lib/prism.js";
-import "~/styles/prism.css";
 
 export default function BundledEditor(props: any) {
   return (
@@ -73,7 +74,7 @@ export default function BundledEditor(props: any) {
           "removeformat | help",
         images_upload_handler: postImage,
         skin_url: "dark-zinc",
-        content_css: "editor-content.css",
+        content_css: [editorContent, editorCodeSample],
         codesample_global_prismjs: true,
         codesample_languages: [
           { text: "HTML/XML", value: "markup" },

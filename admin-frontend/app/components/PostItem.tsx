@@ -96,7 +96,7 @@ export default function PostItem({ post }: any) {
             onCheckedChange={(checked: any) => {
               setPublished(checked);
               const id = toast.loading(
-                `${published ? "Publishing" : "Unpublishing"} post...`,
+                `${checked ? "Publishing" : "Unpublishing"} post...`,
               );
               loadingToasts.current.set("post-patch", id);
               publishedFetcher.submit(

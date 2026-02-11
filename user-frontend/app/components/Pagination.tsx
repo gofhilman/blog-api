@@ -24,7 +24,7 @@ export default function HomePagination({ page, postCount }: any) {
   return (
     <>
       {postCount > 0 && (
-        <Pagination>
+        <Pagination className="justify-start">
           <PaginationContent>
             {page > 1 && (
               <>

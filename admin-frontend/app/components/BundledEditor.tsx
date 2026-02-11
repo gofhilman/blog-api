@@ -93,9 +93,7 @@ export default function BundledEditor(props: any) {
           { text: "YAML", value: "yaml" },
           { text: "Docker", value: "docker" },
         ],
-        relative_urls: false,
-        remove_script_host: false,
-        document_base_url: import.meta.env.VITE_BLOG_URL,
+        convert_urls: false,
       }}
       {...props}
     />

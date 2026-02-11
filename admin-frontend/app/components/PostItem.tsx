@@ -18,10 +18,15 @@ import FormErrors from "./FormErrors";
 import { toast } from "sonner";
 import { SquarePen, Trash2 } from "lucide-react";
 
-function PostData({ post }: any) {
+function PostData({ post, singleElement }: any) {
   return (
     <div>
-      <h3 className="colored-children text-lg font-medium">
+      <h3
+        className={
+          "text-lg font-medium" +
+          (singleElement ? " colored" : " colored-children")
+        }
+      >
         <Link
           to={import.meta.env.VITE_BLOG_URL + post.uri}
           target="_blank"
@@ -135,7 +140,7 @@ export default function PostItem({ post }: any) {
             </DialogHeader>
             <div>
               <FormErrors errors={deleteErrors} />
-              <PostData post={post} />
+              <PostData post={post} singleElement={true} />
             </div>
             <DialogFooter>
               <DialogClose asChild>

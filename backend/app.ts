@@ -5,7 +5,6 @@ import cors from "cors";
 import postsRouter from "./routes/postsRouter";
 import authRouter from "./routes/authRouter";
 import categoriesRouter from "./routes/categoriesRouter";
-import { prisma } from "./lib/prisma";
 
 const app = express();
 
@@ -29,19 +28,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, (error) => {
+app.listen(PORT, (error) => {
   if (error) throw error;
   console.log(`Server running on port ${PORT}`);
 });
-
-const shutdown = async () => {
-  console.log("Shutting down gracefully...");
-  await prisma.$disconnect();
-  server.close(() => {
-    console.log("HTTP server closed");
-    process.exit(0);
-  });
-};
-
-process.on("SIGTERM", shutdown);
-process.on("SIGINT", shutdown);

@@ -5,7 +5,7 @@ import { Fragment } from "react/jsx-runtime";
 
 export default function PostCard({ post }: any) {
   return (
-    <article className="flex flex-col gap-2">
+    <article className="flex flex-col items-start gap-2">
       <Link to={post.uri} viewTransition>
         <h2 className="colored-children text-3xl font-black">{post.title}</h2>
       </Link>

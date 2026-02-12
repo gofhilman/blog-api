@@ -1,8 +1,9 @@
 import { body } from "express-validator";
 import { prisma } from "../lib/prisma";
 import { AppError } from "../errors/AppError";
+import { handleValidation } from "./handleValidation";
 
-const validateLogin = [
+const validateLogin: any = [
   body("username")
     .trim()
     .notEmpty()
@@ -19,7 +20,7 @@ const validateLogin = [
     ),
 ];
 
-const validateSignup = [
+const validateSignup: any = [
   body("username")
     .trim()
     .notEmpty()
@@ -84,7 +85,7 @@ const validateSignup = [
   }),
 ];
 
-const validatePost = [
+const validatePost: any = [
   body("title")
     .trim()
     .notEmpty()
@@ -137,7 +138,7 @@ const validatePost = [
     }),
 ];
 
-const validateComment = [
+const validateComment: any = [
   body("content")
     .trim()
     .notEmpty()
@@ -147,7 +148,7 @@ const validateComment = [
     ),
 ];
 
-const validateCategory = [
+const validateCategory: any = [
   body("name")
     .trim()
     .notEmpty()
@@ -161,6 +162,16 @@ const validateCategory = [
         "No ghost names, no empty vibes, serve us something that actually belongs on the marquee!",
     ),
 ];
+
+for (const validator of [
+  validateLogin,
+  validateSignup,
+  validatePost,
+  validateComment,
+  validateCategory,
+]) {
+  validator.push(handleValidation);
+}
 
 export {
   validateLogin,

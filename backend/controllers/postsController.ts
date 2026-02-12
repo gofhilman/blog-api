@@ -2,6 +2,7 @@ import slugify from "@sindresorhus/slugify";
 import { prisma } from "../lib/prisma";
 import uriToId from "../lib/uriToId";
 import { POSTS_PER_PAGE } from "./constants";
+import { AppError } from "../errors/AppError";
 
 async function postsGet(req: any, res: any) {
   const page = req.query.page;
@@ -160,7 +161,17 @@ async function postPut(req: any, res: any) {
 }
 
 async function commentPut(req: any, res: any) {
-  const comment = await prisma.comment.update({
+  let comment = await prisma.comment.findUnique({
+    where: { id: req.params.commentId },
+  });
+  if (req.user.id !== comment?.userId) {
+    throw new AppError(
+      "Hold up, superstar! This isn't your comment to remix. " +
+        "Only the original author gets editing rights, think of it like VIP backstage access.",
+      403,
+    );
+  }
+  comment = await prisma.comment.update({
     where: { id: req.params.commentId },
     data: { content: req.body.content },
   });
@@ -188,7 +199,17 @@ async function postDelete(req: any, res: any) {
 }
 
 async function commentDelete(req: any, res: any) {
-  const comment = await prisma.comment.delete({
+  let comment = await prisma.comment.findUnique({
+    where: { id: req.params.commentId },
+  });
+  if (req.user.id !== comment?.userId) {
+    throw new AppError(
+      "Whoa there, delete warrior! This isn't your comment to vanish. " +
+        "Only the rightful author has the power to hit the big red button.",
+      403,
+    );
+  }
+  comment = await prisma.comment.delete({
     where: { id: req.params.commentId },
   });
   res.json({ comment });

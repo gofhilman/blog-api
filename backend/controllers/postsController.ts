@@ -202,7 +202,7 @@ async function commentDelete(req: any, res: any) {
   let comment = await prisma.comment.findUnique({
     where: { id: req.params.commentId },
   });
-  if (req.user.id !== comment?.userId) {
+  if (req.user.role !== "ADMIN" && req.user.id !== comment?.userId) {
     throw new AppError(
       "Whoa there, delete warrior! This isn't your comment to vanish. " +
         "Only the rightful author has the power to hit the big red button.",

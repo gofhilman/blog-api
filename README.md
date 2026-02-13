@@ -1,6 +1,6 @@
 # Blog API
 
-Blog API is a fullstack blog application built from scratch. It consists of a back end serving as the Content Management System (CMS) and two frontend Single Page Applications (SPAs): the blog itself ([Stacked Stories](https://stacked-stories.pages.dev/)) and an admin dashboard for managing the blog ([Stacked Control](https://stacked-control.pages.dev/)). The application focuses on core features while maintaining a polished and minimalist design.
+Blog API is a fullstack blog application built from scratch. It consists of a back end serving as the Content Management System (CMS) and two frontend Single Page Applications (SPAs): the blog itself ([Stacked Stories](https://stacked-stories.pages.dev/)) and an admin dashboard for managing the blog ([Stacked Control](https://stacked-control.pages.dev/)). The application focuses on core features while maintaining a polished and minimalist design. More details at [Stacking Up a Blog &mdash; Stacked Stories](https://stacked-stories.pages.dev/stacking-up-a-blog-1).
 
 ## Features
 

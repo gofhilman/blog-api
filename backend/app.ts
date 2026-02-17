@@ -5,7 +5,6 @@ import cors from "cors";
 import postsRouter from "./routes/postsRouter";
 import authRouter from "./routes/authRouter";
 import categoriesRouter from "./routes/categoriesRouter";
-import { prisma } from "./lib/prisma";
 
 const app = express();
 

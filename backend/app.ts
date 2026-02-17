@@ -28,8 +28,6 @@ app.use((err: any, req: any, res: any, next: any) => {
   });
 });
 
-// await prisma.$queryRaw`SELECT 1`;
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, (error) => {
   if (error) throw error;

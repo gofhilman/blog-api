@@ -9,21 +9,35 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter }).$extends({
   query: {
     async $allOperations({ operation, model, args, query }) {
-      return pRetry(async () => {
-        try {
-          return await query(args);
-        } catch (error: any) {
-          if (error.code === "P1001") {
-            console.warn(
-              `Retrying ${model}.${operation} due to connection error...`,
-            );
-            await prisma.$disconnect();
-            await prisma.$connect();
+      return pRetry(
+        async () => {
+          try {
+            return await query(args);
+          } catch (error: any) {
+            if (error.code === "P1001" || error.code === "P2010") {
+              console.warn(
+                `Retrying ${model ?? "raw"}.${operation} due to connection error...`,
+              );
+              await prisma.$disconnect();
+              await prisma.$connect();
+              throw error;
+            }
             throw error;
           }
-          throw error;
-        }
-      });
+        },
+        {
+          onFailedAttempt: ({
+            error,
+            attemptNumber,
+            retriesLeft,
+            retriesConsumed,
+          }) => {
+            console.log(
+              `Attempt ${attemptNumber} failed. ${retriesLeft} retries left. ${retriesConsumed} retries consumed.`,
+            );
+          },
+        },
+      );
     },
   },
 });

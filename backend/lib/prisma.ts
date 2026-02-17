@@ -7,7 +7,7 @@ const connectionString = `${process.env.DATABASE_URL}`;
 
 const adapter = new PrismaPg({
   connectionString,
-  connectionTimeoutMillis: 5_000,
+  connectionTimeoutMillis: 3_000,
 });
 const prisma = new PrismaClient({ adapter }).$extends({
   query: {

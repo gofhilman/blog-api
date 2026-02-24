@@ -94,6 +94,10 @@ export default function BundledEditor(props: any) {
           { text: "Docker", value: "docker" },
         ],
         convert_urls: false,
+        extended_valid_elements: "iframe[*],div[*],a[*]",
+        sandbox_iframes: false,
+        convert_unsafe_embeds: false,
+        valid_children: "+body[style]",
       }}
       {...props}
     />

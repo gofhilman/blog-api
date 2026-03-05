@@ -4,27 +4,34 @@ import PostCard from "~/components/PostCard";
 import HomePagination from "~/components/Pagination";
 import { useNavigation } from "react-router";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
+import { getCategories } from "~/api/categoriesApi";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const categoryUri = url.searchParams.get("category");
   const page = url.searchParams.get("page");
   const { posts, postCount } = await getPosts(categoryUri, page);
-  return { posts, postCount, page };
+  const { categories } = await getCategories();
+  return { posts, postCount, page, categoryUri, categories };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { posts, postCount, page } = loaderData;
+  const { posts, postCount, page, categoryUri, categories } = loaderData;
   const navigation = useNavigation();
 
   return (
-    <main className="flex flex-col gap-10">
+    <main className="flex flex-col items-start gap-10">
       <title>Stacked Stories</title>
       <meta property="og:title" content="Stacked Stories" />
       {navigation.state === "loading" ? (
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <>
+          {categoryUri && (
+            <h3 className="colored text-3xl font-black">
+              {categories?.find(({ uri }: any) => uri === categoryUri).name}
+            </h3>
+          )}
           <div className="colored-container flex flex-col gap-5">
             {posts.map((post: any) => (
               <PostCard key={post.id} post={post} />

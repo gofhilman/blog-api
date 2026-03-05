@@ -37,7 +37,7 @@ export default function Comments({ commentsAndUser }: any) {
     }
   }, [commentAddFetcher.data, commentAddErrors]);
 
-  if (loginFetcher.data) {
+  if (loginFetcher.state === "idle") {
     const id = loadingToasts.current.get("login");
     if (id) {
       loadingToasts.current.delete("login");
@@ -49,7 +49,15 @@ export default function Comments({ commentsAndUser }: any) {
     }
   }
 
-  if (signupFetcher.data) {
+  if (logoutFetcher.state === "idle") {
+    const id = loadingToasts.current.get("logout");
+    if (id) {
+      loadingToasts.current.delete("logout");
+      toast.success("You're now logged out", { id });
+    }
+  }
+
+  if (signupFetcher.state === "idle") {
     const id = loadingToasts.current.get("signup");
     if (id) {
       loadingToasts.current.delete("signup");
@@ -61,7 +69,7 @@ export default function Comments({ commentsAndUser }: any) {
     }
   }
 
-  if (commentAddFetcher.data) {
+  if (commentAddFetcher.state === "idle") {
     const id = loadingToasts.current.get("comment-add");
     if (id) {
       loadingToasts.current.delete("comment-add");
@@ -94,7 +102,14 @@ export default function Comments({ commentsAndUser }: any) {
                 <Label htmlFor="comment-content" className="text-lg">
                   Comment as {user.username}
                 </Label>
-                <logoutFetcher.Form action="/logout" method="post">
+                <logoutFetcher.Form
+                  action="/logout"
+                  method="post"
+                  onSubmit={() => {
+                    const id = toast.loading("Logging out...");
+                    loadingToasts.current.set("logout", id);
+                  }}
+                >
                   <Button type="submit" variant="outline" size="sm">
                     Log out
                   </Button>

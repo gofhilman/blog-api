@@ -18,7 +18,14 @@ async function postsGet(req: any, res: any) {
   };
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
-    include: {
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      title: true,
+      subtitle: true,
+      published: true,
+      uri: true,
       author: {
         select: { username: true, role: true },
       },
@@ -46,7 +53,6 @@ async function specificPostGet(req: any, res: any) {
         select: { username: true, role: true },
       },
       categories: true,
-      // comments: true,
     },
   });
   res.json({ post });

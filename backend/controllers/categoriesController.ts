@@ -21,7 +21,14 @@ async function specificCategoryGet(req: any, res: any) {
     include: {
       posts: {
         orderBy: { createdAt: "desc" },
-        include: {
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          title: true,
+          subtitle: true,
+          published: true,
+          uri: true,
           author: {
             select: { username: true, role: true },
           },

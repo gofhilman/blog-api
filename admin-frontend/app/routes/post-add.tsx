@@ -27,7 +27,8 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
   post.published = post.published === "1";
   post.categories = post.categories ? post.categories.split(", ") : [];
   try {
-    return await postPost(post);
+    await postPost(post);
+    return redirect(`/?post_add=${post.toastId}`);
   } catch (error: any) {
     const errors = await error.json();
     return data({ errors }, { status: error.status });
@@ -57,15 +58,11 @@ export default function PostAdd({
   const navigate = useNavigate();
   const navigation = useNavigation();
 
-  if (actionData) {
+  if (errors) {
     const id = loadingToast.current;
     if (id) {
       loadingToast.current = null;
-      if (errors) {
-        toast.error("Failed to add post", { id });
-      } else {
-        toast.success("Post has been added", { id });
-      }
+      toast.error("Failed to add post", { id });
     }
   }
 
@@ -82,10 +79,11 @@ export default function PostAdd({
               event.preventDefault();
               setDirty(false);
               editorRef.current.setDirty(false);
-              const formData = new FormData(event.currentTarget);
+              const formData: any = new FormData(event.currentTarget);
               formData.set("content", editorRef.current.getContent());
               const id = toast.loading("Adding post...");
               loadingToast.current = id;
+              formData.set("toastId", id);
               submit(formData, { method: "post" });
             }
           }}

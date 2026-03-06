@@ -27,11 +27,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const id = searchParams.get("id");
-    if (id) {
-      toast.success("You're now logged in", { id: +id });
-      searchParams.delete("id");
+    const login = searchParams.get("login");
+    const postAdd = searchParams.get("post_add");
+    if (login) {
+      toast.success("You're now logged in", { id: +login });
+      searchParams.delete("login");
       setSearchParams(searchParams);
+    } else if (postAdd) {
+      toast.success("Post has been added", { id: +postAdd });
+      searchParams.delete("post_add");
+      setSearchParams(searchParams);      
     }
   }, [searchParams, setSearchParams]);
 

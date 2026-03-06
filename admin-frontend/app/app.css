@@ -139,4 +139,7 @@ body {
   .colored-children {
     @apply text-transparent;
   }
+  .colored-bg {
+    @apply bg-linear-to-br from-purple-500 to-pink-500;
+  }
 }

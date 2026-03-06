@@ -44,10 +44,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       ) : (
         <>
           <section className="flex flex-col gap-5">
-            <h2 className="text-3xl font-black">Posts</h2>
+            <h2 className="colored self-start text-3xl font-black">Posts</h2>
             <Form action="posts" viewTransition>
-              <Button type="submit" className="text-lg/tight">
-                <Plus strokeWidth={3} /> Create new post
+              <Button
+                type="submit"
+                size="lg"
+                className="colored-bg text-xl/tight font-bold"
+              >
+                <Plus strokeWidth={4} /> Create new post
               </Button>
             </Form>
             <div className="colored-container flex flex-col gap-5">
@@ -57,7 +61,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </div>
           </section>
           <section className="flex flex-col gap-5">
-            <h2 className="text-3xl font-black">Categories</h2>
+            <h2 className="colored self-start text-3xl font-black">
+              Categories
+            </h2>
             <div className="colored-container flex flex-col gap-5">
               {categories.map((category: any) => (
                 <CategoryItem key={category.id} category={category} />

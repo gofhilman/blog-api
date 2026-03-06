@@ -22,7 +22,7 @@ export default function MainLayout() {
         </fetcher.Form>
       </header>
       <Outlet />
-      <footer className="mt-auto flex flex-col gap-1">
+      <footer className="mt-auto flex flex-col items-start gap-1">
         <h4
           className={"text-2xl font-black" + (path === "/" ? "" : " colored")}
         >

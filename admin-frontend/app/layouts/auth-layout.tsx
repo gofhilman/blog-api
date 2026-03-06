@@ -11,7 +11,7 @@ export default function AuthLayout() {
           </Link>
         </h1>
       </header>
-      <p className="colored text-3xl font-bold">
+      <p className="colored self-start text-3xl font-bold">
         Welcome to Stacked Stories Admin Dashboard.
       </p>
       <Outlet />

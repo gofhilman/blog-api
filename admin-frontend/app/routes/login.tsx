@@ -1,4 +1,4 @@
-import { data, Form, redirect, useSubmit } from "react-router";
+import { data, Form, redirect, useSearchParams, useSubmit } from "react-router";
 import FormErrors from "~/components/FormErrors";
 import { Button } from "~/components/ui/button";
 import {
@@ -13,7 +13,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import type { Route } from "./+types/login";
 import { postLogin } from "~/api/authApi";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
@@ -32,6 +32,16 @@ export default function Login({ actionData }: Route.ComponentProps) {
   const errors = actionData?.errors;
   const loadingToast = useRef<any>(null);
   const submit = useSubmit();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const logout = searchParams.get("logout");
+    if (logout) {
+      toast.success("You're now logged out", { id: +logout });
+      searchParams.delete("logout");
+      setSearchParams(searchParams);
+    } 
+  }, [searchParams, setSearchParams]);
 
   if (errors) {
     const id = loadingToast.current;

@@ -1,9 +1,12 @@
-import { Link, Outlet, useFetcher, useLocation } from "react-router";
+import { useRef } from "react";
+import { Form, Link, Outlet, useLocation, useSubmit } from "react-router";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 
 export default function MainLayout() {
-  const fetcher = useFetcher();
   const path = useLocation().pathname;
+  const loadingToast = useRef<any>(null);
+  const submit = useSubmit();
 
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-10 px-5 py-12">
@@ -15,11 +18,22 @@ export default function MainLayout() {
             Stacked Control
           </Link>
         </h1>
-        <fetcher.Form action="/logout" method="post">
+        <Form
+          action="/logout"
+          method="post"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const id = toast.loading("Logging out...");
+            loadingToast.current = id;
+            const formData: any = new FormData(event.currentTarget);
+            formData.set("toastId", id);
+            submit(formData, { action: "/logout", method: "post" });
+          }}
+        >
           <Button type="submit" variant="outline">
             Log out
           </Button>
-        </fetcher.Form>
+        </Form>
       </header>
       <Outlet />
       <footer className="mt-auto flex flex-col items-start gap-1">

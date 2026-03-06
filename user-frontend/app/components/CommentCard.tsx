@@ -66,7 +66,7 @@ export default function CommentCard({ comment, user }: any) {
     }
   }
 
-  if (commentDeleteFetcher.state === "idle") {
+  if (commentDeleteFetcher.data) {
     const id = loadingToasts.current.get("comment-delete");
     if (id) {
       loadingToasts.current.delete("comment-delete");

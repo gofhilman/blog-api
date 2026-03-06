@@ -118,7 +118,11 @@ export default function PostEdit({
                       {published ? "Published" : "Unpublished"}
                     </Label>
                   </div>
-                  <Button id="form-submit" type="submit">
+                  <Button
+                    id="form-submit"
+                    type="submit"
+                    className={dirty ? "colored-bg" : ""}
+                  >
                     {published ? "Save and publish" : "Save"}
                   </Button>
                   <Button
@@ -158,8 +162,7 @@ export default function PostEdit({
                     )}
                   />
                 </div>
-                <div className="grid gap-1">
-                  {dirty ? <p>(Unsaved)</p> : <p>&nbsp;</p>}
+                <div className="my-5">
                   <BundledEditor
                     initialValue={post.content}
                     onInit={(evt: any, editor: any) =>
@@ -167,6 +170,34 @@ export default function PostEdit({
                     }
                     onDirty={() => setDirty(true)}
                   />
+                </div>
+                <div className="grid grid-cols-[1fr_2fr_1fr] items-center gap-5">
+                  <div className="grid gap-1">
+                    <Switch
+                      id="published"
+                      checked={published}
+                      onCheckedChange={setPublished}
+                      name="published"
+                      value="1"
+                    />
+                    <Label htmlFor="published">
+                      {published ? "Published" : "Unpublished"}
+                    </Label>
+                  </div>
+                  <Button
+                    id="form-submit"
+                    type="submit"
+                    className={dirty ? "colored-bg" : ""}
+                  >
+                    {published ? "Save and publish" : "Save"}
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </div>
             </Form>

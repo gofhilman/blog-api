@@ -61,7 +61,7 @@ export default function PostEdit({
   const navigate = useNavigate();
   const navigation = useNavigation();
 
-  if (actionData) {
+  if (navigation.state === "idle") {
     const id = loadingToast.current;
     if (id) {
       loadingToast.current = null;

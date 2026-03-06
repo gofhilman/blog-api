@@ -32,7 +32,7 @@ export default function CategoryItem({ category }: any) {
     }
   }, [editFetcher.data, editErrors]);
 
-  if (editFetcher.data) {
+  if (editFetcher.state === "idle") {
     const id = loadingToasts.current.get("category-edit");
     if (id) {
       loadingToasts.current.delete("category-edit");

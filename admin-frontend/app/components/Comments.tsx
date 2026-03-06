@@ -19,7 +19,7 @@ export default function Comments({ comments }: any) {
     }
   }, [commentAddFetcher.data, commentAddErrors]);
 
-  if (commentAddFetcher.data) {
+  if (commentAddFetcher.state === "idle") {
     const id = loadingToasts.current.get("comment-add");
     if (id) {
       loadingToasts.current.delete("comment-add");

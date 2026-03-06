@@ -59,7 +59,7 @@ export default function PostItem({ post }: any) {
     }
   }, [publishedErrors]);
 
-  if (publishedFetcher.data) {
+  if (publishedFetcher.state === "idle") {
     const id = loadingToasts.current.get("post-patch");
     if (id) {
       loadingToasts.current.delete("post-patch");

@@ -58,7 +58,7 @@ export default function PostAdd({
   const navigate = useNavigate();
   const navigation = useNavigation();
 
-  if (errors) {
+  if (errors && navigation.state === "idle") {
     const id = loadingToast.current;
     if (id) {
       loadingToast.current = null;

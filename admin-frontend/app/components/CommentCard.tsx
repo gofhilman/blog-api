@@ -57,7 +57,7 @@ export default function CommentCard({ comment }: any) {
     }
   }, [commentEditFetcher.data, commentEditErrors]);
 
-  if (commentEditFetcher.data) {
+  if (commentEditFetcher.state === "idle") {
     const id = loadingToasts.current.get("comment-edit");
     if (id) {
       loadingToasts.current.delete("comment-edit");

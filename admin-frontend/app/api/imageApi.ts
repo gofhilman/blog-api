@@ -1,3 +1,5 @@
+import { fetchWithRetry } from "./fetchWithRetry";
+
 const imageUploadUrl = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 export async function postImage(blobInfo: any) {
@@ -9,7 +11,7 @@ export async function postImage(blobInfo: any) {
   formData.append("tags", "browser_upload");
   formData.append("file", blobInfo.blob(), blobInfo.filename());
 
-  const response = await fetch(imageUploadUrl, {
+  const response = await fetchWithRetry(imageUploadUrl, {
     method: "POST",
     body: formData,
   });

@@ -1,17 +1,18 @@
 import { jsonContentJwtHeaders, jwtHeaders } from "~/lib/httpHeaders";
 import throwError from "./throwError";
+import { fetchWithRetry } from "./fetchWithRetry";
 
 const categoriesUrl = import.meta.env.VITE_API_ROOT_URL + "/categories/";
 
 async function getCategories() {
-  const response = await fetch(categoriesUrl);
+  const response = await fetchWithRetry(categoriesUrl);
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function putCategory(categoryUri: any, name: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(categoriesUrl + categoryUri, {
+  const response = await fetchWithRetry(categoriesUrl + categoryUri, {
     method: "PUT",
     headers,
     body: JSON.stringify({ name }),
@@ -22,7 +23,7 @@ async function putCategory(categoryUri: any, name: any) {
 
 async function deleteCategory(categoryUri: any) {
   const headers = jwtHeaders(new Headers());
-  const response = await fetch(categoriesUrl + categoryUri, {
+  const response = await fetchWithRetry(categoriesUrl + categoryUri, {
     method: "DELETE",
     headers,
   });

@@ -1,23 +1,24 @@
 import { jsonContentJwtHeaders, jwtHeaders } from "~/lib/httpHeaders";
 import throwError from "./throwError";
+import { fetchWithRetry } from "./fetchWithRetry";
 
 const postsUrl = import.meta.env.VITE_API_ROOT_URL + "/posts/";
 
 async function getPosts() {
-  const response = await fetch(postsUrl);
+  const response = await fetchWithRetry(postsUrl);
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function getSpecificPost(postUri: any) {
-  const response = await fetch(postsUrl + postUri);
+  const response = await fetchWithRetry(postsUrl + postUri);
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function postPost(post: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(postsUrl, {
+  const response = await fetchWithRetry(postsUrl, {
     method: "POST",
     headers,
     body: JSON.stringify(post),
@@ -28,7 +29,7 @@ async function postPost(post: any) {
 
 async function putPost(postUri: any, post: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(postsUrl + postUri, {
+  const response = await fetchWithRetry(postsUrl + postUri, {
     method: "PUT",
     headers,
     body: JSON.stringify(post),
@@ -39,7 +40,7 @@ async function putPost(postUri: any, post: any) {
 
 async function patchPostPublished(postUri: any, post: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(postsUrl + postUri, {
+  const response = await fetchWithRetry(postsUrl + postUri, {
     method: "PATCH",
     headers,
     body: JSON.stringify(post),
@@ -50,7 +51,7 @@ async function patchPostPublished(postUri: any, post: any) {
 
 async function deletePost(postUri: any) {
   const headers = jwtHeaders(new Headers());
-  const response = await fetch(postsUrl + postUri, {
+  const response = await fetchWithRetry(postsUrl + postUri, {
     method: "DELETE",
     headers,
   });
@@ -59,14 +60,14 @@ async function deletePost(postUri: any) {
 }
 
 async function getComments(postUri: any) {
-  const response = await fetch(postsUrl + postUri + "/comments");
+  const response = await fetchWithRetry(postsUrl + postUri + "/comments");
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function postComment(postUri: any, content: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(postsUrl + postUri + "/comments", {
+  const response = await fetchWithRetry(postsUrl + postUri + "/comments", {
     method: "POST",
     headers,
     body: JSON.stringify({ content }),
@@ -77,7 +78,7 @@ async function postComment(postUri: any, content: any) {
 
 async function putComment(postUri: any, commentId: any, content: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(postsUrl + postUri + "/comments/" + commentId, {
+  const response = await fetchWithRetry(postsUrl + postUri + "/comments/" + commentId, {
     method: "PUT",
     headers,
     body: JSON.stringify({ content }),
@@ -88,7 +89,7 @@ async function putComment(postUri: any, commentId: any, content: any) {
 
 async function deleteComment(postUri: any, commentId: any) {
   const headers = jwtHeaders(new Headers());
-  const response = await fetch(postsUrl + postUri + "/comments/" + commentId, {
+  const response = await fetchWithRetry(postsUrl + postUri + "/comments/" + commentId, {
     method: "DELETE",
     headers,
   });

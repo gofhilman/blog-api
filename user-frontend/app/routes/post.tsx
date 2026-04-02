@@ -17,8 +17,16 @@ declare global {
   }
 }
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   const { post } = await getSpecificPost(params.postUri);
+  return { post, commentsAndUser: null };
+}
+
+export async function clientLoader({
+  params,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
+  const { post } = await serverLoader();
   const commentsAndUser = Promise.all([getComments(params.postUri), getMe()]);
   return { post, commentsAndUser };
 }

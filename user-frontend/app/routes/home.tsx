@@ -6,7 +6,7 @@ import { useNavigation } from "react-router";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
 import { getCategories } from "~/api/categoriesApi";
 
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const categoryUri = url.searchParams.get("category");
   const page = url.searchParams.get("page");

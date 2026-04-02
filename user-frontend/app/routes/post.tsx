@@ -33,6 +33,16 @@ export async function clientLoader({
 
 clientLoader.hydrate = true;
 
+export function meta({ loaderData }: Route.MetaArgs) {
+  const title = `${loaderData.post.title} \u2014 Stacked Stories`;
+
+  return [
+    { title },
+    { property: "og:title", content: title },
+    { name: "description", content: loaderData.post.subtitle },
+  ];
+}
+
 export default function Post({ loaderData }: Route.ComponentProps) {
   const { post, commentsAndUser } = loaderData;
   const navigation = useNavigation();
@@ -47,11 +57,6 @@ export default function Post({ loaderData }: Route.ComponentProps) {
 
   return (
     <main>
-      <title>{`${post.title} \u2014 Stacked Stories`}</title>
-      <meta
-        property="og:title"
-        content={post.title + " \u2014 Stacked Stories"}
-      />
       {navigation.state === "loading" ? (
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (

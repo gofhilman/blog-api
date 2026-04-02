@@ -15,7 +15,10 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { posts, postCount, page, categoryUri, categories };
 }
 
-export async function clientLoader({ request, serverLoader }: Route.ClientLoaderArgs) {
+export async function clientLoader({
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const categoryUri = url.searchParams.get("category");
   const page = url.searchParams.get("page");
@@ -29,14 +32,20 @@ export async function clientLoader({ request, serverLoader }: Route.ClientLoader
 
 clientLoader.hydrate = true;
 
+export function meta() {
+  return [
+    { title: "Stacked Stories" },
+    { property: "og:title", content: "Stacked Stories" },
+    { name: "description", content: "A blog by Hilman Fikry" },
+  ];
+}
+
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { posts, postCount, page, categoryUri, categories } = loaderData;
   const navigation = useNavigation();
 
   return (
     <main className="flex flex-col items-start gap-10">
-      <title>Stacked Stories</title>
-      <meta property="og:title" content="Stacked Stories" />
       {navigation.state === "loading" ? (
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (

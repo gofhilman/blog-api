@@ -15,6 +15,20 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { posts, postCount, page, categoryUri, categories };
 }
 
+export async function clientLoader({ request, serverLoader }: Route.ClientLoaderArgs) {
+  const url = new URL(request.url);
+  const categoryUri = url.searchParams.get("category");
+  const page = url.searchParams.get("page");
+  if (!categoryUri && !page) {
+    return await serverLoader();
+  }
+  const { posts, postCount } = await getPosts(categoryUri, page);
+  const { categories } = await getCategories();
+  return { posts, postCount, page, categoryUri, categories };
+}
+
+clientLoader.hydrate = true;
+
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { posts, postCount, page, categoryUri, categories } = loaderData;
   const navigation = useNavigation();

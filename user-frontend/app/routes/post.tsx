@@ -31,6 +31,8 @@ export async function clientLoader({
   return { post, commentsAndUser };
 }
 
+clientLoader.hydrate = true;
+
 export default function Post({ loaderData }: Route.ComponentProps) {
   const { post, commentsAndUser } = loaderData;
   const navigation = useNavigation();

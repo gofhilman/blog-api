@@ -72,7 +72,7 @@ export default function Post({ loaderData }: Route.ComponentProps) {
           </section>
           <section className="flex flex-col gap-5">
             <h3 className="text-xl font-black">Comments</h3>
-            <Suspense fallback={<LoadingThreeDotsJumping />}>
+            <Suspense fallback={<LoadingThreeDotsJumping className="my-10" />}>
               <Comments commentsAndUser={commentsAndUser} />
             </Suspense>
           </section>

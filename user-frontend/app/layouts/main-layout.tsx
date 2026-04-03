@@ -23,11 +23,7 @@ export default function MainLayout({ loaderData }: Route.ComponentProps) {
         </h1>
         <div className="flex items-center gap-2">
           <span>by</span>
-          <Link
-            to="https://github.com/gofhilman"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link to="https://gofhilman.my.id/">
             <img
               src="/hilman.jpg"
               alt="Author avatar"

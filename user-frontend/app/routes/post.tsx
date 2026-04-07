@@ -29,13 +29,7 @@ export async function clientLoader({
   serverLoader,
 }: Route.ClientLoaderArgs) {
   const { post, categories } = await serverLoader();
-
-  if (typeof document === "undefined") {
-    return { post, commentsAndUser: null };
-  }
-
   const commentsAndUser = Promise.all([getComments(params.postUri), getMe()]);
-
   return { post, commentsAndUser, categories };
 }
 

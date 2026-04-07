@@ -3,9 +3,23 @@ import throwError from "./throwError";
 
 const authUrl = import.meta.env.VITE_API_ROOT_URL + "/auth/";
 
+function getJwt() {
+  if (typeof localStorage === "undefined") {
+    return null;
+  }
+
+  return localStorage.getItem("JWT");
+}
+
 async function getMe() {
+  const token = getJwt();
+
+  if (!token) {
+    return { user: null };
+  }
+
   const headers = new Headers();
-  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  headers.append("Authorization", "bearer " + token);
   const response = await fetchWithRetry(authUrl + "me", { headers });
   return response.ok ? await response.json() : { user: null };
 }
@@ -30,12 +44,16 @@ async function postSignup(user: any) {
 
 async function postLogin(user: any) {
   const { token } = await postAuth("login", user);
-  localStorage.setItem("JWT", token);
+  if (typeof localStorage !== "undefined") {
+    localStorage.setItem("JWT", token);
+  }
   return { user: { username: user.username } };
 }
 
 function postLogout() {
-  localStorage.removeItem("JWT");
+  if (typeof localStorage !== "undefined") {
+    localStorage.removeItem("JWT");
+  }
 }
 
 export { getMe, postSignup, postLogin, postLogout };

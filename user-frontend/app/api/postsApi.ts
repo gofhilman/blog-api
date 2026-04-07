@@ -3,6 +3,14 @@ import throwError from "./throwError";
 
 const postsUrl = import.meta.env.VITE_API_ROOT_URL + "/posts/";
 
+function getJwt() {
+  if (typeof localStorage === "undefined") {
+    return null;
+  }
+
+  return localStorage.getItem("JWT");
+}
+
 async function getAllPosts() {
   const response = await fetchWithRetry(postsUrl);
   if (!response.ok) await throwError(response);
@@ -34,7 +42,10 @@ async function getComments(postUri: any) {
 
 async function postComment(postUri: any, content: any) {
   const headers = new Headers();
-  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  const token = getJwt();
+  if (token) {
+    headers.append("Authorization", "bearer " + token);
+  }
   headers.append("Content-Type", "application/json");
   const response = await fetchWithRetry(postsUrl + postUri + "/comments", {
     method: "POST",
@@ -47,7 +58,10 @@ async function postComment(postUri: any, content: any) {
 
 async function putComment(postUri: any, commentId: any, content: any) {
   const headers = new Headers();
-  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  const token = getJwt();
+  if (token) {
+    headers.append("Authorization", "bearer " + token);
+  }
   headers.append("Content-Type", "application/json");
   const response = await fetchWithRetry(
     postsUrl + postUri + "/comments/" + commentId,
@@ -63,7 +77,10 @@ async function putComment(postUri: any, commentId: any, content: any) {
 
 async function deleteComment(postUri: any, commentId: any) {
   const headers = new Headers();
-  headers.append("Authorization", "bearer " + localStorage.getItem("JWT"));
+  const token = getJwt();
+  if (token) {
+    headers.append("Authorization", "bearer " + token);
+  }
   const response = await fetchWithRetry(
     postsUrl + postUri + "/comments/" + commentId,
     {

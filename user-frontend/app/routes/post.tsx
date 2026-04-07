@@ -1,12 +1,12 @@
 import { getMe } from "~/api/authApi";
 import type { Route } from "./+types/post";
 import { getComments, getSpecificPost } from "~/api/postsApi";
-import { format } from "date-fns";
 import { Suspense, useEffect, useRef } from "react";
 import Comments from "~/components/Comments";
 import LoadingThreeDotsJumping from "~/components/ui/LoadingThreeDotsJumping";
 import { Link, useFetchers, useLocation, useNavigation } from "react-router";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
+import formatPublishedDate from "~/lib/formatPublishedDate";
 import "~/styles/editor-content.css";
 import "~/styles/prism.css";
 import "~/lib/prism.js";
@@ -67,7 +67,7 @@ export default function Post({ loaderData }: Route.ComponentProps) {
           <article className="flex flex-col gap-10">
             <section className="flex flex-col gap-1">
               <h2 className="text-3xl font-black">{post.title}</h2>
-              <p className="text-sm">{format(post.createdAt, "MMMM d, y")}</p>
+              <p className="text-sm">{formatPublishedDate(post.createdAt)}</p>
               <div
                 dangerouslySetInnerHTML={{ __html: post.content }}
                 className="post-content mt-8"

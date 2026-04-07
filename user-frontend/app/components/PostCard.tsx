@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Separator } from "./ui/separator";
-import { format } from "date-fns";
 import { Fragment } from "react/jsx-runtime";
+import formatPublishedDate from "~/lib/formatPublishedDate";
 
 export default function PostCard({ post }: any) {
   return (
@@ -11,7 +11,7 @@ export default function PostCard({ post }: any) {
       </Link>
       <div className="flex h-5 items-center space-x-4 text-sm">
         <Link to={post.uri} viewTransition>
-          <p>{format(post.createdAt, "MMMM d, y")}</p>
+          <p>{formatPublishedDate(post.createdAt)}</p>
         </Link>
         {post.categories.length > 0 && (
           <>

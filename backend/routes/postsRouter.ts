@@ -1,8 +1,9 @@
 import { Router } from "express";
 import {
+  commentContentPatch,
   commentDelete,
   commentPost,
-  commentPut,
+  commentReadPatch,
   commentsGet,
   postDelete,
   postPost,
@@ -29,14 +30,19 @@ postsRouter.post(
 );
 
 postsRouter.put("/:postUri", isAdminAuth, validatePost, postPut);
-postsRouter.put(
+
+postsRouter.patch("/:postUri", isAdminAuth, postPublishedPatch);
+postsRouter.patch(
   "/:postUri/comments/:commentId",
   isMemberAuth,
   validateComment,
-  commentPut,
+  commentContentPatch,
 );
-
-postsRouter.patch("/:postUri", isAdminAuth, postPublishedPatch);
+postsRouter.patch(
+  "/:postUri/comments/:commentId",
+  isAdminAuth,
+  commentReadPatch,
+);
 
 postsRouter.delete("/:postUri", isAdminAuth, postDelete);
 postsRouter.delete(

@@ -166,7 +166,17 @@ async function postPut(req: any, res: any) {
   res.json({ post });
 }
 
-async function commentPut(req: any, res: any) {
+async function postPublishedPatch(req: any, res: any) {
+  let { createdAt, published } = req.body;
+  createdAt = createdAt ? createdAt : published ? new Date() : null;
+  const post = await prisma.post.update({
+    where: { uri: req.params.postUri },
+    data: { createdAt, published },
+  });
+  res.json({ post });
+}
+
+async function commentContentPatch(req: any, res: any) {
   let comment = await prisma.comment.findUnique({
     where: { id: req.params.commentId },
   });
@@ -179,20 +189,15 @@ async function commentPut(req: any, res: any) {
   }
   comment = await prisma.comment.update({
     where: { id: req.params.commentId },
-    data: { content: req.body.content },
+    data: {
+      updatedAt: new Date(),
+      content: req.body.content,
+    },
   });
   res.json({ comment });
 }
 
-async function postPublishedPatch(req: any, res: any) {
-  let { createdAt, published } = req.body;
-  createdAt = createdAt ? createdAt : published ? new Date() : null;
-  const post = await prisma.post.update({
-    where: { uri: req.params.postUri },
-    data: { createdAt, published },
-  });
-  res.json({ post });
-}
+async function commentReadPatch(req: any, res: any) {}
 
 async function postDelete(req: any, res: any) {
   const post = await prisma.post.delete({
@@ -228,8 +233,9 @@ export {
   postPost,
   commentPost,
   postPut,
-  commentPut,
   postPublishedPatch,
+  commentContentPatch,
+  commentReadPatch,
   postDelete,
   commentDelete,
 };

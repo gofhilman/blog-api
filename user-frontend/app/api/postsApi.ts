@@ -56,7 +56,7 @@ async function postComment(postUri: any, content: any) {
   return await response.json();
 }
 
-async function putComment(postUri: any, commentId: any, content: any) {
+async function patchCommentContent(postUri: any, commentId: any, content: any) {
   const headers = new Headers();
   const token = getJwt();
   if (token) {
@@ -64,11 +64,28 @@ async function putComment(postUri: any, commentId: any, content: any) {
   }
   headers.append("Content-Type", "application/json");
   const response = await fetchWithRetry(
-    postsUrl + postUri + "/comments/" + commentId,
+    postsUrl + postUri + "/comments/" + commentId + "/content",
     {
-      method: "PUT",
+      method: "PATCH",
       headers,
       body: JSON.stringify({ content }),
+    },
+  );
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+async function patchCommentRead(postUri: any, commentId: any) {
+  const headers = new Headers();
+  const token = getJwt();
+  if (token) {
+    headers.append("Authorization", "bearer " + token);
+  }
+  const response = await fetchWithRetry(
+    postsUrl + postUri + "/comments/" + commentId + "/read",
+    {
+      method: "PATCH",
+      headers,
     },
   );
   if (!response.ok) await throwError(response);
@@ -98,6 +115,7 @@ export {
   getSpecificPost,
   getComments,
   postComment,
-  putComment,
+  patchCommentContent,
+  patchCommentRead,
   deleteComment,
 };

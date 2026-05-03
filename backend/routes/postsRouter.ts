@@ -33,13 +33,13 @@ postsRouter.put("/:postUri", isAdminAuth, validatePost, postPut);
 
 postsRouter.patch("/:postUri", isAdminAuth, postPublishedPatch);
 postsRouter.patch(
-  "/:postUri/comments/:commentId",
+  "/:postUri/comments/:commentId/content",
   isMemberAuth,
   validateComment,
   commentContentPatch,
 );
 postsRouter.patch(
-  "/:postUri/comments/:commentId",
+  "/:postUri/comments/:commentId/read",
   isAdminAuth,
   commentReadPatch,
 );

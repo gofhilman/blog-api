@@ -192,12 +192,19 @@ async function commentContentPatch(req: any, res: any) {
     data: {
       updatedAt: new Date(),
       content: req.body.content,
+      read: false,
     },
   });
   res.json({ comment });
 }
 
-async function commentReadPatch(req: any, res: any) {}
+async function commentReadPatch(req: any, res: any) {
+  const comment = await prisma.comment.update({
+    where: { id: req.params.commentId },
+    data: { read: true },
+  });
+  res.json({ comment });
+}
 
 async function postDelete(req: any, res: any) {
   const post = await prisma.post.delete({

@@ -4,13 +4,14 @@ import { getComments, getSpecificPost } from "~/api/postsApi";
 import { Suspense, useEffect, useRef } from "react";
 import Comments from "~/components/Comments";
 import LoadingThreeDotsJumping from "~/components/ui/LoadingThreeDotsJumping";
-import { Link, useFetchers, useLocation, useNavigation } from "react-router";
+import { useFetchers, useNavigation } from "react-router";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
 import formatPublishedDate from "~/lib/formatPublishedDate";
 import "~/styles/editor-content.css";
 import "~/styles/prism.css";
 import "~/lib/prism.js";
 import { getCategories } from "~/api/categoriesApi";
+import SiteFooter from "~/components/SiteFooter";
 
 declare global {
   interface Window {
@@ -50,7 +51,6 @@ export default function Post({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation();
   const contentRef = useRef<HTMLDivElement>(null);
   const fetchers = useFetchers();
-  const path = useLocation().pathname;
 
   useEffect(() => {
     if (window.Prism && contentRef.current) {
@@ -89,36 +89,7 @@ export default function Post({ loaderData }: Route.ComponentProps) {
           </article>
         )}
       </main>
-      <footer className="mt-auto flex flex-col items-start gap-5">
-        <article className="flex flex-col gap-1">
-          <h4
-            className={
-              "text-xl font-extrabold" + (path === "/" ? " colored" : "")
-            }
-          >
-            Categories
-          </h4>
-          <ul className={path === "/" ? "colored-container" : ""}>
-            {categories.map((category: any) => (
-              <li
-                key={category.id}
-                className={
-                  "font-bold" + (path === "/" ? " colored-children" : "")
-                }
-              >
-                <Link to={"/?category=" + category.uri} viewTransition>
-                  {category.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </article>
-        <p className={"text-2xl font-black" + (path === "/" ? "" : " colored")}>
-          <Link to="/" viewTransition>
-            Stacked Stories
-          </Link>
-        </p>
-      </footer>
+      <SiteFooter categories={categories} />
     </>
   );
 }

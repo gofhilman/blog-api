@@ -11,12 +11,6 @@ function getJwt() {
   return localStorage.getItem("JWT");
 }
 
-async function getAllPosts() {
-  const response = await fetchWithRetry(postsUrl);
-  if (!response.ok) await throwError(response);
-  return await response.json();
-}
-
 async function getPosts(categoryUri?: any, page?: any) {
   const response = await fetchWithRetry(
     postsUrl +
@@ -24,6 +18,12 @@ async function getPosts(categoryUri?: any, page?: any) {
       (categoryUri ? "&category=" + categoryUri : "") +
       (page ? "&page=" + page : "&page=1"),
   );
+  if (!response.ok) await throwError(response);
+  return await response.json();
+}
+
+async function getPublishedPosts() {
+  const response = await fetchWithRetry(postsUrl + "?published=1");
   if (!response.ok) await throwError(response);
   return await response.json();
 }
@@ -110,8 +110,8 @@ async function deleteComment(postUri: any, commentId: any) {
 }
 
 export {
-  getAllPosts,
   getPosts,
+  getPublishedPosts,
   getSpecificPost,
   getComments,
   postComment,

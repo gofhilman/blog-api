@@ -7,6 +7,7 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
+  route("rss.xml", "routes/rss.ts"),
   layout("layouts/main-layout.tsx", [
     index("routes/home.tsx"),
     ...prefix(":postUri", [

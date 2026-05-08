@@ -1,5 +1,6 @@
 import { Rss } from "lucide-react";
 import { Link, useLocation } from "react-router";
+import { Button } from "./ui/button";
 
 type Category = {
   id: number | string;
@@ -35,19 +36,16 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
           ))}
         </ul>
       </article>
-      <div className="flex items-center gap-2">
+      <div className="flex items-baseline gap-4">
         <p className={"text-2xl font-black" + (path === "/" ? "" : " colored")}>
           <Link to="/" viewTransition>
             Stacked Stories
           </Link>
         </p>
-        <a
-          href="/rss.xml"
-          aria-label="RSS feed"
-          title="RSS feed"
-          className="text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 inline-flex size-8 items-center justify-center rounded-md transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
-        >
-          <Rss aria-hidden="true" />
+        <a href="/rss.xml">
+          <Button variant="outline" size="sm" className="font-semibold">
+            <Rss /> RSS
+          </Button>
         </a>
       </div>
     </footer>

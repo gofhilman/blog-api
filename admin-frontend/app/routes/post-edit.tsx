@@ -1,6 +1,6 @@
 import { getComments, getSpecificPost, putPost } from "~/api/postsApi";
 import type { Route } from "./+types/post-edit";
-import { data, Form, redirect, useNavigate, useSubmit } from "react-router";
+import { data, redirect, useFetcher, useNavigate } from "react-router";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
 import { useRef, useState } from "react";
@@ -13,7 +13,6 @@ import CreatableCombobox from "~/components/CreatableCombobox";
 import BundledEditor from "~/components/BundledEditor";
 import Comments from "~/components/Comments";
 import { toast } from "sonner";
-import { useNavigation } from "react-router";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
 
 export async function clientAction({
@@ -46,22 +45,18 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return { categoryNames, post, comments };
 }
 
-export default function PostEdit({
-  loaderData,
-  actionData,
-}: Route.ComponentProps) {
+export default function PostEdit({ loaderData }: Route.ComponentProps) {
+  const editFetcher = useFetcher();
   let { categoryNames, post, comments } = loaderData;
-  post = actionData?.post ?? post;
-  const errors = actionData?.errors;
+  post = editFetcher.data?.post ?? post;
+  const errors = editFetcher.data?.errors;
   const [published, setPublished] = useState(post.published);
   const editorRef = useRef<any>(null);
   const [dirty, setDirty] = useState(false);
-  const submit = useSubmit();
   const loadingToast = useRef<any>(null);
   const navigate = useNavigate();
-  const navigation = useNavigation();
 
-  if (navigation.state === "idle") {
+  if (editFetcher.state === "idle") {
     const id = loadingToast.current;
     if (id) {
       loadingToast.current = null;
@@ -76,12 +71,12 @@ export default function PostEdit({
   return (
     <main className="flex flex-col gap-10">
       <title>{`Edit ${post.title} \u2014 Stacked Control`}</title>
-      {navigation.state === "loading" ? (
+      {editFetcher.state !== "idle" ? (
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <>
           <section>
-            <Form
+            <editFetcher.Form
               method="post"
               onSubmit={(event: any) => {
                 if (event.nativeEvent.submitter.id === "form-submit") {
@@ -92,7 +87,7 @@ export default function PostEdit({
                   formData.set("content", editorRef.current.getContent());
                   const id = toast.loading("Editing post...");
                   loadingToast.current = id;
-                  submit(formData, { method: "post" });
+                  editFetcher.submit(formData, { method: "post" });
                 }
               }}
               className="flex flex-col gap-5"
@@ -200,7 +195,7 @@ export default function PostEdit({
                   </Button>
                 </div>
               </div>
-            </Form>
+            </editFetcher.Form>
           </section>
           <section className="flex flex-col gap-5">
             <h2 className="text-3xl font-black">Comments</h2>

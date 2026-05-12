@@ -33,6 +33,7 @@ import "tinymce/plugins/codesample";
 import "tinymce/plugins/autoresize";
 import "tinymce/plugins/autosave";
 
+import wirisPlugin from "@wiris/mathtype-tinymce7/plugin.min.js?url";
 import { postImage } from "~/api/imageApi";
 import editorContent from "~/styles/editor-content.css?url";
 import editorCodeSample from "~/styles/prism.css?url";
@@ -67,11 +68,22 @@ export default function BundledEditor(props: any) {
           "autoresize",
           "autosave",
         ],
+        external_plugins: {
+          tiny_mce_wiris: wirisPlugin,
+        },
+        mathTypeParameters: {
+          editorParameters: {
+            color: "#f4f4f5",
+            backgroundColor: "#18181b",
+          },
+        },
         toolbar:
           "undo redo | blocks | " +
           "bold italic forecolor | alignleft aligncenter " +
           "alignright alignjustify | bullist numlist outdent indent | " +
+          "tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry | " +
           "removeformat | help",
+        draggable_modal: true,
         images_upload_handler: postImage,
         skin_url: "dark-zinc",
         content_css: [editorContent, editorCodeSample],

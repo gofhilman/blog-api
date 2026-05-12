@@ -6,7 +6,7 @@ import { Form, redirect, useNavigation, useSearchParams } from "react-router";
 import { Button } from "~/components/ui/button";
 import CategoryItem from "~/components/CategoryItem";
 import { getMe } from "~/api/authApi";
-import { Plus } from "lucide-react";
+import { ArrowUpRight, Plus, SquareArrowOutUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
@@ -48,6 +48,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <>
+          <a href="https://dash.cloudflare.com/b27e283bc159bc215346d83f006c13b7/gofhilman.my.id">
+            <div className="flex gap-2 items-center">
+              <h2 className="colored self-start text-3xl font-black">Web Traffic</h2>
+              <ArrowUpRight strokeWidth={2.5} />
+            </div>
+          </a>
           <section className="flex flex-col gap-5">
             <h2 className="colored self-start text-3xl font-black">Posts</h2>
             <Form action="posts" viewTransition>

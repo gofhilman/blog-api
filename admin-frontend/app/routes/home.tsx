@@ -2,14 +2,32 @@ import { getPosts } from "~/api/postsApi";
 import type { Route } from "./+types/home";
 import { getCategories } from "~/api/categoriesApi";
 import PostItem from "~/components/PostItem";
-import { Form, redirect, useNavigation, useSearchParams } from "react-router";
+import {
+  data,
+  Form,
+  redirect,
+  useFetcher,
+  useNavigation,
+  useSearchParams,
+} from "react-router";
 import { Button } from "~/components/ui/button";
 import CategoryItem from "~/components/CategoryItem";
 import { getMe } from "~/api/authApi";
-import { ArrowUpRight, Plus, SquareArrowOutUpRight } from "lucide-react";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import LoadingThreeDotsPulse from "~/components/ui/LoadingThreeDotsPulse";
+import { getLatestDeployment, postDeployment } from "~/api/deploymentApi";
+import formatTime from "~/lib/formatTime";
+
+export async function clientAction() {
+  try {
+    return await postDeployment();
+  } catch (error: any) {
+    const errors = await error.json();
+    return data({ errors }, { status: error.status });
+  }
+}
 
 export async function clientLoader() {
   const { user } = await getMe();
@@ -18,13 +36,16 @@ export async function clientLoader() {
   }
   const { posts } = await getPosts();
   const { categories } = await getCategories();
-  return { posts, categories };
+  const { latestDeployment } = await getLatestDeployment();
+  return { posts, categories, latestDeployment };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { posts, categories } = loaderData;
+  const { posts, categories, latestDeployment } = loaderData;
   const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
+  const deploymentFetcher = useFetcher();
+  const loadingToast = useRef<any>(null);
 
   useEffect(() => {
     const login = searchParams.get("login");
@@ -36,9 +57,21 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     } else if (postAdd) {
       toast.success("Post has been added", { id: +postAdd });
       searchParams.delete("post_add");
-      setSearchParams(searchParams);      
+      setSearchParams(searchParams);
     }
   }, [searchParams, setSearchParams]);
+
+  if (deploymentFetcher.state === "idle") {
+    const id = loadingToast.current;
+    if (id) {
+      loadingToast.current = null;
+      if (deploymentFetcher.data?.errors) {
+        toast.error("Failed to deploy posts", { id });
+      } else {
+        toast.success("Posts has been deployed", { id });
+      }
+    }
+  }
 
   return (
     <main className="flex flex-col gap-10">
@@ -49,22 +82,40 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       ) : (
         <>
           <a href="https://dash.cloudflare.com/b27e283bc159bc215346d83f006c13b7/gofhilman.my.id">
-            <div className="flex gap-2 items-center">
-              <h2 className="colored self-start text-3xl font-black">Web Traffic</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="colored self-start text-3xl font-black">
+                Web Traffic
+              </h2>
               <ArrowUpRight strokeWidth={2.5} />
             </div>
           </a>
           <section className="flex flex-col gap-5">
             <h2 className="colored self-start text-3xl font-black">Posts</h2>
-            <Form action="posts" viewTransition>
-              <Button
-                type="submit"
-                size="lg"
-                className="colored-bg text-xl/tight font-bold"
-              >
-                <Plus strokeWidth={4} /> Create new post
-              </Button>
-            </Form>
+            <div className="flex justify-between">
+              <Form action="posts" viewTransition>
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="colored-bg text-lg/tight font-bold"
+                >
+                  <Plus strokeWidth={4} /> Create new post
+                </Button>
+              </Form>
+              <deploymentFetcher.Form method="post">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="text-lg/tight font-bold"
+                >
+                  Deploy posts
+                </Button>
+              </deploymentFetcher.Form>
+            </div>
+            {latestDeployment && (
+              <p className="font-medium">
+                Latest deployment: {formatTime(latestDeployment.createdAt)}
+              </p>
+            )}
             <div className="colored-container flex flex-col gap-5">
               {posts.map((post: any) => (
                 <PostItem key={post.id} post={post} />

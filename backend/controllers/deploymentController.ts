@@ -8,6 +8,13 @@ async function latestDeploymentGet(req: any, res: any) {
 }
 
 async function deploymentPost(req: any, res: any) {
+  await fetch(
+    process.env.CF_PAGES_DEPLOY_HOOK ??
+      (() => {
+        throw new Error("CF_PAGES_DEPLOY_HOOK missing");
+      })(),
+    { method: "POST" },
+  );
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
     select: { id: true },

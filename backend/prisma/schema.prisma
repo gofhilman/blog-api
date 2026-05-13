@@ -14,18 +14,19 @@ datasource db {
 }
 
 model Post {
-  id         Int        @id @default(autoincrement())
-  createdAt  DateTime?
-  updatedAt  DateTime?
-  title      String
-  subtitle   String
-  published  Boolean
-  uri        String?    @unique
-  author     User?      @relation(fields: [authorId], references: [id])
-  authorId   String?
-  categories Category[]
-  content    String
-  comments   Comment[]
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime?
+  updatedAt   DateTime?
+  title       String
+  subtitle    String
+  published   Boolean
+  uri         String?      @unique
+  author      User?        @relation(fields: [authorId], references: [id])
+  authorId    String?
+  categories  Category[]
+  content     String
+  comments    Comment[]
+  deployments Deployment[]
 }
 
 model Category {
@@ -54,6 +55,12 @@ model User {
   role     Role
   posts    Post[]
   comments Comment[]
+}
+
+model Deployment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  posts     Post[]
 }
 
 enum Role {

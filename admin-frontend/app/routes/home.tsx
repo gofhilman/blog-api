@@ -101,7 +101,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                   <Plus strokeWidth={4} /> Create new post
                 </Button>
               </Form>
-              <deploymentFetcher.Form method="post">
+              <deploymentFetcher.Form
+                method="post"
+                onSubmit={() => {
+                  const id = toast.loading("Deploying posts...");
+                  loadingToast.current = id;
+                }}
+              >
                 <Button
                   type="submit"
                   size="lg"

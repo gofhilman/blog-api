@@ -6,6 +6,7 @@ import postsRouter from "./routes/postsRouter";
 import authRouter from "./routes/authRouter";
 import categoriesRouter from "./routes/categoriesRouter";
 import commentsRouter from "./routes/commentsRouter";
+import deploymentRouter from "./routes/deploymentRouter";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/auth", authRouter);
 app.use("/posts", postsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/comments", commentsRouter);
+app.use("/deployment", deploymentRouter);
 
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err);

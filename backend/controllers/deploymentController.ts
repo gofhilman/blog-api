@@ -1,10 +1,10 @@
 import { prisma } from "../lib/prisma";
 
-async function lastDeploymentGet(req: any, res: any) {
-  const lastDeployment = await prisma.deployment.findFirst({
+async function latestDeploymentGet(req: any, res: any) {
+  const latestDeployment = await prisma.deployment.findFirst({
     orderBy: { createdAt: "desc" },
   });
-  res.json({ lastDeployment });
+  res.json({ latestDeployment });
 }
 
 async function deploymentPost(req: any, res: any) {
@@ -21,4 +21,4 @@ async function deploymentPost(req: any, res: any) {
   res.json({ deployment });
 }
 
-export { lastDeploymentGet, deploymentPost };
+export { latestDeploymentGet, deploymentPost };

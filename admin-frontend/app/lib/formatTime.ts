@@ -8,7 +8,7 @@ export default function formatTime(time: any) {
       formatRelative: (token, date, baseDate) => {
         const formatRelativeFn = enUS.formatRelative;
         if (token === "other") {
-          return format(date, "MMMM d, y");
+          return "MMMM d, y";
         }
         return formatRelativeFn(token, date, baseDate);
       },

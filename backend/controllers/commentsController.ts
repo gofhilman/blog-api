@@ -10,10 +10,15 @@ async function unreadCommentsGet(req: any, res: any) {
       updatedAt: true,
       content: true,
       post: {
-        select: { title: true },
+        select: {
+          title: true,
+          uri: true,
+        },
       },
       user: {
-        select: { username: true },
+        select: {
+          username: true,
+        },
       },
     },
   });

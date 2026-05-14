@@ -1,9 +1,17 @@
 import { useRef } from "react";
 import { Form, Link, Outlet, useLocation, useSubmit } from "react-router";
 import { toast } from "sonner";
+import { getUnreadComments } from "~/api/commentsApi";
 import { Button } from "~/components/ui/button";
+import type { Route } from "./+types/main-layout";
+import CommentNotification from "~/components/CommentNotification";
 
-export default function MainLayout() {
+export async function clientLoader() {
+  return await getUnreadComments();
+}
+
+export default function MainLayout({ loaderData }: Route.ComponentProps) {
+  const { comments } = loaderData;
   const path = useLocation().pathname;
   const loadingToast = useRef<any>(null);
   const submit = useSubmit();
@@ -18,22 +26,25 @@ export default function MainLayout() {
             Stacked Control
           </Link>
         </h1>
-        <Form
-          action="/logout"
-          method="post"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const id = toast.loading("Logging out...");
-            loadingToast.current = id;
-            const formData: any = new FormData(event.currentTarget);
-            formData.set("toastId", id);
-            submit(formData, { action: "/logout", method: "post" });
-          }}
-        >
-          <Button type="submit" variant="outline">
-            Log out
-          </Button>
-        </Form>
+        <div className="flex gap-4">
+          <CommentNotification comments={comments} />
+          <Form
+            action="/logout"
+            method="post"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const id = toast.loading("Logging out...");
+              loadingToast.current = id;
+              const formData: any = new FormData(event.currentTarget);
+              formData.set("toastId", id);
+              submit(formData, { action: "/logout", method: "post" });
+            }}
+          >
+            <Button type="submit" variant="outline">
+              Log out
+            </Button>
+          </Form>
+        </div>
       </header>
       <Outlet />
       <footer className="mt-auto flex flex-col items-start gap-1">

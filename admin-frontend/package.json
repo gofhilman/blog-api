@@ -28,6 +28,7 @@
     "motion": "^12.29.0",
     "next-themes": "^0.4.6",
     "p-retry": "^7.1.1",
+    "radix-ui": "^1.4.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router": "7.12.0",

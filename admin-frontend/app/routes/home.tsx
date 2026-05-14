@@ -81,7 +81,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <>
-          <a href="https://dash.cloudflare.com/b27e283bc159bc215346d83f006c13b7/gofhilman.my.id">
+          <a href="https://dash.cloudflare.com/b27e283bc159bc215346d83f006c13b7/gofhilman.my.id" className="self-start">
             <div className="flex items-center gap-2">
               <h2 className="colored self-start text-3xl font-black">
                 Web Traffic

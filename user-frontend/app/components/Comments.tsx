@@ -44,7 +44,7 @@ export default function Comments({ commentsAndUser }: any) {
           },
         );
       });
-  }, []);
+  }, [user?.role]);
 
   useEffect(() => {
     if (commentAddFetcher.data && !commentAddErrors) {

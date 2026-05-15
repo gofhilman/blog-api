@@ -3,7 +3,7 @@ import type { Route } from "./+types/post-edit";
 import { data, redirect, useFetcher, useNavigate } from "react-router";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FormErrors from "~/components/FormErrors";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
@@ -45,8 +45,9 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return { categoryNames, post, comments };
 }
 
-export default function PostEdit({ loaderData }: Route.ComponentProps) {
+export default function PostEdit({ loaderData, params }: Route.ComponentProps) {
   const editFetcher = useFetcher();
+  const readPatchFetcher = useFetcher();
   let { categoryNames, post, comments } = loaderData;
   post = editFetcher.data?.post ?? post;
   const errors = editFetcher.data?.errors;
@@ -55,6 +56,23 @@ export default function PostEdit({ loaderData }: Route.ComponentProps) {
   const [dirty, setDirty] = useState(false);
   const loadingToast = useRef<any>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    comments.forEach((comment: any) => {
+      readPatchFetcher.submit(
+        {},
+        {
+          action:
+            "/posts/" +
+            params.postUri +
+            "/comments/" +
+            comment.id +
+            "/read-patch",
+          method: "post",
+        },
+      );
+    });
+  }, [params.postUri]);
 
   if (editFetcher.state === "idle") {
     const id = loadingToast.current;

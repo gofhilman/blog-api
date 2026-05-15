@@ -58,20 +58,22 @@ export default function PostEdit({ loaderData, params }: Route.ComponentProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    comments.forEach((comment: any) => {
-      readPatchFetcher.submit(
-        {},
-        {
-          action:
-            "/posts/" +
-            params.postUri +
-            "/comments/" +
-            comment.id +
-            "/read-patch",
-          method: "post",
-        },
-      );
-    });
+    comments
+      .filter((comment: any) => !comment.read)
+      .forEach((comment: any) => {
+        readPatchFetcher.submit(
+          {},
+          {
+            action:
+              "/posts/" +
+              params.postUri +
+              "/comments/" +
+              comment.id +
+              "/read-patch",
+            method: "post",
+          },
+        );
+      });
   }, [params.postUri]);
 
   if (editFetcher.state === "idle") {

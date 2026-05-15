@@ -15,6 +15,7 @@ export default [
       ...prefix("comments", [
         index("routes/comment-add.tsx"),
         route(":commentId/edit", "routes/comment-edit.tsx"),
+        route(":commentId/read-patch", "routes/comment-read-patch.tsx"),
         route(":commentId/delete", "routes/comment-delete.tsx"),
       ]),
     ]),

@@ -25,11 +25,26 @@ export default function Comments({ commentsAndUser }: any) {
   const signupFetcher = useFetcher();
   const commentAddFetcher = useFetcher();
   const logoutFetcher = useFetcher();
+  const readPatchFetcher = useFetcher();
   const commentAddFormRef = useRef<HTMLFormElement | null>(null);
   const loginErrors = loginFetcher.data?.errors;
   const signupErrors = signupFetcher.data?.errors;
   const commentAddErrors = commentAddFetcher.data?.errors;
   const loadingToasts = useRef(new Map());
+
+  useEffect(() => {
+    comments
+      .filter((comment: any) => !comment.read)
+      .forEach((comment: any) => {
+        readPatchFetcher.submit(
+          {},
+          {
+            action: "comments/" + comment.id + "/read-patch",
+            method: "post",
+          },
+        );
+      });
+  }, []);
 
   useEffect(() => {
     if (commentAddFetcher.data && !commentAddErrors) {

@@ -1,6 +1,12 @@
 import { getComments, getSpecificPost, putPost } from "~/api/postsApi";
 import type { Route } from "./+types/post-edit";
-import { data, redirect, useFetcher, useNavigate } from "react-router";
+import {
+  data,
+  redirect,
+  useFetcher,
+  useNavigate,
+  useNavigation,
+} from "react-router";
 import { getMe } from "~/api/authApi";
 import { getCategories } from "~/api/categoriesApi";
 import { useEffect, useRef, useState } from "react";
@@ -56,6 +62,7 @@ export default function PostEdit({ loaderData, params }: Route.ComponentProps) {
   const [dirty, setDirty] = useState(false);
   const loadingToast = useRef<any>(null);
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
   useEffect(() => {
     comments
@@ -91,7 +98,7 @@ export default function PostEdit({ loaderData, params }: Route.ComponentProps) {
   return (
     <main className="flex flex-col gap-10">
       <title>{`Edit ${post.title} \u2014 Stacked Control`}</title>
-      {editFetcher.state !== "idle" ? (
+      {editFetcher.state !== "idle" || navigation.state !== "idle" ? (
         <LoadingThreeDotsPulse className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <>

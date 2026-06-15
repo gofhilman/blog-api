@@ -110,7 +110,14 @@ export default function BundledEditor(props: any) {
         sandbox_iframes: false,
         convert_unsafe_embeds: false,
         valid_children: "+body[style]",
-        valid_elements: "#p",
+        setup: (editor) => {
+          editor.on("GetContent", (e) => {
+            e.content = e.content.replace(
+              /<(p|div|li|td|th|dd|dt|figcaption|blockquote)((?:\s+[^>]*)?)>\s*<\/\1>/gi,
+              "<$1$2>&nbsp;</$1>",
+            );
+          });
+        },
       }}
       {...props}
     />

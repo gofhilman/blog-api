@@ -110,6 +110,7 @@ export default function BundledEditor(props: any) {
         sandbox_iframes: false,
         convert_unsafe_embeds: false,
         valid_children: "+body[style]",
+        valid_elements: "#p",
       }}
       {...props}
     />

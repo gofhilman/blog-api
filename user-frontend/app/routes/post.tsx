@@ -16,7 +16,6 @@ import SiteFooter from "~/components/SiteFooter";
 declare global {
   interface Window {
     Prism?: any;
-    WirisPlugin?: any;
     com?: any;
   }
 }
@@ -57,23 +56,15 @@ export default function Post({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
     const renderContent = () => {
       if (!contentRef.current) return;
-      
-      if (window.WirisPlugin?.Parser) {
-        const parsed = window.WirisPlugin.Parser.initParse(post.content);
-        // Only update innerHTML if MathType parsing actually changed something
-        if (parsed !== post.content && contentRef.current.innerHTML !== parsed) {
-          contentRef.current.innerHTML = parsed;
-        }
-      } else if (window.com?.wiris?.js?.JsPluginViewer) {
+      if (window.com?.wiris?.js?.JsPluginViewer) {
         window.com.wiris.js.JsPluginViewer.parseElement(contentRef.current);
       }
-
       if (window.Prism) {
         window.Prism.highlightAllUnder(contentRef.current);
       }
     };
 
-    if (window.WirisPlugin?.Parser || window.com?.wiris?.js?.JsPluginViewer) {
+    if (window.com?.wiris?.js?.JsPluginViewer) {
       renderContent();
     } else {
       const script = document.getElementById("wiris-script");

@@ -96,3 +96,7 @@ code {
 /* ul, ol {
   margin-left: 1.5rem;
 } */
+img.Wirisformula {
+  display: inline-block;
+  vertical-align: middle;
+}

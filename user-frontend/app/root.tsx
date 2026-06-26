@@ -29,6 +29,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           title="Stacked Stories RSS Feed"
           href="/rss.xml"
         />
+        <script
+          id="wiris-script"
+          src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
+        ></script>
         <Links />
         <Meta />
       </head>

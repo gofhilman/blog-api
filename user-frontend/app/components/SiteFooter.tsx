@@ -1,4 +1,4 @@
-import { Rss } from "lucide-react";
+import { Info, Rss } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { Button } from "./ui/button";
 
@@ -42,11 +42,18 @@ export default function SiteFooter({ categories }: { categories: Category[] }) {
             Stacked Stories
           </Link>
         </p>
-        <a href="/rss.xml">
-          <Button variant="outline" size="sm" className="font-semibold">
-            <Rss /> RSS
-          </Button>
-        </a>
+        <div className="flex items-center gap-0.5">
+          <a href="/rss.xml">
+            <Button variant="outline" size="sm" className="font-semibold">
+              <Rss /> RSS
+            </Button>
+          </a>
+          <Link to="/how-to-subscribe-to-an-rss-feed-16" viewTransition>
+            <Button variant="ghost" size="sm">
+              <Info />
+            </Button>
+          </Link>
+        </div>
       </div>
     </footer>
   );
